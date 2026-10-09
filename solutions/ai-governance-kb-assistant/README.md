@@ -8,8 +8,6 @@ Staff and customers at SamaBrains get **instant, cited answers** from the SamaBr
 
 Designed and shipped a grounded AI governance assistant for SamaBrains: staff and customers get instant, cited answers from the SamaBrains website, blog, and a frequently updated store of official AI governance publications—not an unbounded chatbot.
 
-Use that paragraph on a CV, LinkedIn Featured, or a pitch deck. The rest of this page is evidence.
-
 ## Problem
 
 AI governance information at SamaBrains did not live in one place. Website pages, blog posts, and public frameworks (for example NIST AI RMF or Uganda’s Data Protection and Privacy Act) sat in different tools and formats. Staff preparing a review, a training, or a client reply had to search by hand. Customers asking what SamaBrains does, or what a named framework requires, could not get an instant, cited answer from the same corpus.
