@@ -1,18 +1,18 @@
 # AI Governance Knowledge Base and Assistant
 
-Staff and customers at SamaBrains get **instant, cited answers** from the practice site, the blog, and a **frequently updated** store of official AI governance publications—not an unbounded chatbot.
+Staff and customers at SamaBrains get **instant, cited answers** from the SamaBrains website, the blog, and a **frequently updated** store of official AI governance publications—not an unbounded chatbot.
 
 **Live demo:** [https://samabrains.com/ask/](https://samabrains.com/ask/)
 
 ## Role / snapshot
 
-Designed and shipped a grounded AI governance assistant for SamaBrains: staff and customers get instant, cited answers from the practice site, blog, and a frequently updated store of official AI governance publications—not an unbounded chatbot.
+Designed and shipped a grounded AI governance assistant for SamaBrains: staff and customers get instant, cited answers from the SamaBrains website, blog, and a frequently updated store of official AI governance publications—not an unbounded chatbot.
 
 Use that paragraph on a CV, LinkedIn Featured, or a pitch deck. The rest of this page is evidence.
 
 ## Problem
 
-AI governance information at SamaBrains did not live in one place. Practice pages, blog posts, and public frameworks (for example NIST AI RMF or Uganda’s Data Protection and Privacy Act) sat in different tools and formats. Staff preparing a review, a training, or a client reply had to search by hand. Customers asking what SamaBrains does, or what a named framework requires, could not get an instant, cited answer from the same corpus.
+AI governance information at SamaBrains did not live in one place. Website pages, blog posts, and public frameworks (for example NIST AI RMF or Uganda’s Data Protection and Privacy Act) sat in different tools and formats. Staff preparing a review, a training, or a client reply had to search by hand. Customers asking what SamaBrains does, or what a named framework requires, could not get an instant, cited answer from the same corpus.
 
 The result was delay and weak attribution: people either spent time hunting, or they received an answer with no fileable reference. A general chatbot would make that worse—fluent text with no bound to SamaBrains’ knowledge or to the publications the practice is willing to stand behind.
 
@@ -24,7 +24,7 @@ One knowledge base, one assistant, two doors.
 
 | | |
 | --- | --- |
-| **Knowledge base** | Practice site, blog, and a living store of official, reputable AI governance publications. Not an open web scrape. |
+| **Knowledge base** | SamaBrains website, blog, and a living store of official, reputable AI governance publications. Not an open web scrape. |
 | **Assistant** | Ask, site search (Ctrl/Cmd+K), and blog search. Answers are meant to come with a source you can open. |
 
 Staff and customers query the **same** corpus, so a reference a customer follows is the same class of source a reviewer would use internally.
@@ -69,7 +69,7 @@ Customers / visitors ──► /ask/  ─────────────┘
 | Surface | Audience | URL |
 | --- | --- | --- |
 | Ask (chat page) | Customers and visitors; staff who want a conversation | [samabrains.com/ask/](https://samabrains.com/ask/) |
-| Site search / Ctrl+K | Staff and anyone on the practice site | [samabrains.com](https://samabrains.com/) |
+| Site search / Ctrl+K | Staff and anyone on the SamaBrains website | [samabrains.com](https://samabrains.com/) |
 | Blog search | Staff and readers on the blog | [blog.samabrains.com/search](https://blog.samabrains.com/search) |
 
 Nav search and the chat bubble use the same API as Ask.
@@ -78,7 +78,7 @@ Nav search and the chat bubble use the same API as Ask.
 
 | Index | How it is filled | What it holds |
 | --- | --- | --- |
-| `samabrains-site` | Crawl | Practice pages: services, about, legal, Ask, and related site content |
+| `samabrains-site` | Crawl | SamaBrains website: services, about, legal, Ask, and related pages |
 | `samabrains-blog` | Crawl | Posts, categories, and tags on the SamaBrains blog |
 | `samabrains-gov-kb` | Uploaded items, **updated frequently** | Official and reputable AI governance publications, so retrieval stays current rather than a stale snapshot |
 
@@ -92,11 +92,11 @@ The product is the SamaBrains knowledge base and assistant. Retrieval is impleme
 
 The corpus is **curated**: what SamaBrains is willing to retrieve from—not “everything on the internet about AI governance.” This page does **not** reproduce publication text. Use official sources for legal or regulatory work.
 
-### Practice site (crawled)
+### SamaBrains website (crawled)
 
 Index: `samabrains-site` · [samabrains.com](https://samabrains.com/)
 
-Public practice routes: home, about and services, Ask, contact, legal, and other published pages. Retrieval titles come from page metadata (`og:title` / `meta name="title"`).
+Public pages: home, about and services, Ask, contact, legal, and other published routes. Retrieval titles come from page metadata (`og:title` / `meta name="title"`).
 
 ### Blog (crawled)
 
@@ -157,7 +157,7 @@ The same pattern can be stood up for another client. Swap the **corpus** and the
 
 | SamaBrains | Another organisation |
 | --- | --- |
-| Practice site + blog + approved publications | Their policies, internal standards, product docs, or approved publications |
+| SamaBrains website + blog + approved publications | Their policies, internal standards, product docs, or approved publications |
 | Staff + customers on a public Ask page | Their staff and customers—or **staff-only** if the corpus is internal |
 | Not legal advice; cited answers | Their equivalent non-advice / in-scope rules |
 | Living, curated uploads | Their refresh cadence for official sources |
