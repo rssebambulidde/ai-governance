@@ -1,7 +1,7 @@
-﻿# ⚖️ Bias Testing Methodology
+# Bias Testing Methodology
 **Framework:** NIST AI RMF 1.0 — MEASURE 2.11 · NIST SP 1270 (Identifying & Managing Bias in AI)  
 **Version:** 1.0 | **Status:** Pre-Deployment  
-**Date:** 2024  
+**Date:** 2026  
 **Owner:** AI Ethics Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Organization Sector:** Financial Services  

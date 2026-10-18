@@ -1,7 +1,7 @@
-﻿# 👥 Stakeholder Analysis & Engagement Plan
+# Stakeholder Analysis & Engagement Plan
 **Framework:** NIST AI RMF 1.0 — MAP 1.2 · MAP 5.2 · GOVERN 5.1 · GOVERN 5.2  
 **Version:** 1.0 | **Status:** Active  
-**Date:** 2024  
+**Date:** 2026  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Owner:** AI Ethics Officer  
 **Location:** `docs/02-map/MAP-Stakeholder-Analysis.md`

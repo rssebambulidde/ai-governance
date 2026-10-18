@@ -1,4 +1,4 @@
-﻿# 📘 NIST AI RMF Playbook — Complete Study Notes
+# NIST AI RMF Playbook — Complete Study Notes
 ### Source: [AI-RMF-Playbook.pdf](./AI-RMF-Playbook.pdf) | 147 pages
 
 ---
@@ -666,5 +666,5 @@ KEY PRINCIPLES THROUGHOUT:
 ```
 
 ---
-*Study notes compiled from complete reading of AI-RMF-Playbook.pdf (147 pages, NIST, 2024)*
+*Study notes compiled from complete reading of AI-RMF-Playbook.pdf (147 pages, NIST, 2026)*
 

@@ -2,7 +2,7 @@
 **Framework:** NIST AI Risk Management Framework (AI RMF 1.0) — GOVERN Function  
 **Version:** 1.0  
 **Status:** Draft  
-**Date:** 2024  
+**Date:** 2026  
 **Owner:** [Chief AI Officer / Head of AI Governance]  
 **Review Cycle:** Annual (or upon significant AI system change)
 

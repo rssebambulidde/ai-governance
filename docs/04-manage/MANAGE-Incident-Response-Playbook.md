@@ -1,7 +1,7 @@
-﻿# 🚨 Incident Response Playbook
+# Incident Response Playbook
 **Framework:** NIST AI RMF 1.0 — MANAGE 4.3 · GOVERN 4.3  
 **Version:** 1.0 | **Status:** Active  
-**Date:** 2024  
+**Date:** 2026  
 **Owner:** AI Risk Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Location:** `docs/04-manage/MANAGE-Incident-Response-Playbook.md`

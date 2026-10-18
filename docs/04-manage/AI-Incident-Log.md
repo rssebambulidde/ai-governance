@@ -1,6 +1,6 @@
 # AI Incident Log
 **Framework:** NIST AI RMF 1.0 — GOVERN 4.3 · MANAGE 4.3  
-**Version:** 1.0 | **Status:** Active | **Date Started:** 2024  
+**Version:** 1.0 | **Status:** Active | **Date Started:** 2026  
 **Owner:** AI Risk Officer  
 **Location:** `docs/04-manage/AI-Incident-Log.md`
 

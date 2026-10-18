@@ -1,7 +1,7 @@
-﻿# 📏 MEASURE — TEVV & Metrics Framework
+# MEASURE — TEVV & Metrics Framework
 **Framework:** NIST AI RMF 1.0 — MEASURE Function (MEASURE 1.1 – MEASURE 4.3)  
 **Version:** 1.0 | **Status:** Pre-Deployment  
-**Date:** 2024  
+**Date:** 2026  
 **Prepared By:** TEVV Team Lead · AI Risk Officer · AI Ethics Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Organization Sector:** Financial Services  

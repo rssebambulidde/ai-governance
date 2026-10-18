@@ -1,6 +1,6 @@
 # AI Roles & Responsibilities Matrix
 **Framework:** NIST AI RMF 1.0 — GOVERN Function (2.1, 2.2, 2.3, 3.2)  
-**Version:** 1.0 | **Status:** Draft | **Date:** 2024  
+**Version:** 1.0 | **Status:** Draft | **Date:** 2026  
 **Owner:** Chief AI Officer / AI Governance Committee
 
 ---

@@ -1,7 +1,7 @@
-﻿# 🗺️ AI System Context & Risk Identification Report
+# AI System Context & Risk Identification Report
 **Framework:** NIST AI RMF 1.0 — MAP Function (MAP 1.1 – MAP 5.2)  
 **Version:** 1.0 | **Status:** Pre-Deployment Assessment  
-**Date:** 2024  
+**Date:** 2026  
 **Prepared By:** AI Project Lead · AI Risk Officer · AI Ethics Officer  
 **AI System:** Customer Support AI Chatbot ("FinAssist AI")  
 **AI System ID:** AI-001  

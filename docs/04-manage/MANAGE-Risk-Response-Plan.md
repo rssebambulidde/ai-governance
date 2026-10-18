@@ -1,7 +1,7 @@
-﻿# 🛠️ MANAGE — Risk Response Plan
+# MANAGE — Risk Response Plan
 **Framework:** NIST AI RMF 1.0 — MANAGE Function (MANAGE 1.1 – MANAGE 4.3)  
 **Version:** 1.0 | **Status:** Pre-Deployment  
-**Date:** 2024  
+**Date:** 2026  
 **Owner:** AI Risk Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Organization Sector:** Financial Services  
