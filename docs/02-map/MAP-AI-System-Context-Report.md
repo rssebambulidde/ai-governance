@@ -16,7 +16,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [MAP 1 — Context Is Established and Understood](#map-1--context-is-established-and-understood)
 2. [MAP 2 — AI System Categorization](#map-2--ai-system-categorization)
@@ -699,7 +699,7 @@ Stakeholder Feedback
 
 ---
 
-## 📎 Cross-References
+## Cross-References
 
 | Document | Link |
 |---|---|

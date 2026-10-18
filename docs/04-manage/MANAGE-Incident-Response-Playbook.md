@@ -13,7 +13,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Incident Classification & Severity](#1-incident-classification--severity)
 2. [Roles & Responsibilities During Incidents](#2-roles--responsibilities-during-incidents)
@@ -472,7 +472,7 @@ Signed: AI Risk Officer ____________  Date: ________
 
 ---
 
-## 📎 Cross-References
+## Cross-References
 
 | Document | Link |
 |---|---|

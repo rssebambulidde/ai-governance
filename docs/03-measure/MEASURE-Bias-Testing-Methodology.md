@@ -14,7 +14,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Bias Taxonomy](#1-bias-taxonomy)
 2. [Fairness Definitions](#2-fairness-definitions)
@@ -577,7 +577,7 @@ Chief AI Officer:       ____________  Date: ________
 
 ---
 
-## 📎 Cross-References
+## Cross-References
 
 | Document | Link |
 |---|---|

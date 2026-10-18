@@ -1,4 +1,4 @@
-# 🏛️ AI Governance Policy Document
+# AI Governance Policy Document
 **Framework:** NIST AI Risk Management Framework (AI RMF 1.0) — GOVERN Function  
 **Version:** 1.0  
 **Status:** Draft  
@@ -13,7 +13,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Purpose & Scope](#1-purpose--scope)
 2. [Definitions](#2-definitions)
@@ -514,7 +514,7 @@ This policy shall be reviewed:
 
 ---
 
-## 📎 Associated Documents
+## Associated Documents
 
 | Document | Description | Location |
 |---|---|---|
@@ -526,7 +526,7 @@ This policy shall be reviewed:
 
 ---
 
-## ✍️ Approval & Sign-Off
+## Approval & Sign-Off
 
 | Role | Name | Signature | Date |
 |---|---|---|---|

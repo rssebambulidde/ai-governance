@@ -15,7 +15,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [MEASURE 1 — Metrics Selection & Governance](#measure-1--metrics-selection--governance)
 2. [MEASURE 2 — Evaluate Trustworthiness Characteristics](#measure-2--evaluate-trustworthiness-characteristics)
@@ -762,7 +762,7 @@ AI Risk Officer:     ____________  Date: ________
 
 ---
 
-## 📎 Cross-References
+## Cross-References
 
 | Document | Link |
 |---|---|

@@ -13,7 +13,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Stakeholder Identification](#1-stakeholder-identification)
 2. [Stakeholder Power-Interest Grid](#2-stakeholder-power-interest-grid)
@@ -275,7 +275,7 @@
 
 ---
 
-## 📎 Cross-References
+## Cross-References
 
 | Document | Link |
 |---|---|

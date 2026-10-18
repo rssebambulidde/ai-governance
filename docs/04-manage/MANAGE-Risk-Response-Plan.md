@@ -14,7 +14,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [MANAGE 1 — Prioritize & Respond to Risks](#manage-1--prioritize--respond-to-risks)
 2. [MANAGE 2 — Sustain, Adapt & Override](#manage-2--sustain-adapt--override)
@@ -719,7 +719,7 @@ If FinAssist AI must be decommissioned (planned or emergency):
 
 ---
 
-## 📎 Cross-References
+## Cross-References
 
 | Document | Link |
 |---|---|

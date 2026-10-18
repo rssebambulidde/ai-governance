@@ -1,4 +1,4 @@
-# 👥 AI Roles & Responsibilities Matrix
+# AI Roles & Responsibilities Matrix
 **Framework:** NIST AI RMF 1.0 — GOVERN Function (2.1, 2.2, 2.3, 3.2)  
 **Version:** 1.0 | **Status:** Draft | **Date:** 2024  
 **Owner:** Chief AI Officer / AI Governance Committee
@@ -12,7 +12,7 @@
 
 ---
 
-## 🗂️ Section 1 — Role Descriptions
+## Section 1 — Role Descriptions
 
 ### 1.1 Governance & Leadership Roles
 
@@ -62,7 +62,7 @@
 
 ---
 
-## 📊 Section 2 — RACI Matrix by Activity
+## Section 2 — RACI Matrix by Activity
 
 ### 2.1 Governance & Policy Activities *(GOVERN 1.x, 2.x)*
 
@@ -162,7 +162,7 @@
 
 ---
 
-## 📋 Section 3 — Human-AI Configuration Register
+## Section 3 — Human-AI Configuration Register
 
 > *For each deployed AI system, document the human oversight configuration here. Reference: GOVERN 3.2*
 
@@ -183,7 +183,7 @@
 
 ---
 
-## 📋 Section 4 — Training Completion Tracker
+## Section 4 — Training Completion Tracker
 
 > *Track mandatory AI governance training per role. Reference: GOVERN 2.2*
 
@@ -193,7 +193,7 @@
 
 ---
 
-## 📋 Section 5 — Accountability Sign-Off Log
+## Section 5 — Accountability Sign-Off Log
 
 > *Every AI system deployment shall be formally signed off. Reference: GOVERN 2.3*
 
@@ -204,7 +204,7 @@
 
 ---
 
-## 📎 Related Documents
+## Related Documents
 
 | Document | Location |
 |---|---|

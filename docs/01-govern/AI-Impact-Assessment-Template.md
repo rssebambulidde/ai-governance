@@ -1,4 +1,4 @@
-# 📋 AI Impact Assessment Template
+# AI Impact Assessment Template
 **Framework:** NIST AI RMF 1.0 — GOVERN 4.2 · MAP 3.1 · MAP 3.2 · MAP 5.1 · MAP 5.2  
 **Version:** 1.0 | **Status:** Template  
 **Owner:** AI Ethics Officer  
@@ -15,7 +15,7 @@
 
 ---
 
-## 🗂️ Part 0 — Assessment Header
+## Part 0 — Assessment Header
 
 | Field | Details |
 |---|---|
@@ -33,7 +33,7 @@
 
 ---
 
-## 🗺️ Part 1 — AI System Overview *(MAP 1.1, MAP 2.1)*
+## Part 1 — AI System Overview *(MAP 1.1, MAP 2.1)*
 
 ### 1.1 System Purpose & Description
 
@@ -87,7 +87,7 @@
 
 ---
 
-## 🏢 Part 2 — Organizational Mission Alignment *(MAP 1.3, MAP 1.4)*
+## Part 2 — Organizational Mission Alignment *(MAP 1.3, MAP 1.4)*
 
 ### 2.1 Mission Alignment
 
@@ -114,7 +114,7 @@
 
 ---
 
-## ⚖️ Part 3 — Risk Tolerance & Legal Review *(MAP 1.5, GOVERN 1.1)*
+## Part 3 — Risk Tolerance & Legal Review *(MAP 1.5, GOVERN 1.1)*
 
 ### 3.1 Legal & Regulatory Review
 
@@ -144,7 +144,7 @@
 
 ---
 
-## 🌟 Part 4 — Potential Benefits *(MAP 3.1)*
+## Part 4 — Potential Benefits *(MAP 3.1)*
 
 ### 4.1 Intended Benefits
 
@@ -171,7 +171,7 @@
 
 ---
 
-## ⚠️ Part 5 — Potential Harms & Risks *(MAP 3.2, MAP 5.1)*
+## Part 5 — Potential Harms & Risks *(MAP 3.2, MAP 5.1)*
 
 ### 5.1 Harm Identification
 
@@ -220,7 +220,7 @@ For each harm identified above:
 
 ---
 
-## 🛡️ Part 6 — Risk Mitigation Plan *(MANAGE 1.3)*
+## Part 6 — Risk Mitigation Plan *(MANAGE 1.3)*
 
 For each harm rated 🟡 Medium or above, define a mitigation:
 
@@ -240,7 +240,7 @@ For each harm rated 🟡 Medium or above, define a mitigation:
 
 ---
 
-## 👥 Part 7 — Stakeholder Engagement *(MAP 5.2, GOVERN 5.1)*
+## Part 7 — Stakeholder Engagement *(MAP 5.2, GOVERN 5.1)*
 
 ### 7.1 Stakeholder Identification
 
@@ -264,7 +264,7 @@ For each harm rated 🟡 Medium or above, define a mitigation:
 
 ---
 
-## 📏 Part 8 — TEVV Summary *(MAP 2.3, MEASURE 1.1)*
+## Part 8 — TEVV Summary *(MAP 2.3, MEASURE 1.1)*
 
 ### 8.1 Testing Overview
 
@@ -294,7 +294,7 @@ For each harm rated 🟡 Medium or above, define a mitigation:
 
 ---
 
-## ✅ Part 9 — Go/No-Go Recommendation *(MANAGE 1.1)*
+## Part 9 — Go/No-Go Recommendation *(MANAGE 1.1)*
 
 ### 9.1 Summary of Findings
 
@@ -322,7 +322,7 @@ For each harm rated 🟡 Medium or above, define a mitigation:
 
 ---
 
-## ✍️ Part 10 — Sign-Off & Approval
+## Part 10 — Sign-Off & Approval
 
 | Role | Name | Decision | Conditions / Notes | Date | Signature |
 |---|---|---|---|---|---|
@@ -334,7 +334,7 @@ For each harm rated 🟡 Medium or above, define a mitigation:
 
 ---
 
-## 📎 Related Documents
+## Related Documents
 
 | Document | Location |
 |---|---|

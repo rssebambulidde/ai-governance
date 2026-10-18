@@ -12,7 +12,7 @@
 
 ---
 
-## 📋 Document Structure
+## Document Structure
 
 | Element | Details |
 |---|---|
@@ -23,7 +23,7 @@
 
 ---
 
-## 🏛️ GOVERN — Policies, Culture & Accountability
+## GOVERN — Policies, Culture & Accountability
 
 > *"Policies, processes, procedures and practices across the organization related to the mapping, measuring and managing of AI risks are in place, transparent, and implemented effectively."*
 
@@ -208,7 +208,7 @@
 
 ---
 
-## 🛠️ MANAGE — Prioritize, Respond & Improve
+## MANAGE — Prioritize, Respond & Improve
 
 > *"AI risks based on assessments and other analytical output from the Map and Measure functions are prioritized, responded to, and managed."*
 
@@ -335,7 +335,7 @@
 
 ---
 
-## 🗺️ MAP — Context & Risk Identification
+## MAP — Context & Risk Identification
 
 > *"Context is established and understood."*
 
@@ -504,7 +504,7 @@
 
 ---
 
-## 📏 MEASURE — Quantify & Evaluate Risks
+## MEASURE — Quantify & Evaluate Risks
 
 > *"Appropriate methods and metrics are identified and applied."*
 
@@ -610,7 +610,7 @@
 
 ---
 
-## 🔧 Key Software Tools Referenced
+## Key Software Tools Referenced
 
 | Category | Tools |
 |---|---|
@@ -622,7 +622,7 @@
 
 ---
 
-## 📚 Key Frameworks Referenced
+## Key Frameworks Referenced
 
 | Framework | Purpose |
 |---|---|
@@ -637,7 +637,7 @@
 
 ---
 
-## 🎓 Quick Recall Summary
+## Quick Recall Summary
 
 ```
 PLAYBOOK = HOW to implement each AI RMF subcategory

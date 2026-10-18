@@ -7,7 +7,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 | Section | Topic |
 |---|---|
@@ -23,7 +23,7 @@
 
 ---
 
-## 🌐 Big Picture: What is the AI RMF?
+## Big Picture: What is the AI RMF?
 
 ### The Problem It Solves
 
@@ -71,7 +71,7 @@ NIST AI RMF 1.0
 
 ---
 
-## ⚠️ Part 1A: Framing Risk
+## Part 1A: Framing Risk
 
 ### What Is "Risk" in AI?
 
@@ -94,7 +94,7 @@ Individuals → Groups → Communities → Organizations → Society → Environ
 
 ### The 4 Key Challenges in AI Risk Management
 
-#### Challenge 1: 🔬 Risk Measurement
+#### Challenge 1: Risk Measurement
 Measuring AI risks is hard because:
 
 | Problem | Explanation |
@@ -106,7 +106,7 @@ Measuring AI risks is hard because:
 | **Opacity / "Black boxes"** | If you can't explain the model, you can't measure its risk well |
 | **Human baseline problem** | Hard to compare AI decisions to human decisions fairly |
 
-#### Challenge 2: ⚖️ Risk Tolerance
+#### Challenge 2: Risk Tolerance
 - **Risk tolerance** = How much risk an org is *willing to accept* to achieve its goals
 - It is **NOT prescribed** by the framework — you define your own
 - Tolerance is influenced by: laws/regulations, industry norms, organizational values
@@ -116,7 +116,7 @@ Measuring AI risks is hard because:
 > [!TIP]
 > **Practical Guidance:** If your sector has existing risk guidelines, follow those. If not, *define reasonable tolerance yourself*, then use this framework to document and manage risks within that tolerance.
 
-#### Challenge 3: 🎯 Risk Prioritization
+#### Challenge 3: Risk Prioritization
 Not all risks are equal. Here's the prioritization logic:
 
 ```
@@ -137,7 +137,7 @@ Not all risks are equal. Here's the prioritization logic:
 
 **Residual Risk** = Risk remaining *after* risk treatment. Must be documented and disclosed to end users.
 
-#### Challenge 4: 🏢 Organizational Integration
+#### Challenge 4: Organizational Integration
 - AI risks should NOT be managed in isolation — integrate with **enterprise risk management**
 - Treat AI risks alongside cybersecurity and privacy risks for better outcomes
 - **Senior leadership** must own AI risk decisions — culture change often required
@@ -145,7 +145,7 @@ Not all risks are equal. Here's the prioritization logic:
 
 ---
 
-## 👥 Part 1B: Audience & AI Actors
+## Part 1B: Audience & AI Actors
 
 ### Who Should Use This Framework?
 
@@ -196,7 +196,7 @@ Anyone involved in the **AI lifecycle**: designers, developers, deployers, evalu
 
 ---
 
-## ✅ Part 1C: Trustworthy AI — The 7 Characteristics
+## Part 1C: Trustworthy AI — The 7 Characteristics
 
 This is one of the most important sections. These 7 characteristics define what "good AI" looks like. Think of them as **qualities every AI system should strive for**, though tradeoffs between them are inevitable.
 
@@ -207,7 +207,7 @@ This is one of the most important sections. These 7 characteristics define what 
 
 ---
 
-### 1️⃣ Valid and Reliable
+### 1⃣ Valid and Reliable
 
 | Concept | Plain-English Meaning |
 |---|---|
@@ -223,7 +223,7 @@ This is one of the most important sections. These 7 characteristics define what 
 
 ---
 
-### 2️⃣ Safe
+### 2⃣ Safe
 
 AI systems should not endanger human life, health, property, or the environment.
 
@@ -239,7 +239,7 @@ AI systems should not endanger human life, health, property, or the environment.
 
 ---
 
-### 3️⃣ Secure and Resilient
+### 3⃣ Secure and Resilient
 
 | Concept | Meaning |
 |---|---|
@@ -258,7 +258,7 @@ AI systems should not endanger human life, health, property, or the environment.
 
 ---
 
-### 4️⃣ Accountable and Transparent
+### 4⃣ Accountable and Transparent
 
 These two are inseparable:
 - **Transparency** = Information about the AI system and its outputs is *accessible* to those interacting with or affected by it
@@ -277,7 +277,7 @@ These two are inseparable:
 
 ---
 
-### 5️⃣ Explainable and Interpretable
+### 5⃣ Explainable and Interpretable
 
 | Concept | Meaning |
 |---|---|
@@ -294,7 +294,7 @@ These matter because:
 
 ---
 
-### 6️⃣ Privacy-Enhanced
+### 6⃣ Privacy-Enhanced
 
 Privacy refers to norms and practices that safeguard human autonomy, identity, and dignity — including:
 - Freedom from intrusion
@@ -313,7 +313,7 @@ Privacy refers to norms and practices that safeguard human autonomy, identity, a
 
 ---
 
-### 7️⃣ Fair — with Harmful Bias Managed
+### 7⃣ Fair — with Harmful Bias Managed
 
 Fairness in AI means addressing **equality and equity** by managing harmful bias and discrimination.
 
@@ -348,7 +348,7 @@ Security          ←→  Transparency (revealing model info = security risk)
 
 ---
 
-## ⚙️ Part 2 — The AI RMF Core: The 4 Functions
+## Part 2 — The AI RMF Core: The 4 Functions
 
 This is the operational heart of the framework. Think of it as a **continuous management cycle**, not a one-time checklist.
 
@@ -381,7 +381,7 @@ This is the operational heart of the framework. Think of it as a **continuous ma
 
 ---
 
-## 🏛️ Function 1: GOVERN
+## Function 1: GOVERN
 
 **Purpose:** Build and sustain an organizational culture that takes AI risk seriously.
 
@@ -445,7 +445,7 @@ GOVERN is the **only function that applies at all times** — it's not tied to a
 
 ---
 
-## 🗺️ Function 2: MAP
+## Function 2: MAP
 
 **Purpose:** Understand the *context* of your AI system to identify and frame its risks.
 
@@ -502,7 +502,7 @@ MAP is the **starting point for any specific AI system** — it builds the conte
 
 ---
 
-## 📏 Function 3: MEASURE
+## Function 3: MEASURE
 
 **Purpose:** Quantify and evaluate the risks identified in MAP using rigorous testing and metrics.
 
@@ -558,7 +558,7 @@ This is where each of the 7 trustworthiness characteristics gets formally measur
 
 ---
 
-## 🛠️ Function 4: MANAGE
+## Function 4: MANAGE
 
 **Purpose:** Act on what MAP and MEASURE revealed — prioritize, respond, recover, and improve.
 
@@ -610,7 +610,7 @@ MANAGE is where risk management becomes **operational**. It involves allocating 
 
 ---
 
-## 🗺️ AI RMF Profiles
+## AI RMF Profiles
 
 **What is a Profile?** A customized implementation of the AI RMF functions/categories for a *specific* use case, sector, or organization.
 
@@ -641,7 +641,7 @@ Step 5: IMPLEMENT → MONITOR → UPDATE profiles
 
 ---
 
-## 📊 Appendix Highlights
+## Appendix Highlights
 
 ### Appendix B: How AI Risks Differ from Traditional Software
 
@@ -692,7 +692,7 @@ The design principles NIST used to build this framework:
 
 ---
 
-## 🎓 Quick-Study Cheatsheet
+## Quick-Study Cheatsheet
 
 ### The Complete Framework on One Page
 
@@ -752,7 +752,7 @@ PART 2: THE CORE
 
 ---
 
-## 🔑 Key Vocabulary Glossary
+## Key Vocabulary Glossary
 
 | Term | Definition |
 |---|---|
@@ -793,7 +793,7 @@ PART 2: THE CORE
 
 ---
 
-## 📚 Further Learning Resources
+## Further Learning Resources
 
 | Resource | Where to Find It |
 |---|---|

@@ -1,4 +1,4 @@
-# 🚨 AI Incident Log
+# AI Incident Log
 **Framework:** NIST AI RMF 1.0 — GOVERN 4.3 · MANAGE 4.3  
 **Version:** 1.0 | **Status:** Active | **Date Started:** 2024  
 **Owner:** AI Risk Officer  
@@ -15,7 +15,7 @@
 
 ---
 
-## 📋 Incident Log Index
+## Incident Log Index
 
 | Incident ID | Date | AI System | Severity | Status | Summary |
 |---|---|---|---|---|---|
@@ -25,7 +25,7 @@
 
 ---
 
-## 📝 Incident Report Template
+## Incident Report Template
 
 > *Copy this block for each new incident. Replace the ID (INC-XXX) sequentially.*
 
@@ -203,7 +203,7 @@
 
 ---
 
-## 📊 Monthly Near-Miss & Low Severity Summary
+## Monthly Near-Miss & Low Severity Summary
 
 > *Low-severity incidents and near-misses are summarized monthly rather than reported individually.*
 
@@ -218,7 +218,7 @@
 
 ---
 
-## 📈 Incident Trend Tracker
+## Incident Trend Tracker
 
 > *Updated quarterly by the AI Risk Officer*
 
@@ -231,7 +231,7 @@
 
 ---
 
-## 📎 Related Documents
+## Related Documents
 
 | Document | Location |
 |---|---|
