@@ -1,4 +1,4 @@
-# 🛡️ SamaBrains AI Governance & Risk Solutions
+# SamaBrains AI Governance & Risk Solutions
 
 [![Framework: NIST AI RMF 1.0](https://img.shields.io/badge/Framework-NIST%20AI%20RMF%201.0-blue?style=for-the-badge)](https://www.nist.gov/itl/ai-risk-management-framework)
 [![Compliance: ISO/IEC 42001 Ready](https://img.shields.io/badge/Compliance-ISO%2FIEC%2042001-green?style=for-the-badge)](https://www.iso.org/standard/81230.html)
@@ -10,7 +10,7 @@
 
 ---
 
-## 🌟 Featured Portfolio Projects
+## Featured Portfolio Projects
 
 ```mermaid
 flowchart TD
@@ -25,7 +25,7 @@ flowchart TD
 
 ---
 
-### 🏛️ Project 1: Enterprise AI Governance Framework & TEVV (FinAssist AI)
+### Project 1: Enterprise AI Governance Framework & TEVV (FinAssist AI)
 > **Full Operational Case Study:** [`docs/README.md`](docs/README.md)  
 > **Domain:** Financial Services / Tier-1 Enterprise Generative AI Assistant  
 > **Standards:** NIST AI 100-1 (NIST AI RMF 1.0), ISO/IEC 42001, EU AI Act
@@ -34,35 +34,35 @@ Most enterprise AI ethics efforts stall at abstract statements. This project is 
 
 ```
 docs/
-├── 🏛️ 01-govern/
+├── 01-govern/
 │   ├── AI-Governance-Policy.md             <- Enterprise policy & oversight gates
 │   ├── AI-Roles-Matrix.md                  <- 3-tier RACI matrix & veto authority
 │   ├── AI-System-Inventory.csv             <- Model catalog & risk tier classification
 │   └── AI-Impact-Assessment-Template.md    <- Pre-deployment rights & harm assessment
-├── 🗺️ 02-map/
+├── 02-map/
 │   ├── MAP-AI-System-Context-Report.md     <- Technical boundaries & 13 risk profiles (R-01..R-13)
 │   ├── MAP-Stakeholder-Analysis.md         <- Impacted populations & whistleblower channels
 │   └── MAP-Risk-Benefit-Matrix.csv         <- Quantitative risk vs. utility scoring
-├── 📏 03-measure/
+├── 03-measure/
 │   ├── MEASURE-TEVV-Metrics-Framework.md   <- Independent testing & validation protocols
 │   ├── MEASURE-Bias-Testing-Methodology.md <- Statistical demographic parity & disparate impact testing
 │   └── MEASURE-Metrics-Tracker.csv         <- 20 operational metrics with breach thresholds
-├── 🛡️ 04-manage/
+├── 04-manage/
 │   ├── MANAGE-Risk-Response-Plan.md        <- Mitigation actions across all 13 MANAGE subcategories
 │   ├── MANAGE-Incident-Response-Playbook.md<- SEV-1 to SEV-4 classification & 15-min containment SLAs
 │   ├── MANAGE-Continuous-Improvement-Log.csv<- Post-incident & feedback closed-loop tracking
 │   └── AI-Incident-Log.md                  <- Standardized incident reporting register
-└── 📚 00-references/
+└── 00-references/
     ├── NIST-AI-RMF-Learning-Guide.md       <- 40+ page breakdown of NIST AI 100-1
     ├── NIST-AI-RMF-Playbook-Study-Notes.md <- Study notes across 72 NIST subcategories
     └── NIST.AI.100-1.pdf / Playbook.pdf    <- Primary standard publications
 ```
 
-👉 **[Explore the full FinAssist AI Governance Framework →](docs/README.md)**
+[Explore the full FinAssist AI Governance Framework →](docs/README.md)
 
 ---
 
-### 💬 Project 2: Grounded AI Governance Knowledge Base & Assistant
+### Project 2: Grounded AI Governance Knowledge Base & Assistant
 > **Case Study Write-up:** [`solutions/ai-governance-kb-assistant/`](solutions/ai-governance-kb-assistant/)  
 > **Live Demo:** [Ask SamaBrains](https://samabrains.com/ask/)
 
@@ -73,11 +73,11 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
   * Dual-door architecture serving staff internal lookups (Ctrl+K) and public client inquiries (`/ask/`).
   * Continuous indexing of emerging regulatory texts and practice guidance.
 
-👉 **[Read the Knowledge Base Case Study →](solutions/ai-governance-kb-assistant/)**
+[Read the Knowledge Base Case Study →](solutions/ai-governance-kb-assistant/)
 
 ---
 
-## 📊 Summary of Core Governance Deliverables
+## Summary of Core Governance Deliverables
 
 | Pillar | Key Artifacts | What It Delivers |
 |---|---|---|
@@ -88,7 +88,7 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
 
 ---
 
-## 🛠️ Operationalization & AI GRC Integration
+## Operationalization & AI GRC Integration
 
 This repository's deliverables are structured for straightforward integration into modern AI GRC and observability platforms:
 
@@ -98,7 +98,7 @@ This repository's deliverables are structured for straightforward integration in
 
 ---
 
-## 📖 Foundational Reference Guides
+## Foundational Reference Guides
 
 Included in this repository are comprehensive reference and study materials:
 
@@ -108,13 +108,13 @@ Included in this repository are comprehensive reference and study materials:
 
 ---
 
-## ⚖️ Legal Disclaimer
+## Legal Disclaimer
 
 *The contents of this repository are provided for educational, governance architecture, and compliance demonstration purposes. They do not constitute formal legal counsel. For regulatory filings, engage certified legal counsel and accredited conformity assessment bodies.*
 
 ---
 
-## 👤 Author & Practice
+## Author & Practice
 
 **Robert Ssebambulidde**  
 Founder & Practice Lead, **[SamaBrains](https://samabrains.com/)**  

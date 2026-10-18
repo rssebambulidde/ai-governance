@@ -1,11 +1,11 @@
-# 🏛️ NIST AI RMF 1.0 Implementation: FinAssist AI
+# NIST AI RMF 1.0 Implementation: FinAssist AI
 
 > **Operational Governance, Risk Mapping, TEVV Metrics, and Incident Response for an Enterprise Financial Services LLM**  
 > *Aligned with NIST AI 100-1 (NIST AI Risk Management Framework 1.0), ISO/IEC 42001 (Artificial Intelligence Management System), and Global Regulatory Guidance.*
 
 ---
 
-## 📌 Executive Summary
+## Executive Summary
 
 This documentation repository contains the **complete, end-to-end operational governance implementation** for **FinAssist AI (SYS-FIN-001)**—a Tier-1 enterprise Generative AI assistant deployed by a commercial retail bank for customer financial inquiry assistance, account navigation, and financial product guidance.
 
@@ -22,11 +22,11 @@ flowchart LR
 
 ---
 
-## 📁 Repository Directory & Deliverables Index
+## Repository Directory & Deliverables Index
 
 All files in this directory are interlinked with relative markdown links, making them fully browsable on GitHub, local markdown viewers, or web doc systems.
 
-### 🏛️ 1. GOVERN Function — Institutional Accountability & Culture
+### 1. GOVERN Function — Institutional Accountability & Culture
 *Cultivating a culture of risk management, clear accountability, and structured pre-deployment gates.*
 
 | Artifact | Format | Description | NIST AI RMF Core |
@@ -38,7 +38,7 @@ All files in this directory are interlinked with relative markdown links, making
 
 ---
 
-### 🗺️ 2. MAP Function — Context, Risks & Stakeholder Impact
+### 2. MAP Function — Context, Risks & Stakeholder Impact
 *Understanding context, categorizing system boundaries, and profiling specific AI harms.*
 
 | Artifact | Format | Description | NIST AI RMF Core |
@@ -49,7 +49,7 @@ All files in this directory are interlinked with relative markdown links, making
 
 ---
 
-### 📏 3. MEASURE Function — TEVV & Quantitative Evaluation
+### 3. MEASURE Function — TEVV & Quantitative Evaluation
 *Rigorous testing, evaluation, verification, and validation (TEVV) against measurable benchmarks.*
 
 | Artifact | Format | Description | NIST AI RMF Core |
@@ -60,7 +60,7 @@ All files in this directory are interlinked with relative markdown links, making
 
 ---
 
-### 🛡️ 4. MANAGE Function — Risk Response, Incident Playbook & Continuous Improvement
+### 4. MANAGE Function — Risk Response, Incident Playbook & Continuous Improvement
 *Allocating risk resources, sustaining mitigations in production, containing incidents, and closing the learning loop.*
 
 | Artifact | Format | Description | NIST AI RMF Core |
@@ -72,7 +72,7 @@ All files in this directory are interlinked with relative markdown links, making
 
 ---
 
-### 📚 5. Study Notes & Standards Reference Materials
+### 5. Study Notes & Standards Reference Materials
 *Foundational study materials and primary reference frameworks.*
 
 | Artifact | Description |
@@ -86,7 +86,7 @@ All files in this directory are interlinked with relative markdown links, making
 
 ---
 
-## 🔗 Operationalization with AI GRC Platforms
+## Operationalization with AI GRC Platforms
 
 This framework is built for immediate ingestion into modern AI Governance, Risk, and Compliance (GRC) tools:
 
