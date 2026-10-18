@@ -11,7 +11,7 @@
 ---
 
 > [!IMPORTANT]
-> This document fulfills the **MEASURE function** of the NIST AI RMF. It defines the metrics, testing protocols, evaluation criteria, and monitoring framework for FinAssist AI. All metrics, test suites, and evaluation results feed into the Go/No-Go deployment decision defined in the [MAP Report](./MAP_AI_System_Context_Report.md) and the [AI Governance Policy](./AI_Governance_Policy.md).
+> This document fulfills the **MEASURE function** of the NIST AI RMF. It defines the metrics, testing protocols, evaluation criteria, and monitoring framework for FinAssist AI. All metrics, test suites, and evaluation results feed into the Go/No-Go deployment decision defined in the [MAP Report](../02_map/MAP_AI_System_Context_Report.md) and the [AI Governance Policy](../01_govern/AI_Governance_Policy.md).
 
 ---
 
@@ -134,7 +134,7 @@ Metrics are organized into four tiers:
 | **External Audit** (optional) | Third-party AI audit firm | Fully independent | Comprehensive AI system audit (if required by regulator) |
 
 > [!WARNING]
-> Per MEASURE 1.3 and GOVERN 4.1, the TEVV team must have **no reporting dependency** on the development team. If the TEVV team reports to the same manager as the AI/ML engineers, this creates a conflict of interest. The TEVV Team Lead reports to the **AI Risk Officer** (see [AI_Roles_Matrix.md](./AI_Roles_Matrix.md)).
+> Per MEASURE 1.3 and GOVERN 4.1, the TEVV team must have **no reporting dependency** on the development team. If the TEVV team reports to the same manager as the AI/ML engineers, this creates a conflict of interest. The TEVV Team Lead reports to the **AI Risk Officer** (see [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md)).
 
 ---
 
@@ -427,7 +427,7 @@ Since direct demographic data is not collected, bias testing uses **proxy dimens
 
 #### Risk Tracking Integration
 
-All risks from the [MAP Risk Register](./MAP_AI_System_Context_Report.md) are tracked through continuous monitoring. The MEASURE function adds:
+All risks from the [MAP Risk Register](../02_map/MAP_AI_System_Context_Report.md) are tracked through continuous monitoring. The MEASURE function adds:
 
 | Tracking Activity | Description | Frequency | Owner |
 |---|---|---|---|
@@ -766,15 +766,15 @@ AI Risk Officer:     ____________  Date: ________
 
 | Document | Link |
 |---|---|
-| MAP — AI System Context & Risk Report | [MAP_AI_System_Context_Report.md](./MAP_AI_System_Context_Report.md) |
-| MAP — Stakeholder Analysis | [MAP_Stakeholder_Analysis.md](./MAP_Stakeholder_Analysis.md) |
-| MAP — Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](./MAP_Risk_Benefit_Matrix.csv) |
+| MAP — AI System Context & Risk Report | [MAP_AI_System_Context_Report.md](../02_map/MAP_AI_System_Context_Report.md) |
+| MAP — Stakeholder Analysis | [MAP_Stakeholder_Analysis.md](../02_map/MAP_Stakeholder_Analysis.md) |
+| MAP — Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](../02_map/MAP_Risk_Benefit_Matrix.csv) |
 | MEASURE — Bias Testing Methodology | [MEASURE_Bias_Testing_Methodology.md](./MEASURE_Bias_Testing_Methodology.md) |
-| AI Governance Policy | [AI_Governance_Policy.md](./AI_Governance_Policy.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](./AI_Roles_Matrix.md) |
-| AI Impact Assessment Template | [AI_Impact_Assessment_Template.md](./AI_Impact_Assessment_Template.md) |
-| AI Incident Log | [AI_Incident_Log.md](./AI_Incident_Log.md) |
-| AI System Inventory | [AI_System_Inventory.csv](./AI_System_Inventory.csv) |
+| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
+| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
+| AI Impact Assessment Template | [AI_Impact_Assessment_Template.md](../01_govern/AI_Impact_Assessment_Template.md) |
+| AI Incident Log | [AI_Incident_Log.md](../04_manage/AI_Incident_Log.md) |
+| AI System Inventory | [AI_System_Inventory.csv](../01_govern/AI_System_Inventory.csv) |
 
 ---
 

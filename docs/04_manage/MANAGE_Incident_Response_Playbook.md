@@ -4,7 +4,7 @@
 **Date:** 2024  
 **Owner:** AI Risk Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
-**Location:** `docs/MANAGE_Incident_Response_Playbook.md`
+**Location:** `docs/04_manage/MANAGE_Incident_Response_Playbook.md`
 
 ---
 
@@ -304,7 +304,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 - [ ] For P1: consider broader scope restriction
 
 ### G4 — Remediation (per Bias Testing Methodology §8)
-- [ ] Follow the bias remediation decision tree in [MEASURE_Bias_Testing_Methodology.md](./MEASURE_Bias_Testing_Methodology.md)
+- [ ] Follow the bias remediation decision tree in [MEASURE_Bias_Testing_Methodology.md](../03_measure/MEASURE_Bias_Testing_Methodology.md)
 - [ ] Re-run full FAI test suite after remediation
 - [ ] Verify fix does not create new regressions (run TS-01 and TS-02)
 
@@ -478,8 +478,8 @@ Signed: AI Risk Officer ____________  Date: ________
 |---|---|
 | MANAGE — Risk Response Plan | [MANAGE_Risk_Response_Plan.md](./MANAGE_Risk_Response_Plan.md) |
 | AI Incident Log | [AI_Incident_Log.md](./AI_Incident_Log.md) |
-| MEASURE — Metrics Tracker | [MEASURE_Metrics_Tracker.csv](./MEASURE_Metrics_Tracker.csv) |
-| MEASURE — Bias Testing Methodology | [MEASURE_Bias_Testing_Methodology.md](./MEASURE_Bias_Testing_Methodology.md) |
-| AI Governance Policy | [AI_Governance_Policy.md](./AI_Governance_Policy.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](./AI_Roles_Matrix.md) |
+| MEASURE — Metrics Tracker | [MEASURE_Metrics_Tracker.csv](../03_measure/MEASURE_Metrics_Tracker.csv) |
+| MEASURE — Bias Testing Methodology | [MEASURE_Bias_Testing_Methodology.md](../03_measure/MEASURE_Bias_Testing_Methodology.md) |
+| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
+| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
 

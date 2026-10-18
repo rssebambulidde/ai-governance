@@ -40,7 +40,7 @@
 | Field | Details |
 |---|---|
 | **System Name** | FinAssist AI |
-| **System ID** | AI-001 (per [AI_System_Inventory.csv](./AI_System_Inventory.csv)) |
+| **System ID** | AI-001 (per [AI_System_Inventory.csv](../01_govern/AI_System_Inventory.csv)) |
 | **System Type** | Conversational AI Chatbot — Customer Support |
 | **AI Task(s)** | Natural Language Understanding (NLU), Intent Classification, Response Generation, Knowledge Retrieval, Escalation Routing |
 | **Underlying Technology** | Cloudflare Workers AI (inference at the edge) with Cloudflare AI Search for retrieval-augmented generation (RAG) |
@@ -186,7 +186,7 @@ The context-mapping team must include diverse perspectives to avoid blind spots.
 
 | Criterion | Threshold for "Go" | Measured By |
 |---|---|---|
-| Impact Assessment completed | ✅ Must be complete and signed | [AI_Impact_Assessment_Template.md](./AI_Impact_Assessment_Template.md) |
+| Impact Assessment completed | ✅ Must be complete and signed | [AI_Impact_Assessment_Template.md](../01_govern/AI_Impact_Assessment_Template.md) |
 | TEVV completed | ✅ All test suites passed | TEVV Team Lead |
 | Bias testing | ✅ No statistically significant disparities | AI Ethics Officer |
 | Regulatory review | ✅ Compliance sign-off obtained | Compliance / Legal |
@@ -591,7 +591,7 @@ Stakeholder Feedback
 
 ## Appendix B — Risk Register
 
-> This register consolidates all risks identified in this MAP report. Each risk links to the [AI_Incident_Log.md](./AI_Incident_Log.md) for tracking if materialized.
+> This register consolidates all risks identified in this MAP report. Each risk links to the [AI_Incident_Log.md](../04_manage/AI_Incident_Log.md) for tracking if materialized.
 
 | Risk ID | Category | Description | Likelihood | Impact | Rating | Owner | Control | Status |
 |---|---|---|---|---|---|---|---|---|
@@ -703,12 +703,12 @@ Stakeholder Feedback
 
 | Document | Link |
 |---|---|
-| AI Governance Policy | [AI_Governance_Policy.md](./AI_Governance_Policy.md) |
-| AI System Inventory | [AI_System_Inventory.csv](./AI_System_Inventory.csv) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](./AI_Roles_Matrix.md) |
-| AI Impact Assessment Template | [AI_Impact_Assessment_Template.md](./AI_Impact_Assessment_Template.md) |
-| AI Incident Log | [AI_Incident_Log.md](./AI_Incident_Log.md) |
-| NIST AI RMF Playbook Study Notes | [NIST_AI_RMF_Playbook_Study_Notes.md](./NIST_AI_RMF_Playbook_Study_Notes.md) |
+| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
+| AI System Inventory | [AI_System_Inventory.csv](../01_govern/AI_System_Inventory.csv) |
+| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
+| AI Impact Assessment Template | [AI_Impact_Assessment_Template.md](../01_govern/AI_Impact_Assessment_Template.md) |
+| AI Incident Log | [AI_Incident_Log.md](../04_manage/AI_Incident_Log.md) |
+| NIST AI RMF Playbook Study Notes | [NIST_AI_RMF_Playbook_Study_Notes.md](../00_references/NIST_AI_RMF_Playbook_Study_Notes.md) |
 
 ---
 

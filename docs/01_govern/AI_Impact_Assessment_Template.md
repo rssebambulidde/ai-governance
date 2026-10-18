@@ -2,7 +2,7 @@
 **Framework:** NIST AI RMF 1.0 — GOVERN 4.2 · MAP 3.1 · MAP 3.2 · MAP 5.1 · MAP 5.2  
 **Version:** 1.0 | **Status:** Template  
 **Owner:** AI Ethics Officer  
-**Location:** `docs/AI_Impact_Assessment_Template.md`
+**Location:** `docs/01_govern/AI_Impact_Assessment_Template.md`
 
 ---
 

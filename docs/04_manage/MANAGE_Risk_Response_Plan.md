@@ -5,7 +5,7 @@
 **Owner:** AI Risk Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Organization Sector:** Financial Services  
-**Location:** `docs/MANAGE_Risk_Response_Plan.md`
+**Location:** `docs/04_manage/MANAGE_Risk_Response_Plan.md`
 
 ---
 
@@ -38,13 +38,13 @@ The Go/No-Go decision for FinAssist AI is a formal governance gate. It is **not*
 
 | Input | Source | Required Before Decision |
 |---|---|---|
-| MAP Context & Risk Report | [MAP_AI_System_Context_Report.md](./MAP_AI_System_Context_Report.md) | ✅ Completed |
-| Stakeholder Analysis | [MAP_Stakeholder_Analysis.md](./MAP_Stakeholder_Analysis.md) | ✅ Completed |
-| Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](./MAP_Risk_Benefit_Matrix.csv) | ✅ Completed |
-| TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](./MEASURE_TEVV_Metrics_Framework.md) | ✅ Completed |
-| Bias Testing Results | [MEASURE_Bias_Testing_Methodology.md](./MEASURE_Bias_Testing_Methodology.md) | ⬜ Complete pre-deployment |
+| MAP Context & Risk Report | [MAP_AI_System_Context_Report.md](../02_map/MAP_AI_System_Context_Report.md) | ✅ Completed |
+| Stakeholder Analysis | [MAP_Stakeholder_Analysis.md](../02_map/MAP_Stakeholder_Analysis.md) | ✅ Completed |
+| Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](../02_map/MAP_Risk_Benefit_Matrix.csv) | ✅ Completed |
+| TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](../03_measure/MEASURE_TEVV_Metrics_Framework.md) | ✅ Completed |
+| Bias Testing Results | [MEASURE_Bias_Testing_Methodology.md](../03_measure/MEASURE_Bias_Testing_Methodology.md) | ⬜ Complete pre-deployment |
 | All TEVV Test Suite Results (TS-01 to TS-11) | TEVV Team | ⬜ Complete pre-deployment |
-| AI Impact Assessment | [AI_Impact_Assessment_Template.md](./AI_Impact_Assessment_Template.md) | ⬜ Complete pre-deployment |
+| AI Impact Assessment | [AI_Impact_Assessment_Template.md](../01_govern/AI_Impact_Assessment_Template.md) | ⬜ Complete pre-deployment |
 | Compliance Sign-Off | Compliance / Legal Department | ⬜ Obtained pre-deployment |
 | Data Privacy Impact Assessment (DPIA) | Data Privacy Officer | ⬜ Complete pre-deployment |
 
@@ -63,7 +63,7 @@ The Go/No-Go decision for FinAssist AI is a formal governance gate. It is **not*
 | Stakeholder engagement complete | ✅ Pilot feedback reviewed and addressed | AI Ethics Officer |
 
 > [!CAUTION]
-> A **No-Go from any veto role blocks deployment regardless of other approvals**. This independence from financial or timeline pressure is mandated by NIST AI RMF MANAGE 1.1 and the [AI Governance Policy](./AI_Governance_Policy.md).
+> A **No-Go from any veto role blocks deployment regardless of other approvals**. This independence from financial or timeline pressure is mandated by NIST AI RMF MANAGE 1.1 and the [AI Governance Policy](../01_govern/AI_Governance_Policy.md).
 
 #### 1.1.3 Possible Outcomes
 
@@ -725,11 +725,11 @@ If FinAssist AI must be decommissioned (planned or emergency):
 |---|---|
 | Incident Response Playbook | [MANAGE_Incident_Response_Playbook.md](./MANAGE_Incident_Response_Playbook.md) |
 | Continuous Improvement Log | [MANAGE_Continuous_Improvement_Log.csv](./MANAGE_Continuous_Improvement_Log.csv) |
-| MAP — Context & Risk Report | [MAP_AI_System_Context_Report.md](./MAP_AI_System_Context_Report.md) |
-| MAP — Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](./MAP_Risk_Benefit_Matrix.csv) |
-| MEASURE — TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](./MEASURE_TEVV_Metrics_Framework.md) |
-| MEASURE — Metrics Tracker | [MEASURE_Metrics_Tracker.csv](./MEASURE_Metrics_Tracker.csv) |
-| AI Governance Policy | [AI_Governance_Policy.md](./AI_Governance_Policy.md) |
+| MAP — Context & Risk Report | [MAP_AI_System_Context_Report.md](../02_map/MAP_AI_System_Context_Report.md) |
+| MAP — Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](../02_map/MAP_Risk_Benefit_Matrix.csv) |
+| MEASURE — TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](../03_measure/MEASURE_TEVV_Metrics_Framework.md) |
+| MEASURE — Metrics Tracker | [MEASURE_Metrics_Tracker.csv](../03_measure/MEASURE_Metrics_Tracker.csv) |
+| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
 | AI Incident Log | [AI_Incident_Log.md](./AI_Incident_Log.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](./AI_Roles_Matrix.md) |
+| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
 
