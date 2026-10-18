@@ -4,7 +4,7 @@
 **Date:** 2024  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Owner:** AI Ethics Officer  
-**Location:** `docs/02_map/MAP_Stakeholder_Analysis.md`
+**Location:** `docs/02-map/MAP-Stakeholder-Analysis.md`
 
 ---
 
@@ -196,7 +196,7 @@
 | **In-Chat Thumbs Up/Down** | Every AI response includes a feedback button | Binary satisfaction + optional text | Real-time dashboard; monthly trend analysis |
 | **Post-Interaction Survey** | Random 10% sample receives short survey after conversation | CSAT (1–5), "Was your issue resolved?", open text | Monthly CSAT report |
 | **"Talk to a Person" Analytics** | Track when and why customers request human escalation | Escalation trigger, conversation point, topic | Weekly escalation analysis |
-| **Formal Complaint Channel** | Existing bank complaints process with AI-specific categorization | Complaint category, severity, resolution | [AI_Incident_Log.md](../04_manage/AI_Incident_Log.md) |
+| **Formal Complaint Channel** | Existing bank complaints process with AI-specific categorization | Complaint category, severity, resolution | [AI-Incident-Log.md](../04-manage/AI-Incident-Log.md) |
 | **Customer Focus Groups** | Quarterly sessions with diverse customer group | Qualitative insights, usability observations | Quarterly review report |
 
 ### 5.2 Internal Feedback Channels
@@ -206,7 +206,7 @@
 | **Agent Feedback Portal** | CS Agents + Supervisors | Report AI errors, poor escalation context, or customer complaints | Incident Log + Monthly review |
 | **AI Operations Dashboard** | AI Ops + Supervisors | Real-time metrics: accuracy, escalation rate, response time, errors | Automated alerts at threshold breaches |
 | **Governance Board Report** | Board + Oversight | Quarterly consolidated report: metrics, incidents, feedback themes, risk status | Quarterly governance review |
-| **Anonymous Whistleblower** | All staff | Report concerns about AI system safety, ethics, or compliance without attribution | Per [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) Section 1.2 |
+| **Anonymous Whistleblower** | All staff | Report concerns about AI system safety, ethics, or compliance without attribution | Per [AI-Governance-Policy.md](../01-govern/AI-Governance-Policy.md) Section 1.2 |
 
 ### 5.3 Feedback-to-Action Workflow
 
@@ -279,10 +279,10 @@
 
 | Document | Link |
 |---|---|
-| MAP — AI System Context & Risk Report | [MAP_AI_System_Context_Report.md](./MAP_AI_System_Context_Report.md) |
-| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
-| AI Impact Assessment Template | [AI_Impact_Assessment_Template.md](../01_govern/AI_Impact_Assessment_Template.md) |
-| AI Incident Log | [AI_Incident_Log.md](../04_manage/AI_Incident_Log.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
-| AI System Inventory | [AI_System_Inventory.csv](../01_govern/AI_System_Inventory.csv) |
+| MAP — AI System Context & Risk Report | [MAP-AI-System-Context-Report.md](./MAP-AI-System-Context-Report.md) |
+| AI Governance Policy | [AI-Governance-Policy.md](../01-govern/AI-Governance-Policy.md) |
+| AI Impact Assessment Template | [AI-Impact-Assessment-Template.md](../01-govern/AI-Impact-Assessment-Template.md) |
+| AI Incident Log | [AI-Incident-Log.md](../04-manage/AI-Incident-Log.md) |
+| AI Roles Matrix | [AI-Roles-Matrix.md](../01-govern/AI-Roles-Matrix.md) |
+| AI System Inventory | [AI-System-Inventory.csv](../01-govern/AI-System-Inventory.csv) |
 

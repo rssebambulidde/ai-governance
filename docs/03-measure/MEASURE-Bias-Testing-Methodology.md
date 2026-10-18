@@ -5,7 +5,7 @@
 **Owner:** AI Ethics Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Organization Sector:** Financial Services  
-**Location:** `docs/03_measure/MEASURE_Bias_Testing_Methodology.md`
+**Location:** `docs/03-measure/MEASURE-Bias-Testing-Methodology.md`
 
 ---
 
@@ -581,10 +581,10 @@ Chief AI Officer:       ____________  Date: ________
 
 | Document | Link |
 |---|---|
-| MEASURE — TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](./MEASURE_TEVV_Metrics_Framework.md) |
-| MAP — AI System Context & Risk Report | [MAP_AI_System_Context_Report.md](../02_map/MAP_AI_System_Context_Report.md) |
-| MAP — Stakeholder Analysis | [MAP_Stakeholder_Analysis.md](../02_map/MAP_Stakeholder_Analysis.md) |
-| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
-| AI Incident Log | [AI_Incident_Log.md](../04_manage/AI_Incident_Log.md) |
+| MEASURE — TEVV & Metrics Framework | [MEASURE-TEVV-Metrics-Framework.md](./MEASURE-TEVV-Metrics-Framework.md) |
+| MAP — AI System Context & Risk Report | [MAP-AI-System-Context-Report.md](../02-map/MAP-AI-System-Context-Report.md) |
+| MAP — Stakeholder Analysis | [MAP-Stakeholder-Analysis.md](../02-map/MAP-Stakeholder-Analysis.md) |
+| AI Governance Policy | [AI-Governance-Policy.md](../01-govern/AI-Governance-Policy.md) |
+| AI Roles Matrix | [AI-Roles-Matrix.md](../01-govern/AI-Roles-Matrix.md) |
+| AI Incident Log | [AI-Incident-Log.md](../04-manage/AI-Incident-Log.md) |
 

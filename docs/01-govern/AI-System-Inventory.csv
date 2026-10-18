@@ -1,0 +1,6 @@
+ID,System_Name,Department_Owner,Business_Purpose,AI_Task_Type,Deployment_Status,Risk_Level,Data_Types_Used,Third_Party_Components,Accountable_Owner,AI_Project_Lead,Developer_Team,Operator_Team,TEVV_Status,Last_Review_Date,Next_Review_Date,Impact_Assessment_Done,Documentation_Repo_Link,Incident_Log_Link,Notes
+AI-001,FinAssist AI,Customer Service / Retail Banking,Automate customer support triage and FAQ responses via AI chatbot,NLU + RAG + Intent Classification + Response Generation,Planning / Pre-Development,High,Text - Customer queries; Session context; Customer segment (non-PII),Cloudflare Workers AI; Cloudflare AI Search / Vectorize,[Chief AI Officer],[AI Project Lead],[AI/ML Engineering Team],[Customer Service + AI Operations],In Progress,2024-01-01,2024-06-30,In Progress,docs/MAP-AI-System-Context-Report.md,docs/AI-Incident-Log.md,MAP function completed - Context Report and Risk Matrix produced. Pending: MEASURE and MANAGE.
+AI-002,,,,,,,,,,,,,,,,,,,
+AI-003,,,,,,,,,,,,,,,,,,,
+AI-004,,,,,,,,,,,,,,,,,,,
+AI-005,,,,,,,,,,,,,,,,,,,

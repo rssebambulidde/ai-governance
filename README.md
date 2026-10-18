@@ -34,27 +34,27 @@ Most enterprise AI ethics efforts stall at abstract statements. This project is 
 
 ```
 docs/
-├── 🏛️ 01_govern/
-│   ├── AI_Governance_Policy.md             <- Enterprise policy & oversight gates
-│   ├── AI_Roles_Matrix.md                  <- 3-tier RACI matrix & veto authority
-│   ├── AI_System_Inventory.csv             <- Model catalog & risk tier classification
-│   └── AI_Impact_Assessment_Template.md    <- Pre-deployment rights & harm assessment
-├── 🗺️ 02_map/
-│   ├── MAP_AI_System_Context_Report.md     <- Technical boundaries & 13 risk profiles (R-01..R-13)
-│   ├── MAP_Stakeholder_Analysis.md         <- Impacted populations & whistleblower channels
-│   └── MAP_Risk_Benefit_Matrix.csv         <- Quantitative risk vs. utility scoring
-├── 📏 03_measure/
-│   ├── MEASURE_TEVV_Metrics_Framework.md   <- Independent testing & validation protocols
-│   ├── MEASURE_Bias_Testing_Methodology.md <- Statistical demographic parity & disparate impact testing
-│   └── MEASURE_Metrics_Tracker.csv         <- 20 operational metrics with breach thresholds
-├── 🛡️ 04_manage/
-│   ├── MANAGE_Risk_Response_Plan.md        <- Mitigation actions across all 13 MANAGE subcategories
-│   ├── MANAGE_Incident_Response_Playbook.md<- SEV-1 to SEV-4 classification & 15-min containment SLAs
-│   ├── MANAGE_Continuous_Improvement_Log.csv<- Post-incident & feedback closed-loop tracking
-│   └── AI_Incident_Log.md                  <- Standardized incident reporting register
-└── 📚 00_references/
-    ├── NIST_AI_RMF_Learning_Guide.md       <- 40+ page breakdown of NIST AI 100-1
-    ├── NIST_AI_RMF_Playbook_Study_Notes.md <- Study notes across 72 NIST subcategories
+├── 🏛️ 01-govern/
+│   ├── AI-Governance-Policy.md             <- Enterprise policy & oversight gates
+│   ├── AI-Roles-Matrix.md                  <- 3-tier RACI matrix & veto authority
+│   ├── AI-System-Inventory.csv             <- Model catalog & risk tier classification
+│   └── AI-Impact-Assessment-Template.md    <- Pre-deployment rights & harm assessment
+├── 🗺️ 02-map/
+│   ├── MAP-AI-System-Context-Report.md     <- Technical boundaries & 13 risk profiles (R-01..R-13)
+│   ├── MAP-Stakeholder-Analysis.md         <- Impacted populations & whistleblower channels
+│   └── MAP-Risk-Benefit-Matrix.csv         <- Quantitative risk vs. utility scoring
+├── 📏 03-measure/
+│   ├── MEASURE-TEVV-Metrics-Framework.md   <- Independent testing & validation protocols
+│   ├── MEASURE-Bias-Testing-Methodology.md <- Statistical demographic parity & disparate impact testing
+│   └── MEASURE-Metrics-Tracker.csv         <- 20 operational metrics with breach thresholds
+├── 🛡️ 04-manage/
+│   ├── MANAGE-Risk-Response-Plan.md        <- Mitigation actions across all 13 MANAGE subcategories
+│   ├── MANAGE-Incident-Response-Playbook.md<- SEV-1 to SEV-4 classification & 15-min containment SLAs
+│   ├── MANAGE-Continuous-Improvement-Log.csv<- Post-incident & feedback closed-loop tracking
+│   └── AI-Incident-Log.md                  <- Standardized incident reporting register
+└── 📚 00-references/
+    ├── NIST-AI-RMF-Learning-Guide.md       <- 40+ page breakdown of NIST AI 100-1
+    ├── NIST-AI-RMF-Playbook-Study-Notes.md <- Study notes across 72 NIST subcategories
     └── NIST.AI.100-1.pdf / Playbook.pdf    <- Primary standard publications
 ```
 
@@ -81,10 +81,10 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
 
 | Pillar | Key Artifacts | What It Delivers |
 |---|---|---|
-| **GOVERN** | [Policy](docs/01_govern/AI_Governance_Policy.md) · [Roles Matrix](docs/01_govern/AI_Roles_Matrix.md) · [System Inventory](docs/01_govern/AI_System_Inventory.csv) | Board-level accountability, clear RACI definitions, independent veto powers, and complete model registration. |
-| **MAP** | [Context Report](docs/02_map/MAP_AI_System_Context_Report.md) · [Stakeholder Analysis](docs/02_map/MAP_Stakeholder_Analysis.md) · [Risk-Benefit Matrix](docs/02_map/MAP_Risk_Benefit_Matrix.csv) | Comprehensive categorization of the AI system, 13 profiled risks (R-01 to R-13), and disproportionate impact analysis on vulnerable groups. |
-| **MEASURE** | [TEVV Framework](docs/03_measure/MEASURE_TEVV_Metrics_Framework.md) · [Bias Testing](docs/03_measure/MEASURE_Bias_Testing_Methodology.md) · [Metrics Tracker](docs/03_measure/MEASURE_Metrics_Tracker.csv) | Independent TEVV testing regimen tracking 20 quantitative metrics (hallucination rate, prompt injection bypass, latency, demographic parity). |
-| **MANAGE** | [Risk Response Plan](docs/04_manage/MANAGE_Risk_Response_Plan.md) · [Incident Playbook](docs/04_manage/MANAGE_Incident_Response_Playbook.md) · [CI Log](docs/04_manage/MANAGE_Continuous_Improvement_Log.csv) | Automated circuit breakers, SEV-1 to SEV-4 incident escalation, emergency kill-switches, and continuous retraining feedback loops. |
+| **GOVERN** | [Policy](docs/01-govern/AI-Governance-Policy.md) · [Roles Matrix](docs/01-govern/AI-Roles-Matrix.md) · [System Inventory](docs/01-govern/AI-System-Inventory.csv) | Board-level accountability, clear RACI definitions, independent veto powers, and complete model registration. |
+| **MAP** | [Context Report](docs/02-map/MAP-AI-System-Context-Report.md) · [Stakeholder Analysis](docs/02-map/MAP-Stakeholder-Analysis.md) · [Risk-Benefit Matrix](docs/02-map/MAP-Risk-Benefit-Matrix.csv) | Comprehensive categorization of the AI system, 13 profiled risks (R-01 to R-13), and disproportionate impact analysis on vulnerable groups. |
+| **MEASURE** | [TEVV Framework](docs/03-measure/MEASURE-TEVV-Metrics-Framework.md) · [Bias Testing](docs/03-measure/MEASURE-Bias-Testing-Methodology.md) · [Metrics Tracker](docs/03-measure/MEASURE-Metrics-Tracker.csv) | Independent TEVV testing regimen tracking 20 quantitative metrics (hallucination rate, prompt injection bypass, latency, demographic parity). |
+| **MANAGE** | [Risk Response Plan](docs/04-manage/MANAGE-Risk-Response-Plan.md) · [Incident Playbook](docs/04-manage/MANAGE-Incident-Response-Playbook.md) · [CI Log](docs/04-manage/MANAGE-Continuous-Improvement-Log.csv) | Automated circuit breakers, SEV-1 to SEV-4 incident escalation, emergency kill-switches, and continuous retraining feedback loops. |
 
 ---
 
@@ -94,7 +94,7 @@ This repository's deliverables are structured for straightforward integration in
 
 * **[VerifyWise.ai](https://verifywise.ai/):** Open-source AI GRC platform native to NIST AI RMF. Deliverables map directly into VerifyWise's Model Inventory, Risk Register, and Incident Logging modules.
 * **Credo AI / Holistic AI / Vanta AI:** Controls, roles, and impact assessments can be ingested as compliance evidence items for ISO/IEC 42001 certification audits.
-* **LLM Observability (Langfuse / Phoenix / Arize):** Production telemetry streams real-time data into the 20 metrics defined in [`MEASURE_Metrics_Tracker.csv`](docs/03_measure/MEASURE_Metrics_Tracker.csv).
+* **LLM Observability (Langfuse / Phoenix / Arize):** Production telemetry streams real-time data into the 20 metrics defined in [`MEASURE-Metrics-Tracker.csv`](docs/03-measure/MEASURE-Metrics-Tracker.csv).
 
 ---
 
@@ -102,9 +102,9 @@ This repository's deliverables are structured for straightforward integration in
 
 Included in this repository are comprehensive reference and study materials:
 
-* [NIST AI RMF Learning Guide](docs/00_references/NIST_AI_RMF_Learning_Guide.md) — 40+ page breakdown of the NIST AI 100-1 framework.
-* [NIST AI RMF Playbook Study Notes](docs/00_references/NIST_AI_RMF_Playbook_Study_Notes.md) — Line-by-line notes on all 72 NIST subcategories.
-* [AI Risk Taxonomy Guide](docs/00_references/ai-risk-guide.md) — Categorized directory of AI harms, failure modes, and threat vectors.
+* [NIST AI RMF Learning Guide](docs/00-references/NIST-AI-RMF-Learning-Guide.md) — 40+ page breakdown of the NIST AI 100-1 framework.
+* [NIST AI RMF Playbook Study Notes](docs/00-references/NIST-AI-RMF-Playbook-Study-Notes.md) — Line-by-line notes on all 72 NIST subcategories.
+* [AI Risk Taxonomy Guide](docs/00-references/ai-risk-guide.md) — Categorized directory of AI harms, failure modes, and threat vectors.
 
 ---
 

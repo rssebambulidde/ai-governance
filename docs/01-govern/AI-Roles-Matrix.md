@@ -208,9 +208,9 @@
 
 | Document | Location |
 |---|---|
-| AI Governance Policy | `docs/AI_Governance_Policy.md` |
-| AI System Inventory | `docs/AI_System_Inventory.csv` |
-| NIST AI RMF Playbook Study Notes | `docs/NIST_AI_RMF_Playbook_Study_Notes.md` |
+| AI Governance Policy | `docs/AI-Governance-Policy.md` |
+| AI System Inventory | `docs/AI-System-Inventory.csv` |
+| NIST AI RMF Playbook Study Notes | `docs/NIST-AI-RMF-Playbook-Study-Notes.md` |
 
 ---
 

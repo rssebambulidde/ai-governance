@@ -224,7 +224,7 @@ The organization shall maintain:
 ## 8. AI System Inventory *(GOVERN 1.6)*
 
 ### 8.1 Inventory Requirement
-The organization shall maintain a complete and current inventory of all AI systems. Refer to the **AI System Inventory** (separate document: `AI_System_Inventory.csv`).
+The organization shall maintain a complete and current inventory of all AI systems. Refer to the **AI System Inventory** (separate document: `AI-System-Inventory.csv`).
 
 ### 8.2 Minimum Inventory Attributes
 Each AI system entry shall include:
@@ -275,7 +275,7 @@ An AI system shall be decommissioned when:
 
 ## 10. Roles & Responsibilities *(GOVERN 2.1)*
 
-Refer to the full **AI Roles & Responsibilities Matrix** (separate document: `AI_Roles_Matrix.md`).
+Refer to the full **AI Roles & Responsibilities Matrix** (separate document: `AI-Roles-Matrix.md`).
 
 ### 10.1 Key Principles
 - Development and testing/evaluation functions shall be **organizationally separated** to prevent conflicts of interest and groupthink
@@ -518,11 +518,11 @@ This policy shall be reviewed:
 
 | Document | Description | Location |
 |---|---|---|
-| AI System Inventory | Registry of all organizational AI systems | `docs/AI_System_Inventory.csv` |
-| AI Roles & Responsibilities Matrix | Detailed roles and accountability mapping | `docs/AI_Roles_Matrix.md` |
-| AI Impact Assessment Template | Template for conducting impact assessments | `docs/AI_Impact_Assessment_Template.md` |
-| NIST AI RMF Playbook Study Notes | Reference for implementation guidance | `docs/NIST_AI_RMF_Playbook_Study_Notes.md` |
-| AI Incident Log | Record of all AI incidents and responses | `docs/AI_Incident_Log.md` |
+| AI System Inventory | Registry of all organizational AI systems | `docs/AI-System-Inventory.csv` |
+| AI Roles & Responsibilities Matrix | Detailed roles and accountability mapping | `docs/AI-Roles-Matrix.md` |
+| AI Impact Assessment Template | Template for conducting impact assessments | `docs/AI-Impact-Assessment-Template.md` |
+| NIST AI RMF Playbook Study Notes | Reference for implementation guidance | `docs/NIST-AI-RMF-Playbook-Study-Notes.md` |
+| AI Incident Log | Record of all AI incidents and responses | `docs/AI-Incident-Log.md` |
 
 ---
 

@@ -4,12 +4,12 @@
 **Date:** 2024  
 **Owner:** AI Risk Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
-**Location:** `docs/04_manage/MANAGE_Incident_Response_Playbook.md`
+**Location:** `docs/04-manage/MANAGE-Incident-Response-Playbook.md`
 
 ---
 
 > [!IMPORTANT]
-> This playbook defines **step-by-step response procedures** for every category of incident that may affect FinAssist AI. It must be reviewed and drilled before go-live, accessible to all incident responders 24/7, and updated after every incident or exercise. All incidents are logged in [AI_Incident_Log.md](./AI_Incident_Log.md).
+> This playbook defines **step-by-step response procedures** for every category of incident that may affect FinAssist AI. It must be reviewed and drilled before go-live, accessible to all incident responders 24/7, and updated after every incident or exercise. All incidents are logged in [AI-Incident-Log.md](./AI-Incident-Log.md).
 
 ---
 
@@ -67,7 +67,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 | Phase | Actions | Timebox |
 |---|---|---|
 | **Detect** | Monitoring alert fires OR human reports issue | N/A |
-| **Log** | Open entry in [AI_Incident_Log.md](./AI_Incident_Log.md) immediately; record detection time, source, initial description | < 5 minutes |
+| **Log** | Open entry in [AI-Incident-Log.md](./AI-Incident-Log.md) immediately; record detection time, source, initial description | < 5 minutes |
 | **Classify** | Assign P1/P2/P3/P4; activate appropriate playbook | < 10 minutes |
 | **Contain** | Stop the harm — restrict, isolate, or shut down as required by playbook | < 15 minutes (P1); < 1 hour (P2) |
 | **Notify** | Alert per escalation contact directory based on class | Per SLA in §13 |
@@ -84,7 +84,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### A1 — Immediate Containment (< 30 minutes)
 - [ ] Classify as **P1**
-- [ ] Log in AI_Incident_Log.md with: conversation ID, customer segment, incorrect information provided, timestamp
+- [ ] Log in AI-Incident-Log.md with: conversation ID, customer segment, incorrect information provided, timestamp
 - [ ] **Restrict system immediately:** switch AI to FAQ-only pre-approved response mode; disable open-ended response generation
 - [ ] Notify AI Risk Officer, CS Lead, and Chief AI Officer
 - [ ] CS Lead: Brief all CS agents — "Increased escalation expected; treat all AI-assisted queries with extra verification today"
@@ -122,7 +122,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### B1 — Immediate Containment (< 15 minutes)
 - [ ] Classify as **P1**
-- [ ] Log in AI_Incident_Log.md
+- [ ] Log in AI-Incident-Log.md
 - [ ] **Isolate affected session(s):** prevent further access to conversation logs containing PII
 - [ ] Notify DPO and CISO simultaneously
 - [ ] DPO starts breach assessment timer: T+0 = now
@@ -162,7 +162,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### C1 — Immediate Containment (< 15 minutes)
 - [ ] Classify as **P1**
-- [ ] Log in AI_Incident_Log.md with: attack vector, what was achieved, conversation ID(s)
+- [ ] Log in AI-Incident-Log.md with: attack vector, what was achieved, conversation ID(s)
 - [ ] **Full system shutdown:** FinAssist AI taken offline entirely; fallback activated
 - [ ] Notify InfoSec Lead, CISO, AI Risk Officer, Chief AI Officer
 - [ ] Preserve all conversation logs and system state for forensic analysis
@@ -197,7 +197,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### D1 — Immediate Response (< 30 minutes)
 - [ ] Classify as **P1** if confirmed instance; **P2** if metric breach only
-- [ ] Log in AI_Incident_Log.md
+- [ ] Log in AI-Incident-Log.md
 - [ ] If confirmed individual case: CS Lead identifies customer; immediate human outreach
 - [ ] CS Lead: Brief all agents to be especially attentive to distressed customer signals on escalated conversations today
 - [ ] AI Risk Officer notified
@@ -232,7 +232,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### E1 — Immediate Activation (< 5 minutes)
 - [ ] Classify: total outage = **P1**; degraded availability = **P2**
-- [ ] Log in AI_Incident_Log.md
+- [ ] Log in AI-Incident-Log.md
 - [ ] **Activate fallback immediately:** static FAQ page + direct to human agent queue
 - [ ] Display to customers: *"Our AI assistant is temporarily unavailable. Please wait and a team member will assist you shortly."*
 - [ ] CS Lead notified: expect significantly increased human query volume
@@ -263,7 +263,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### F1 — Immediate Response (< 1 hour)
 - [ ] Classify as **P1** (all regulatory contact is critical)
-- [ ] Log in AI_Incident_Log.md
+- [ ] Log in AI-Incident-Log.md
 - [ ] Do NOT respond to regulator without Legal and Compliance involvement
 - [ ] Notify immediately: Legal, Compliance, Chief AI Officer, CEO
 - [ ] Legal: Review the nature of the inquiry — examination, complaint, investigation, or information request?
@@ -271,7 +271,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 ### F2 — Preparation (< 24 hours)
 - [ ] Compliance + Legal: Assemble required documentation — this document suite covers all NIST AI RMF functions
 - [ ] AI Risk Officer: Prepare FinAssist AI overview: MAP report, MEASURE results, MANAGE controls
-- [ ] Ensure audit trail is complete and accessible (verify AI_Incident_Log.md is current)
+- [ ] Ensure audit trail is complete and accessible (verify AI-Incident-Log.md is current)
 - [ ] Brief executive team on inquiry scope
 
 ### F3 — Response
@@ -288,7 +288,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ### G1 — Immediate Response (< 4 hours)
 - [ ] Classify as **P2** (fairness gap 10–15%) or **P1** (> 15% gap or confirmed discriminatory impact)
-- [ ] Log in AI_Incident_Log.md
+- [ ] Log in AI-Incident-Log.md
 - [ ] AI Ethics Officer leads response
 - [ ] Notify: AI Risk Officer, Compliance, Chief AI Officer
 
@@ -304,7 +304,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 - [ ] For P1: consider broader scope restriction
 
 ### G4 — Remediation (per Bias Testing Methodology §8)
-- [ ] Follow the bias remediation decision tree in [MEASURE_Bias_Testing_Methodology.md](../03_measure/MEASURE_Bias_Testing_Methodology.md)
+- [ ] Follow the bias remediation decision tree in [MEASURE-Bias-Testing-Methodology.md](../03-measure/MEASURE-Bias-Testing-Methodology.md)
 - [ ] Re-run full FAI test suite after remediation
 - [ ] Verify fix does not create new regressions (run TS-01 and TS-02)
 
@@ -317,7 +317,7 @@ DETECT → LOG → CLASSIFY → CONTAIN → INVESTIGATE → REMEDIATE → RESTOR
 
 ## 11. Incident Log Entry Template
 
-> Open a new entry in [AI_Incident_Log.md](./AI_Incident_Log.md) immediately on detection. Fill in what you know — update as investigation progresses.
+> Open a new entry in [AI-Incident-Log.md](./AI-Incident-Log.md) immediately on detection. Fill in what you know — update as investigation progresses.
 
 ```
 ═══════════════════════════════════════════════
@@ -476,10 +476,10 @@ Signed: AI Risk Officer ____________  Date: ________
 
 | Document | Link |
 |---|---|
-| MANAGE — Risk Response Plan | [MANAGE_Risk_Response_Plan.md](./MANAGE_Risk_Response_Plan.md) |
-| AI Incident Log | [AI_Incident_Log.md](./AI_Incident_Log.md) |
-| MEASURE — Metrics Tracker | [MEASURE_Metrics_Tracker.csv](../03_measure/MEASURE_Metrics_Tracker.csv) |
-| MEASURE — Bias Testing Methodology | [MEASURE_Bias_Testing_Methodology.md](../03_measure/MEASURE_Bias_Testing_Methodology.md) |
-| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
+| MANAGE — Risk Response Plan | [MANAGE-Risk-Response-Plan.md](./MANAGE-Risk-Response-Plan.md) |
+| AI Incident Log | [AI-Incident-Log.md](./AI-Incident-Log.md) |
+| MEASURE — Metrics Tracker | [MEASURE-Metrics-Tracker.csv](../03-measure/MEASURE-Metrics-Tracker.csv) |
+| MEASURE — Bias Testing Methodology | [MEASURE-Bias-Testing-Methodology.md](../03-measure/MEASURE-Bias-Testing-Methodology.md) |
+| AI Governance Policy | [AI-Governance-Policy.md](../01-govern/AI-Governance-Policy.md) |
+| AI Roles Matrix | [AI-Roles-Matrix.md](../01-govern/AI-Roles-Matrix.md) |
 

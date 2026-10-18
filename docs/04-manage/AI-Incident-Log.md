@@ -2,7 +2,7 @@
 **Framework:** NIST AI RMF 1.0 — GOVERN 4.3 · MANAGE 4.3  
 **Version:** 1.0 | **Status:** Active | **Date Started:** 2024  
 **Owner:** AI Risk Officer  
-**Location:** `docs/04_manage/AI_Incident_Log.md`
+**Location:** `docs/04-manage/AI-Incident-Log.md`
 
 ---
 
@@ -41,7 +41,7 @@
 | **Date & Time Detected** | YYYY-MM-DD HH:MM (UTC+X) |
 | **Date & Time Reported** | YYYY-MM-DD HH:MM |
 | **Reported By** | [Name, Role] |
-| **AI System Affected** | [System Name — matches AI_System_Inventory.csv ID] |
+| **AI System Affected** | [System Name — matches AI-System-Inventory.csv ID] |
 | **System Risk Level** | 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low |
 | **Incident Severity** | 🔴 Critical / 🟠 High / 🟡 Medium / 🟢 Low |
 | **Incident Type** | ⬜ Performance Failure · ⬜ Bias/Fairness · ⬜ Security/Adversarial · ⬜ Privacy Breach · ⬜ Unexpected Behavior · ⬜ Near-Miss · ⬜ User Complaint · ⬜ Other |
@@ -179,7 +179,7 @@
 **Policy / Process Changes Triggered:**
 | Change | Document Updated | Owner | Date |
 |---|---|---|---|
-| [e.g. Update TEVV protocol for X] | [AI_Governance_Policy.md] | [Name] | YYYY-MM-DD |
+| [e.g. Update TEVV protocol for X] | [AI-Governance-Policy.md] | [Name] | YYYY-MM-DD |
 | | | | |
 
 **Shared Externally?**
@@ -235,10 +235,10 @@
 
 | Document | Location |
 |---|---|
-| AI Governance Policy | `docs/AI_Governance_Policy.md` |
-| AI System Inventory | `docs/AI_System_Inventory.csv` |
-| AI Roles & Responsibilities Matrix | `docs/AI_Roles_Matrix.md` |
-| AI Impact Assessment Template | `docs/AI_Impact_Assessment_Template.md` |
+| AI Governance Policy | `docs/AI-Governance-Policy.md` |
+| AI System Inventory | `docs/AI-System-Inventory.csv` |
+| AI Roles & Responsibilities Matrix | `docs/AI-Roles-Matrix.md` |
+| AI Impact Assessment Template | `docs/AI-Impact-Assessment-Template.md` |
 
 ---
 

@@ -2,7 +2,7 @@
 **Framework:** NIST AI RMF 1.0 — GOVERN 4.2 · MAP 3.1 · MAP 3.2 · MAP 5.1 · MAP 5.2  
 **Version:** 1.0 | **Status:** Template  
 **Owner:** AI Ethics Officer  
-**Location:** `docs/01_govern/AI_Impact_Assessment_Template.md`
+**Location:** `docs/01-govern/AI-Impact-Assessment-Template.md`
 
 ---
 
@@ -21,7 +21,7 @@
 |---|---|
 | **Assessment ID** | AIIA-[XXX] |
 | **AI System Name** | |
-| **AI System ID** | [Matches AI_System_Inventory.csv] |
+| **AI System ID** | [Matches AI-System-Inventory.csv] |
 | **Assessment Version** | v1.0 |
 | **Assessment Type** | ⬜ New System · ⬜ Major Update · ⬜ Re-Evaluation of Existing System · ⬜ Post-Incident Review |
 | **Assessment Lead** | [Name — AI Ethics Officer] |
@@ -338,11 +338,11 @@ For each harm rated 🟡 Medium or above, define a mitigation:
 
 | Document | Location |
 |---|---|
-| AI Governance Policy | `docs/AI_Governance_Policy.md` |
-| AI System Inventory | `docs/AI_System_Inventory.csv` |
-| AI Roles & Responsibilities Matrix | `docs/AI_Roles_Matrix.md` |
-| AI Incident Log | `docs/AI_Incident_Log.md` |
-| NIST AI RMF Playbook Study Notes | `docs/NIST_AI_RMF_Playbook_Study_Notes.md` |
+| AI Governance Policy | `docs/AI-Governance-Policy.md` |
+| AI System Inventory | `docs/AI-System-Inventory.csv` |
+| AI Roles & Responsibilities Matrix | `docs/AI-Roles-Matrix.md` |
+| AI Incident Log | `docs/AI-Incident-Log.md` |
+| NIST AI RMF Playbook Study Notes | `docs/NIST-AI-RMF-Playbook-Study-Notes.md` |
 
 ---
 

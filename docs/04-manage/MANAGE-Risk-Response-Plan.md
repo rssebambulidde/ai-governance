@@ -5,7 +5,7 @@
 **Owner:** AI Risk Officer  
 **AI System:** FinAssist AI (Customer Support Chatbot) — AI-001  
 **Organization Sector:** Financial Services  
-**Location:** `docs/04_manage/MANAGE_Risk_Response_Plan.md`
+**Location:** `docs/04-manage/MANAGE-Risk-Response-Plan.md`
 
 ---
 
@@ -38,13 +38,13 @@ The Go/No-Go decision for FinAssist AI is a formal governance gate. It is **not*
 
 | Input | Source | Required Before Decision |
 |---|---|---|
-| MAP Context & Risk Report | [MAP_AI_System_Context_Report.md](../02_map/MAP_AI_System_Context_Report.md) | ✅ Completed |
-| Stakeholder Analysis | [MAP_Stakeholder_Analysis.md](../02_map/MAP_Stakeholder_Analysis.md) | ✅ Completed |
-| Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](../02_map/MAP_Risk_Benefit_Matrix.csv) | ✅ Completed |
-| TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](../03_measure/MEASURE_TEVV_Metrics_Framework.md) | ✅ Completed |
-| Bias Testing Results | [MEASURE_Bias_Testing_Methodology.md](../03_measure/MEASURE_Bias_Testing_Methodology.md) | ⬜ Complete pre-deployment |
+| MAP Context & Risk Report | [MAP-AI-System-Context-Report.md](../02-map/MAP-AI-System-Context-Report.md) | ✅ Completed |
+| Stakeholder Analysis | [MAP-Stakeholder-Analysis.md](../02-map/MAP-Stakeholder-Analysis.md) | ✅ Completed |
+| Risk-Benefit Matrix | [MAP-Risk-Benefit-Matrix.csv](../02-map/MAP-Risk-Benefit-Matrix.csv) | ✅ Completed |
+| TEVV & Metrics Framework | [MEASURE-TEVV-Metrics-Framework.md](../03-measure/MEASURE-TEVV-Metrics-Framework.md) | ✅ Completed |
+| Bias Testing Results | [MEASURE-Bias-Testing-Methodology.md](../03-measure/MEASURE-Bias-Testing-Methodology.md) | ⬜ Complete pre-deployment |
 | All TEVV Test Suite Results (TS-01 to TS-11) | TEVV Team | ⬜ Complete pre-deployment |
-| AI Impact Assessment | [AI_Impact_Assessment_Template.md](../01_govern/AI_Impact_Assessment_Template.md) | ⬜ Complete pre-deployment |
+| AI Impact Assessment | [AI-Impact-Assessment-Template.md](../01-govern/AI-Impact-Assessment-Template.md) | ⬜ Complete pre-deployment |
 | Compliance Sign-Off | Compliance / Legal Department | ⬜ Obtained pre-deployment |
 | Data Privacy Impact Assessment (DPIA) | Data Privacy Officer | ⬜ Complete pre-deployment |
 
@@ -63,7 +63,7 @@ The Go/No-Go decision for FinAssist AI is a formal governance gate. It is **not*
 | Stakeholder engagement complete | ✅ Pilot feedback reviewed and addressed | AI Ethics Officer |
 
 > [!CAUTION]
-> A **No-Go from any veto role blocks deployment regardless of other approvals**. This independence from financial or timeline pressure is mandated by NIST AI RMF MANAGE 1.1 and the [AI Governance Policy](../01_govern/AI_Governance_Policy.md).
+> A **No-Go from any veto role blocks deployment regardless of other approvals**. This independence from financial or timeline pressure is mandated by NIST AI RMF MANAGE 1.1 and the [AI Governance Policy](../01-govern/AI-Governance-Policy.md).
 
 #### 1.1.3 Possible Outcomes
 
@@ -158,7 +158,7 @@ The four NIST AI RMF response strategies applied to each risk:
 | **Tertiary Control** | Automated PII scanner (M-03) continuous; 90-day anonymization policy |
 | **Transfer** | Cloudflare Data Processing Agreement covering processing jurisdiction, no data use for training |
 | **Trigger for Immediate Action** | Any PII detection in post-processing scan (M-03 = any count > 0) |
-| **Immediate Action** | Isolate affected session; notify DPO within 1 hour; assess breach scope; regulatory notification within 72 hours if threshold met; full incident response per [MANAGE_Incident_Response_Playbook.md](./MANAGE_Incident_Response_Playbook.md) |
+| **Immediate Action** | Isolate affected session; notify DPO within 1 hour; assess breach scope; regulatory notification within 72 hours if threshold met; full incident response per [MANAGE-Incident-Response-Playbook.md](./MANAGE-Incident-Response-Playbook.md) |
 | **Owner** | DPO (primary); InfoSec (technical) |
 
 **R-05 — Prompt Injection / Jailbreak (P2 — Mitigate)**
@@ -326,7 +326,7 @@ All controls for FinAssist AI, categorised by type:
 | Protocol | Description | Frequency |
 |---|---|---|
 | **Anomaly Monitoring** | Automated statistical monitoring flags unusual patterns in input queries, response quality, escalation rates, and user behaviour | Continuous |
-| **Near-Miss Logging** | All "almost harmful" events logged in [AI_Incident_Log.md](./AI_Incident_Log.md) — patterns reviewed monthly | Per event |
+| **Near-Miss Logging** | All "almost harmful" events logged in [AI-Incident-Log.md](./AI-Incident-Log.md) — patterns reviewed monthly | Per event |
 | **Decontextualisation Watch** | Monitor for FinAssist AI being used in contexts significantly different from intended deployment (e.g., referenced by third parties, shared externally) | Monthly |
 | **Drift Detection** | Input distribution drift (M-18) may signal new user populations, new query types, or external changes | Weekly |
 | **External Intelligence** | Monitor NIST AI incident database, CISA advisories, financial services AI risk publications, academic preprints | Monthly |
@@ -388,7 +388,7 @@ SHUTDOWN INITIATED
     │
     Step 4: Scope Assessment (within 4 hours)
     │   └── What went wrong? How many customers affected? Data involved?
-    │       Document in AI_Incident_Log.md
+    │       Document in AI-Incident-Log.md
     │
     Step 5: Regulatory Assessment (within 24 hours)
     │   └── Does this require regulatory notification?
@@ -593,7 +593,7 @@ For each trustworthiness characteristic, define improvement targets:
 ```
 INCIDENT DETECTED
         │
-        ├── Log in AI_Incident_Log.md immediately
+        ├── Log in AI-Incident-Log.md immediately
         │
         ├── Classify: P1 / P2 / P3 / Near-Miss
         │
@@ -723,13 +723,13 @@ If FinAssist AI must be decommissioned (planned or emergency):
 
 | Document | Link |
 |---|---|
-| Incident Response Playbook | [MANAGE_Incident_Response_Playbook.md](./MANAGE_Incident_Response_Playbook.md) |
-| Continuous Improvement Log | [MANAGE_Continuous_Improvement_Log.csv](./MANAGE_Continuous_Improvement_Log.csv) |
-| MAP — Context & Risk Report | [MAP_AI_System_Context_Report.md](../02_map/MAP_AI_System_Context_Report.md) |
-| MAP — Risk-Benefit Matrix | [MAP_Risk_Benefit_Matrix.csv](../02_map/MAP_Risk_Benefit_Matrix.csv) |
-| MEASURE — TEVV & Metrics Framework | [MEASURE_TEVV_Metrics_Framework.md](../03_measure/MEASURE_TEVV_Metrics_Framework.md) |
-| MEASURE — Metrics Tracker | [MEASURE_Metrics_Tracker.csv](../03_measure/MEASURE_Metrics_Tracker.csv) |
-| AI Governance Policy | [AI_Governance_Policy.md](../01_govern/AI_Governance_Policy.md) |
-| AI Incident Log | [AI_Incident_Log.md](./AI_Incident_Log.md) |
-| AI Roles Matrix | [AI_Roles_Matrix.md](../01_govern/AI_Roles_Matrix.md) |
+| Incident Response Playbook | [MANAGE-Incident-Response-Playbook.md](./MANAGE-Incident-Response-Playbook.md) |
+| Continuous Improvement Log | [MANAGE-Continuous-Improvement-Log.csv](./MANAGE-Continuous-Improvement-Log.csv) |
+| MAP — Context & Risk Report | [MAP-AI-System-Context-Report.md](../02-map/MAP-AI-System-Context-Report.md) |
+| MAP — Risk-Benefit Matrix | [MAP-Risk-Benefit-Matrix.csv](../02-map/MAP-Risk-Benefit-Matrix.csv) |
+| MEASURE — TEVV & Metrics Framework | [MEASURE-TEVV-Metrics-Framework.md](../03-measure/MEASURE-TEVV-Metrics-Framework.md) |
+| MEASURE — Metrics Tracker | [MEASURE-Metrics-Tracker.csv](../03-measure/MEASURE-Metrics-Tracker.csv) |
+| AI Governance Policy | [AI-Governance-Policy.md](../01-govern/AI-Governance-Policy.md) |
+| AI Incident Log | [AI-Incident-Log.md](./AI-Incident-Log.md) |
+| AI Roles Matrix | [AI-Roles-Matrix.md](../01-govern/AI-Roles-Matrix.md) |
 
