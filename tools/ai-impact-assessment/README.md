@@ -23,7 +23,16 @@
 * **Workforce Competency Tracker (GOVERN 2.2):** Role-based training records, mandatory certification tracking, and compliance audit readiness.
 * **Executive Role & RACI PDF Exporter:** Dedicated light-theme, pure white PDF engine with formal executive signatures and CSV export.
 
-### 3. AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
+### 3. AI Governance Policy & Deployment Gatekeeper (GOVERN 1.1–1.7 · GOVERN 4.1 · GOVERN 6.1–6.2)
+* **Mandatory 4-Tier Go/No-Go Deployment Gates (GOVERN 1.3):** Live gatekeeper verifying whether any registered system passes all 4 non-negotiable policy release criteria (Zero Unmitigated Critical Risks, Legal & Digital Equity Sign-off, Independent TEVV Validation, and Veto Authorities Approval) with real-time clearance status (`CLEARED FOR DEPLOYMENT`, `CONDITIONAL HOLD`, `BLOCKED`).
+* **Trustworthy AI Principles Audit Verifier (GOVERN 1.2):** Operational compliance review across all 8 foundational principles (Accountability, Transparency, Fairness, Safety, Privacy, Security, Reliability, Explainability).
+* **Mandatory Lifecycle Documentation Standards (GOVERN 1.4):** Real-time readiness tracker for all 9 required governance artifacts (AI System Card, Data Sheet, Model Card, Risk Report, TEVV Dossier, AIIA, Deployment Record, Monitoring Plan, Incident Log).
+* **Decommissioning Triggers (GOVERN 1.7):** 5 standard triggers requiring immediate system suspension, human failover, or permanent retirement.
+* **Third-Party AI & Foundation Model Due Diligence (GOVERN 6.1 & 6.2):** Evaluation rubric assessing model cards, training data rights, zero-retention SLAs, and adversarial red-teaming.
+* **Policy Exceptions & Risk Waivers Register (GOVERN 1.1):** Formal deviation workflow tracking expiry dates, compensating controls, and approving officers.
+* **Executive Policy Attestation & PDF Certificate:** One-click generation of the formal annual/quarterly AI Governance Policy Attestation Statement in white-paper printable PDF and Markdown.
+
+### 4. AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
 * **10-Part Assessment Wizard:** Guides users through all sections of the NIST AI RMF Impact Assessment lifecycle.
 * **Interactive Risk Calculator:** Real-time Likelihood (1–5) × Impact (1–5) calculation with dynamic risk badges (Low, Medium, High, Critical) and risk scorecard heat counter.
 * **Preset Switcher:** Instant *"Load FinAssist AI Example"* for demonstration and benchmarking, or *"New Blank"* for net-new assessments.

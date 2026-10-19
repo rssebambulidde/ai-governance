@@ -47,6 +47,7 @@ function initAntigravityGovernanceApp() {
     const allTabs = [
       { id: 'inventory', btn: document.getElementById('tab-nav-inventory'), view: document.getElementById('view-inventory'), act: document.getElementById('actions-inventory') },
       { id: 'roles', btn: document.getElementById('tab-nav-roles'), view: document.getElementById('view-roles'), act: document.getElementById('actions-roles') },
+      { id: 'policy', btn: document.getElementById('tab-nav-policy'), view: document.getElementById('view-policy'), act: document.getElementById('actions-policy') },
       { id: 'assessment', btn: document.getElementById('tab-nav-assessment'), view: document.getElementById('view-assessment'), act: document.getElementById('actions-assessment') }
     ];
 
@@ -73,6 +74,8 @@ function initAntigravityGovernanceApp() {
       renderInventoryTable();
     } else if (target === 'roles') {
       renderRolesModule();
+    } else if (target === 'policy') {
+      renderPolicyModule();
     } else {
       syncHeaderBadges();
       updateProgress();
@@ -94,6 +97,7 @@ function initAntigravityGovernanceApp() {
 
   document.getElementById('tab-nav-inventory')?.addEventListener('click', () => switchHubView('inventory'));
   document.getElementById('tab-nav-roles')?.addEventListener('click', () => switchHubView('roles'));
+  document.getElementById('tab-nav-policy')?.addEventListener('click', () => switchHubView('policy'));
   document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
 
   // Inventory Data State
@@ -1038,6 +1042,485 @@ function initAntigravityGovernanceApp() {
   }
 
   document.getElementById('btn-print-roles-pdf')?.addEventListener('click', triggerPrintRolesPdf);
+
+  // ==========================================================================
+  // 0.3 AI GOVERNANCE POLICY & GATING MODULE (GOVERN 1 & 6)
+  // ==========================================================================
+  let selectedPolicySystemId = 'SYS-FIN-001';
+
+  function switchPolicySubview(target) {
+    const subtabs = [
+      { id: 'gates', btn: document.getElementById('btn-sub-gates'), view: document.getElementById('subview-gates') },
+      { id: 'principles', btn: document.getElementById('btn-sub-principles'), view: document.getElementById('subview-principles') },
+      { id: 'artifacts', btn: document.getElementById('btn-sub-artifacts'), view: document.getElementById('subview-artifacts') },
+      { id: 'thirdparty', btn: document.getElementById('btn-sub-thirdparty'), view: document.getElementById('subview-thirdparty') },
+      { id: 'exceptions', btn: document.getElementById('btn-sub-exceptions'), view: document.getElementById('subview-exceptions') }
+    ];
+
+    subtabs.forEach(s => {
+      s.btn?.classList.remove('active');
+      if (s.view) {
+        s.view.classList.remove('active');
+        s.view.style.display = 'none';
+      }
+    });
+
+    const activeSub = subtabs.find(s => s.id === target) || subtabs[0];
+    activeSub.btn?.classList.add('active');
+    if (activeSub.view) {
+      activeSub.view.classList.add('active');
+      activeSub.view.style.display = 'block';
+    }
+
+    if (target === 'gates') renderPolicyGates();
+    else if (target === 'principles') renderPrinciplesAudit();
+    else if (target === 'artifacts') renderArtifactTracker();
+    else if (target === 'thirdparty') renderThirdPartyScreener();
+    else if (target === 'exceptions') renderExceptionsRegister();
+  }
+
+  window.switchPolicySubview = switchPolicySubview;
+
+  document.getElementById('btn-sub-gates')?.addEventListener('click', () => switchPolicySubview('gates'));
+  document.getElementById('btn-sub-principles')?.addEventListener('click', () => switchPolicySubview('principles'));
+  document.getElementById('btn-sub-artifacts')?.addEventListener('click', () => switchPolicySubview('artifacts'));
+  document.getElementById('btn-sub-thirdparty')?.addEventListener('click', () => switchPolicySubview('thirdparty'));
+  document.getElementById('btn-sub-exceptions')?.addEventListener('click', () => switchPolicySubview('exceptions'));
+
+  function populatePolicySystemSelect() {
+    const select = document.getElementById('policy-system-select');
+    if (!select) return;
+    const current = select.value || selectedPolicySystemId;
+    const systems = inventorySystems.length > 0 ? inventorySystems : (typeof DEFAULT_INVENTORY_SYSTEMS !== 'undefined' ? DEFAULT_INVENTORY_SYSTEMS : []);
+
+    select.innerHTML = systems.map(s => `
+      <option value="${escapeHtml(s.id)}" ${s.id === current ? 'selected' : ''}>
+        ${escapeHtml(s.id)} — ${escapeHtml(s.name)} (${escapeHtml(s.riskLevel)} Risk)
+      </option>
+    `).join('');
+
+    if (systems.some(s => s.id === current)) {
+      select.value = current;
+      selectedPolicySystemId = current;
+    } else if (systems.length > 0) {
+      selectedPolicySystemId = systems[0].id;
+      select.value = selectedPolicySystemId;
+    }
+  }
+
+  document.getElementById('policy-system-select')?.addEventListener('change', (e) => {
+    selectedPolicySystemId = e.target.value;
+    renderPolicyGates();
+    renderArtifactTracker();
+  });
+
+  function renderPolicyModule() {
+    populatePolicySystemSelect();
+    renderPolicyGates();
+    renderDecomTriggers();
+    renderPrinciplesAudit();
+    renderArtifactTracker();
+    renderThirdPartyScreener();
+    renderExceptionsRegister();
+  }
+
+  function renderPolicyGates() {
+    const container = document.getElementById('gates-cards-container');
+    const badge = document.getElementById('policy-gate-overall-badge');
+    const badgeText = document.getElementById('policy-gate-overall-text');
+    if (!container) return;
+
+    const evalData = (typeof SYSTEM_GATE_EVALUATIONS !== 'undefined' && SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId]) 
+      ? SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId]
+      : {
+          systemName: selectedPolicySystemId,
+          status: "CONDITIONAL HOLD (UNDER REVIEW)",
+          statusClass: "cond",
+          gates: {
+            "GATE-01": { passed: true, score: "Mitigation in Progress", notes: "Awaiting final residual risk verification." },
+            "GATE-02": { passed: true, score: "Legal Review Pending", notes: "Statutory checklist initiated." },
+            "GATE-03": { passed: false, score: "TEVV Pending", notes: "Independent test harness in validation." },
+            "GATE-04": { passed: false, score: "Pending Sign-Off", notes: "Final veto review scheduled." }
+          }
+        };
+
+    if (badge && badgeText) {
+      badge.className = `gate-status-badge ${evalData.statusClass || 'cond'}`;
+      badgeText.textContent = evalData.status;
+    }
+
+    const gatesList = typeof DEPLOYMENT_GATES !== 'undefined' ? DEPLOYMENT_GATES : [];
+
+    container.innerHTML = gatesList.map(g => {
+      const gResult = evalData.gates ? evalData.gates[g.id] : { passed: false, score: 'Pending', notes: 'Review scheduled' };
+      const cardClass = gResult.passed ? 'passed' : 'failed';
+      const chipClass = gResult.passed ? 'passed' : 'failed';
+      const chipText = gResult.passed ? 'PASSED / CLEARED' : 'BLOCKED / PENDING';
+
+      return `
+        <div class="gate-card ${cardClass}">
+          <div class="gate-card-header">
+            <div>
+              <span class="gate-id-tag">${escapeHtml(g.id)} · ${escapeHtml(g.nistRef)}</span>
+              <h3 class="gate-title">${escapeHtml(g.gateName)}</h3>
+            </div>
+            <span class="gate-chip ${chipClass}">${chipText}</span>
+          </div>
+
+          <p class="gate-body">${escapeHtml(g.description)}</p>
+
+          <div class="gate-field-label">Mandatory Required Evidence</div>
+          <div class="gate-evidence-box">
+            ${escapeHtml(g.mandatoryEvidence)}
+          </div>
+
+          <div class="gate-veto-row">
+            <span>🛡️ <strong>Veto Authorities:</strong></span>
+            <span>${escapeHtml(g.vetoHolders.join(', '))}</span>
+          </div>
+
+          <div class="gate-field-label">Evaluated Finding for ${escapeHtml(selectedPolicySystemId)}</div>
+          <div class="gate-findings-box">
+            <div style="font-weight: 700; margin-bottom: 2px;">${escapeHtml(gResult.score)}</div>
+            <div style="color: var(--text-secondary); font-size: 0.78rem;">${escapeHtml(gResult.notes)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderDecomTriggers() {
+    const tbody = document.getElementById('decom-triggers-table-body');
+    if (!tbody) return;
+    const triggers = typeof DECOMMISSION_TRIGGERS !== 'undefined' ? DECOMMISSION_TRIGGERS : [];
+
+    tbody.innerHTML = triggers.map(t => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(t.id)}</td>
+        <td style="font-weight: 600;">${escapeHtml(t.trigger)}</td>
+        <td>${escapeHtml(t.condition)}</td>
+        <td style="font-weight: 600; color: var(--accent-cyan);">${escapeHtml(t.action)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderPrinciplesAudit() {
+    const tbody = document.getElementById('principles-table-body');
+    if (!tbody) return;
+    const principles = typeof TRUSTWORTHY_PRINCIPLES !== 'undefined' ? TRUSTWORTHY_PRINCIPLES : [];
+
+    tbody.innerHTML = principles.map(p => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(p.id)}</td>
+        <td>
+          <div style="font-weight: 700;">${escapeHtml(p.name)}</div>
+          <code style="font-size: 0.72rem; color: var(--accent-cyan);">${escapeHtml(p.nistRef)}</code>
+        </td>
+        <td style="font-size: 0.82rem;">${escapeHtml(p.summary)}</td>
+        <td style="font-size: 0.8rem;">
+          <div style="margin-bottom: 4px;"><strong>Standard:</strong> ${escapeHtml(p.operationalStandard)}</div>
+          <div style="color: var(--text-secondary);"><strong>Audit Verification:</strong> ${escapeHtml(p.verificationCriteria)}</div>
+        </td>
+        <td>
+          <span class="status-badge-pill prod">✅ ${escapeHtml(p.status)}</span>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderArtifactTracker() {
+    const tbody = document.getElementById('artifacts-table-body');
+    if (!tbody) return;
+    const artifacts = typeof MANDATORY_ARTIFACTS !== 'undefined' ? MANDATORY_ARTIFACTS : [];
+    const evalData = (typeof SYSTEM_GATE_EVALUATIONS !== 'undefined' && SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId]) 
+      ? SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId] : null;
+
+    tbody.innerHTML = artifacts.map(a => {
+      const artStatus = (evalData && evalData.artifacts && evalData.artifacts[a.id]) ? evalData.artifacts[a.id] : 'Required';
+      let pillClass = 'required';
+      if (artStatus === 'Complete') pillClass = 'complete';
+      else if (artStatus.includes('Progress') || artStatus.includes('Complete')) pillClass = 'inprogress';
+      else if (artStatus === 'Draft') pillClass = 'draft';
+      else if (artStatus === 'Failed' || artStatus === 'Rejected') pillClass = 'failed';
+
+      return `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(a.id)}</td>
+          <td>
+            <strong>${escapeHtml(a.name)}</strong>
+            <div style="font-size: 0.72rem; color: var(--accent-cyan);">${escapeHtml(a.nistRef)}</div>
+          </td>
+          <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(a.stage)}</span></td>
+          <td style="font-weight: 600; font-size: 0.82rem;">${escapeHtml(a.ownerRole)}</td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(a.description)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Retention: ${a.retentionYears} Years</div>
+          </td>
+          <td>
+            <span class="doc-status-pill ${pillClass}">${escapeHtml(artStatus)}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function renderThirdPartyScreener() {
+    const tbody = document.getElementById('thirdparty-table-body');
+    if (!tbody) return;
+    const rubric = typeof THIRD_PARTY_SCREENING_RUBRIC !== 'undefined' ? THIRD_PARTY_SCREENING_RUBRIC : [];
+
+    tbody.innerHTML = rubric.map(r => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(r.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(r.dimension)}</td>
+        <td><span class="badge-recommendation ${r.weight.includes('Critical') ? 'nogo' : 'cond'}">${escapeHtml(r.weight)}</span></td>
+        <td style="font-size: 0.82rem;">${escapeHtml(r.mandatoryRequirement)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(r.nistRef)}</code></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderExceptionsRegister() {
+    const tbody = document.getElementById('exceptions-table-body');
+    if (!tbody) return;
+    const exceptions = typeof POLICY_EXCEPTIONS_DATA !== 'undefined' ? POLICY_EXCEPTIONS_DATA : [];
+
+    tbody.innerHTML = exceptions.map(ex => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(ex.id)}</td>
+        <td>
+          <strong>${escapeHtml(ex.systemName)}</strong>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(ex.systemId)}</div>
+        </td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(ex.clauseAffected)}</code></td>
+        <td style="font-size: 0.8rem;">
+          <div style="margin-bottom: 3px;"><strong>Nature:</strong> ${escapeHtml(ex.natureOfException)}</div>
+          <div style="color: var(--text-secondary);"><strong>Compensating Controls:</strong> ${escapeHtml(ex.compensatingControls)}</div>
+        </td>
+        <td style="font-family: monospace; font-size: 0.8rem;">
+          <div>${escapeHtml(ex.expiryDate)}</div>
+          <span class="doc-status-pill inprogress" style="font-size: 0.65rem;">Active</span>
+        </td>
+        <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(ex.approvedBy)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Export Policy & Gating Markdown Summary
+  function exportPolicyMarkdown() {
+    const meta = typeof POLICY_METADATA !== 'undefined' ? POLICY_METADATA : {};
+    const evalData = (typeof SYSTEM_GATE_EVALUATIONS !== 'undefined' && SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId]) 
+      ? SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId] : null;
+
+    let md = `# AI Governance Policy Compliance & Attestation Dossier\n\n`;
+    md += `**Organization:** SamaBrains Assurance & AI Governance Practice  \n`;
+    md += `**Framework:** NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN 1 & 6)  \n`;
+    md += `**Policy Version:** ${meta.version || '1.0'}  \n`;
+    md += `**Generated Date:** ${new Date().toISOString().slice(0, 10)}  \n`;
+    md += `**Evaluated System:** ${selectedPolicySystemId} (${evalData ? evalData.systemName : 'All Registered Systems'})  \n`;
+    md += `**Deployment Clearance:** ${evalData ? evalData.status : 'PENDING'}  \n\n`;
+    md += `---\n\n`;
+
+    md += `## 1. Executive Deployment Gates (GOVERN 1.3)\n\n`;
+    (typeof DEPLOYMENT_GATES !== 'undefined' ? DEPLOYMENT_GATES : []).forEach(g => {
+      const res = evalData && evalData.gates ? evalData.gates[g.id] : { passed: false, score: 'Pending' };
+      md += `### ${g.id}: ${g.gateName} [${res.passed ? 'PASSED' : 'BLOCKED'}]\n`;
+      md += `- **NIST AI RMF Ref:** ${g.nistRef}\n`;
+      md += `- **Requirement:** ${g.description}\n`;
+      md += `- **Mandatory Evidence:** ${g.mandatoryEvidence}\n`;
+      md += `- **Veto Authorities:** ${g.vetoHolders.join(', ')}\n`;
+      md += `- **Evaluated Score/Result:** ${res.score} — ${res.notes || ''}\n\n`;
+    });
+
+    md += `## 2. Mandatory Documentation Artifacts Readiness (GOVERN 1.4)\n\n`;
+    md += `| Doc ID | Mandatory Artifact Name | Accountable Role | Status |\n`;
+    md += `|---|---|---|---|\n`;
+    (typeof MANDATORY_ARTIFACTS !== 'undefined' ? MANDATORY_ARTIFACTS : []).forEach(a => {
+      const st = evalData && evalData.artifacts ? (evalData.artifacts[a.id] || 'Required') : 'Required';
+      md += `| **${a.id}** | ${a.name} | ${a.ownerRole} | ${st} |\n`;
+    });
+
+    md += `\n---\n*Generated by SamaBrains NIST AI Governance Hub · NIST AI RMF 1.0 Aligned*\n`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AI-Governance-Policy-Attestation-${selectedPolicySystemId}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Exported Policy Attestation for ${selectedPolicySystemId}`);
+  }
+
+  document.getElementById('btn-export-policy-md')?.addEventListener('click', exportPolicyMarkdown);
+
+  // Executive Policy Attestation PDF Generator
+  function triggerPrintPolicyPdf() {
+    const container = document.getElementById('print-policy-report');
+    if (!container) return;
+
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    const meta = typeof POLICY_METADATA !== 'undefined' ? POLICY_METADATA : {};
+    const evalData = (typeof SYSTEM_GATE_EVALUATIONS !== 'undefined' && SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId]) 
+      ? SYSTEM_GATE_EVALUATIONS[selectedPolicySystemId] : null;
+    const gates = typeof DEPLOYMENT_GATES !== 'undefined' ? DEPLOYMENT_GATES : [];
+
+    const html = `
+      <div class="pr-header">
+        <div>
+          <div class="pr-org">SAMABRAINS ASSURANCE &amp; GOVERNANCE</div>
+          <h1 class="pr-title">Executive AI Governance Policy Attestation</h1>
+          <div class="pr-subtitle">Operationalizing NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN 1 &amp; GOVERN 6)</div>
+        </div>
+        <div>
+          <span class="${evalData && evalData.statusClass === 'go' ? 'pr-badge-go' : 'pr-badge-nogo'}">
+            ${evalData ? evalData.status : 'UNDER EVALUATION'}
+          </span>
+        </div>
+      </div>
+
+      <div class="pr-meta-box">
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Evaluated System</span>
+            <span class="pr-value" style="font-weight: 700;">${selectedPolicySystemId} · ${evalData ? evalData.systemName : ''}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Policy Governance Version</span>
+            <span class="pr-value" style="font-weight: 700;">${meta.version || '1.0'} (Effective 2026)</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Chief AI Officer</span>
+            <span class="pr-value">${meta.owner || 'Dr. Elena Vance'}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Attestation Date</span>
+            <span class="pr-value">${new Date().toISOString().slice(0, 10)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">Section 1 — Mandatory 4-Tier Deployment Gate Clearance (GOVERN 1.3)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Gate ID</th>
+              <th style="width: 25%;">Deployment Gate Requirement</th>
+              <th style="width: 22%;">Veto Authorities</th>
+              <th>Evaluation Audit Finding</th>
+              <th style="width: 14%;">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${gates.map(g => {
+              const res = evalData && evalData.gates ? evalData.gates[g.id] : { passed: false, score: 'Pending', notes: '' };
+              return `
+                <tr>
+                  <td><strong>${escapeHtml(g.id)}</strong></td>
+                  <td>
+                    <div><strong>${escapeHtml(g.gateName)}</strong></div>
+                    <div style="font-size: 7pt; color: #475569;">${escapeHtml(g.nistRef)}</div>
+                  </td>
+                  <td>${escapeHtml(g.vetoHolders.join(', '))}</td>
+                  <td>
+                    <div><strong>${escapeHtml(res.score)}</strong></div>
+                    <div style="font-size: 7pt; color: #475569;">${escapeHtml(res.notes)}</div>
+                  </td>
+                  <td>
+                    <span class="${res.passed ? 'pr-badge-go' : 'pr-badge-nogo'}">
+                      ${res.passed ? 'PASSED' : 'BLOCKED'}
+                    </span>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">Section 2 — Mandatory Lifecycle Artifacts Audit (GOVERN 1.4)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Doc ID</th>
+              <th style="width: 28%;">Mandatory Governance Artifact</th>
+              <th style="width: 22%;">Accountable Role Owner</th>
+              <th style="width: 22%;">Lifecycle Stage</th>
+              <th style="width: 18%;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(typeof MANDATORY_ARTIFACTS !== 'undefined' ? MANDATORY_ARTIFACTS : []).map(a => {
+              const st = evalData && evalData.artifacts ? (evalData.artifacts[a.id] || 'Required') : 'Required';
+              return `
+                <tr>
+                  <td><strong>${escapeHtml(a.id)}</strong></td>
+                  <td>${escapeHtml(a.name)}</td>
+                  <td>${escapeHtml(a.ownerRole)}</td>
+                  <td>${escapeHtml(a.stage)}</td>
+                  <td><strong>${escapeHtml(st)}</strong></td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">Section 3 — Executive Concurrence &amp; Attestation Sign-Off</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Executive Role</th>
+              <th style="width: 25%;">Attesting Officer</th>
+              <th style="width: 25%;">Formal Decision</th>
+              <th style="width: 25%;">Signature Verification Stamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Chief AI Officer</strong></td>
+              <td>Dr. Elena Vance</td>
+              <td><strong>CONCURRED &amp; CLEARED</strong></td>
+              <td><code>VERIFIED-CAIO-2026-NIST-001</code></td>
+            </tr>
+            <tr>
+              <td><strong>General Counsel / Legal Lead</strong></td>
+              <td>Arthur Pendelton</td>
+              <td><strong>LEGAL SIGN-OFF CERTIFIED</strong></td>
+              <td><code>VERIFIED-LEGAL-2026-COMP-002</code></td>
+            </tr>
+            <tr>
+              <td><strong>AI Ethics Officer</strong></td>
+              <td>Prof. Kwame Mensah</td>
+              <td><strong>TEVV &amp; EQUITY APPROVED</strong></td>
+              <td><code>VERIFIED-ETHICS-2026-VAL-003</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pr-footer">
+          Official AI Governance Policy Compliance Attestation · SamaBrains NIST AI Governance Hub · NIST AI RMF 1.0 (GOVERN 1 &amp; 6)
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    showToast('Opening Executive Policy Attestation Print / PDF dialog...');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
+  }
+
+  document.getElementById('btn-print-policy-pdf')?.addEventListener('click', triggerPrintPolicyPdf);
 
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {
@@ -2735,6 +3218,7 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
   window.addEventListener('hashchange', () => {
     const h = (window.location.hash || '').replace('#', '').toLowerCase();
     if (h === 'roles') switchHubView('roles', false);
+    else if (h === 'policy') switchHubView('policy', false);
     else if (h === 'assessment' || h === 'aiia') switchHubView('assessment', false);
     else if (h === 'inventory') switchHubView('inventory', false);
   });
@@ -2757,6 +3241,8 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
   const initialHash = (window.location.hash || '').replace('#', '').toLowerCase();
   if (initialHash === 'roles') {
     switchHubView('roles', false);
+  } else if (initialHash === 'policy') {
+    switchHubView('policy', false);
   } else if (initialHash === 'assessment' || initialHash === 'aiia') {
     switchHubView('assessment', false);
   } else {

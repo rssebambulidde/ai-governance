@@ -84,11 +84,12 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
 > **Deployment:** Cloudflare Pages (Turnkey static edge application)  
 > **Standards Exclusively:** NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN · MAP · MEASURE · MANAGE)
 
-A dynamic, audit-ready operational suite uniting three core governance modules into a single synchronized interface:
+A dynamic, audit-ready operational suite uniting four core governance modules into a single synchronized interface:
 
 1. **AI System Inventory & Registry (GOVERN 1.6):** Real-time searchable registry, KPI cards, bidirectional CSV sync with repository inventory, and one-click assessment launches.
 2. **AI Roles & Responsibilities Matrix (GOVERN 2.1 · 2.2 · 2.3 · 3.2):** Interactive 28-activity RACI lifecycle matrix, 18-role catalog with explicit Veto authorities, Human-AI Oversight Configurations (HITL/HOTL/HIC), and Workforce Training Tracker.
-3. **AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1):** 10-part assessment wizard with real-time Likelihood × Impact calculator, FinAssist AI preloads, executive white-paper PDF export, Markdown download, and JSON state persistence.
+3. **AI Governance Policy & Deployment Gatekeeper (GOVERN 1.1–1.7 · 4.1 · 6.1–6.2):** Live 4-tier deployment gate validator (Zero Unmitigated Critical Risks, Legal Sign-off, Independent TEVV, Veto Approvals), 8 Trustworthy AI Principles audit, 9 mandatory lifecycle artifacts tracker, decommissioning triggers, third-party foundation model screener, risk waiver register, and executive attestation PDF exporter.
+4. **AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1):** 10-part assessment wizard with real-time Likelihood × Impact calculator, FinAssist AI preloads, executive white-paper PDF export, Markdown download, and JSON state persistence.
 
 [Explore the NIST AI RMF Governance Hub Guide →](tools/ai-impact-assessment/README.md)
 

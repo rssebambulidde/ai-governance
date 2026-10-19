@@ -36,6 +36,11 @@
           <span class="hub-nav-title">Roles &amp; RACI</span>
           <span class="hub-nav-tag">GOVERN 2</span>
         </button>
+        <button type="button" class="hub-nav-btn" id="tab-nav-policy" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('policy')">
+          <span class="hub-nav-icon">📜</span>
+          <span class="hub-nav-title">Policy &amp; Gates</span>
+          <span class="hub-nav-tag">GOVERN 1 &amp; 6</span>
+        </button>
         <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('assessment')">
           <span class="hub-nav-icon">⚖️</span>
           <span class="hub-nav-title">Impact Assessment</span>
@@ -71,6 +76,16 @@
         </button>
         <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-roles-pdf" title="Export Executive RACI Matrix PDF">
           RACI PDF
+        </button>
+      </div>
+
+      <!-- Policy view actions -->
+      <div class="view-actions-policy" id="actions-policy" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-policy-md" title="Download audit-ready Policy &amp; Gates Markdown report">
+          Export MD
+        </button>
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-policy-pdf" title="Export Executive Policy Attestation Certificate">
+          Attestation PDF
         </button>
       </div>
 
@@ -431,7 +446,252 @@
     </div>
   </div><!-- End of #view-roles -->
 
-  <!-- VIEW 2: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
+  <!-- VIEW 3: AI GOVERNANCE POLICY & GATING MODULE (GOVERN 1 & GOVERN 6) -->
+  <div id="view-policy" class="portal-view" style="display: none;">
+    <div class="inventory-container">
+      <!-- Hero -->
+      <div class="inventory-hero">
+        <div>
+          <div class="section-tag">NIST AI RMF GOVERN 1 &amp; 6</div>
+          <h1 class="inventory-title">AI Governance Policy &amp; Deployment Gatekeeper</h1>
+          <p class="inventory-desc">
+            Operationalizing organizational AI principles, mandatory 4-tier deployment gates, lifecycle documentation standards, third-party foundation model vetting, and formal exception tracking.
+          </p>
+        </div>
+        <div class="inventory-hero-actions">
+          <div class="raci-legend-pill">
+            <span class="pulse-dot"></span> Active Policy: <strong>v1.0 (2026)</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Executive Metrics -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Active Governance Policy</span>
+            <span class="kpi-icon">📜</span>
+          </div>
+          <div class="kpi-value">v1.0</div>
+          <div class="kpi-sub">Annual Review: Jan 2027</div>
+        </div>
+
+        <div class="kpi-card prod-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Mandatory Gates Passed</span>
+            <span class="kpi-icon">🛡️</span>
+          </div>
+          <div class="kpi-value" id="kpi-policy-gate-cleared">3 / 6</div>
+          <div class="kpi-sub">Fully cleared for live production</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Artifact Health Index</span>
+            <span class="kpi-icon">📑</span>
+          </div>
+          <div class="kpi-value">92.6%</div>
+          <div class="kpi-sub">Across 9 mandatory lifecycle documents</div>
+        </div>
+
+        <div class="kpi-card review-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Active Policy Waivers</span>
+            <span class="kpi-icon">⚠️</span>
+          </div>
+          <div class="kpi-value">1 Active</div>
+          <div class="kpi-sub">WAIVER-2026-001 (Expires Nov 2026)</div>
+        </div>
+      </div>
+
+      <!-- System Selector Toolbar for Gate Inspection -->
+      <div class="policy-system-selector-bar">
+        <div class="selector-left">
+          <span class="selector-label">Evaluate System Gates:</span>
+          <select id="policy-system-select" class="policy-system-select" aria-label="Select AI System for Policy Gating Evaluation">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div id="policy-gate-status-pill-container">
+          <span class="gate-status-badge go" id="policy-gate-overall-badge">
+            <span class="pulse-dot"></span>
+            <span id="policy-gate-overall-text">CLEARED FOR DEPLOYMENT</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Module Sub-Tabs Switcher -->
+      <div class="sub-tab-bar">
+        <button type="button" class="sub-tab-btn active" id="btn-sub-gates" onclick="window.switchPolicySubview && window.switchPolicySubview('gates')">
+          <span class="sub-tab-icon">🚪</span> Mandatory Deployment Gates (GOVERN 1.3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-principles" onclick="window.switchPolicySubview && window.switchPolicySubview('principles')">
+          <span class="sub-tab-icon">⚖️</span> Trustworthy Principles Audit (GOVERN 1.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-artifacts" onclick="window.switchPolicySubview && window.switchPolicySubview('artifacts')">
+          <span class="sub-tab-icon">🗂️</span> Lifecycle Artifact Tracker (GOVERN 1.4)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-thirdparty" onclick="window.switchPolicySubview && window.switchPolicySubview('thirdparty')">
+          <span class="sub-tab-icon">🌐</span> Third-Party Model Screener (GOVERN 6)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-exceptions" onclick="window.switchPolicySubview && window.switchPolicySubview('exceptions')">
+          <span class="sub-tab-icon">📋</span> Exceptions &amp; Waivers (GOVERN 1.1)
+        </button>
+      </div>
+
+      <!-- SUBVIEW 1: MANDATORY DEPLOYMENT GATES -->
+      <div id="subview-gates" class="subview-panel active">
+        <div class="gates-grid" id="gates-cards-container">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Decommissioning Policy Rules Box (GOVERN 1.7) -->
+        <div class="card table-card" style="margin-top: 1.5rem;">
+          <div class="card-header-flex">
+            <div>
+              <h3>Mandatory Decommissioning Triggers (GOVERN 1.7)</h3>
+              <p class="text-muted">Standard conditions requiring immediate system suspension, fallback to human operators, or complete retirement.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">ID</th>
+                  <th style="width: 25%;">Decommissioning Trigger</th>
+                  <th>Operational Threshold / Trigger Condition</th>
+                  <th style="width: 30%;">Mandatory Response Action</th>
+                </tr>
+              </thead>
+              <tbody id="decom-triggers-table-body">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 2: TRUSTWORTHY PRINCIPLES AUDIT -->
+      <div id="subview-principles" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>NIST AI RMF Trustworthy AI Principles Verification (GOVERN 1.2)</h3>
+              <p class="text-muted">8 foundational organizational principles with active operational standards and verification criteria.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 8%;">ID</th>
+                  <th style="width: 18%;">Principle &amp; Ref</th>
+                  <th style="width: 22%;">Policy Statement</th>
+                  <th>Operational Standard &amp; Verification</th>
+                  <th style="width: 12%;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="principles-table-body">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 3: LIFECYCLE ARTIFACT TRACKER -->
+      <div id="subview-artifacts" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Mandatory Lifecycle Documentation Standards (GOVERN 1.4)</h3>
+              <p class="text-muted">Readiness and compliance status of the 9 required audit artifacts across the AI system lifecycle.</p>
+            </div>
+            <div class="table-actions">
+              <span class="status-pill"><span class="pulse-dot"></span> Evaluated for Selected System</span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 8%;">Doc ID</th>
+                  <th style="width: 20%;">Mandatory Artifact Name</th>
+                  <th style="width: 15%;">Lifecycle Stage</th>
+                  <th style="width: 18%;">Accountable Role</th>
+                  <th>Artifact Purpose &amp; Retention</th>
+                  <th style="width: 14%;">Readiness Status</th>
+                </tr>
+              </thead>
+              <tbody id="artifacts-table-body">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 4: THIRD-PARTY AI & SUPPLY CHAIN SCREENER -->
+      <div id="subview-thirdparty" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Third-Party AI &amp; Supply Chain Due Diligence (GOVERN 6.1 &amp; 6.2)</h3>
+              <p class="text-muted">Mandatory vetting criteria for foundation models, commercial APIs, and external ML vendor integrations.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 8%;">Item</th>
+                  <th style="width: 22%;">Vetting Dimension</th>
+                  <th style="width: 12%;">Weight</th>
+                  <th>Mandatory Contractual &amp; Technical Requirement</th>
+                  <th style="width: 15%;">NIST AI RMF Ref</th>
+                </tr>
+              </thead>
+              <tbody id="thirdparty-table-body">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 5: EXCEPTIONS & WAIVERS REGISTER -->
+      <div id="subview-exceptions" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Formal Policy Deviations &amp; Risk Waiver Register (GOVERN 1.1)</h3>
+              <p class="text-muted">Time-bound approved exceptions with mandatory compensating controls and executive sign-off.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 12%;">Waiver ID</th>
+                  <th style="width: 15%;">System Name</th>
+                  <th style="width: 18%;">Clause Affected</th>
+                  <th>Nature of Exception &amp; Compensating Controls</th>
+                  <th style="width: 12%;">Expiry Date</th>
+                  <th style="width: 15%;">Approved By</th>
+                </tr>
+              </thead>
+              <tbody id="exceptions-table-body">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- End of .inventory-container -->
+  </div><!-- End of #view-policy -->
+
+  <!-- VIEW 4: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
   <div id="view-assessment" class="portal-view" style="display: none;">
     <!-- Main Container with Sidebar Navigation + Content Area -->
     <div class="app-layout">
@@ -1527,14 +1787,16 @@
   <div id="print-report" class="print-report"></div>
   <div id="print-inventory-report" class="print-report"></div>
   <div id="print-roles-report" class="print-report"></div>
+  <div id="print-policy-report" class="print-report"></div>
 
   <!-- Notification Toast -->
   <div id="toast" class="toast">Portal state saved</div>
 
   <!-- Scripts -->
-  <script src="inventory-data.js?v=20261019-3"></script>
-  <script src="roles-data.js?v=20261019-3"></script>
-  <script src="finassist-data.js?v=20261019-3"></script>
-  <script src="app.js?v=20261019-3"></script>
+  <script src="inventory-data.js?v=20261019-4"></script>
+  <script src="roles-data.js?v=20261019-4"></script>
+  <script src="policy-data.js?v=20261019-4"></script>
+  <script src="finassist-data.js?v=20261019-4"></script>
+  <script src="app.js?v=20261019-4"></script>
 </body>
 </html>

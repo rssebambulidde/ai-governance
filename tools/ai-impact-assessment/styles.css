@@ -247,6 +247,7 @@ h1, h2, h3, h4, .brand-title {
 
 .view-actions-inventory,
 .view-actions-roles,
+.view-actions-policy,
 .view-actions-assessment {
   display: flex;
   align-items: center;
@@ -929,6 +930,210 @@ h1, h2, h3, h4, .brand-title {
   padding: 0.35rem 0.75rem;
   font-size: 0.8rem;
 }
+
+/* ==========================================================================
+   AI GOVERNANCE POLICY & GATING MODULE (GOVERN 1 & 6)
+   ========================================================================== */
+.policy-system-selector-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.selector-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.selector-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.policy-system-select {
+  padding: 0.5rem 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 260px;
+}
+.policy-system-select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+}
+
+.gate-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.gate-status-badge.go {
+  background: var(--color-low-bg);
+  color: var(--color-low);
+  border: 1px solid var(--color-low);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+.gate-status-badge.cond {
+  background: var(--color-med-bg);
+  color: var(--color-med);
+  border: 1px solid var(--color-med);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+.gate-status-badge.nogo {
+  background: var(--color-crit-bg);
+  color: var(--color-crit);
+  border: 1px solid var(--color-crit);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.2);
+}
+
+/* 4 Deployment Gates Grid */
+.gates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.gate-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.gate-card.passed {
+  border-top: 4px solid var(--color-low);
+}
+.gate-card.failed {
+  border-top: 4px solid var(--color-crit);
+}
+.gate-card.pending {
+  border-top: 4px solid var(--color-med);
+}
+
+.gate-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.gate-id-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.gate-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.gate-chip {
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.gate-chip.passed { background: var(--color-low-bg); color: var(--color-low); border: 1px solid var(--color-low); }
+.gate-chip.failed { background: var(--color-crit-bg); color: var(--color-crit); border: 1px solid var(--color-crit); }
+.gate-chip.pending { background: var(--color-med-bg); color: var(--color-med); border: 1px solid var(--color-med); }
+
+.gate-body {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.gate-field-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2rem;
+}
+
+.gate-evidence-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.gate-veto-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.gate-findings-box {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid var(--border-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.8rem;
+}
+.gate-card.passed .gate-findings-box { border-left-color: var(--color-low); }
+.gate-card.failed .gate-findings-box { border-left-color: var(--color-crit); }
+.gate-card.pending .gate-findings-box { border-left-color: var(--color-med); }
+
+/* Artifact Matrix Pills */
+.doc-status-pill {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.doc-status-pill.complete { background: var(--color-low-bg); color: var(--color-low); border: 1px solid var(--color-low); }
+.doc-status-pill.inprogress { background: var(--color-med-bg); color: var(--color-med); border: 1px solid var(--color-med); }
+.doc-status-pill.draft { background: rgba(59, 130, 246, 0.12); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+.doc-status-pill.failed { background: var(--color-crit-bg); color: var(--color-crit); border: 1px solid var(--color-crit); }
+.doc-status-pill.required { background: rgba(107, 114, 128, 0.15); color: var(--text-muted); border: 1px solid var(--text-muted); }
 
 .btn-primary {
   background: var(--gradient-brand);
@@ -1616,7 +1821,8 @@ h1, h2, h3, h4, .brand-title {
   /* Executive Print Document Containers */
   #print-report,
   #print-inventory-report,
-  #print-roles-report {
+  #print-roles-report,
+  #print-policy-report {
     display: block !important;
     visibility: visible !important;
     position: static !important;
@@ -1630,7 +1836,8 @@ h1, h2, h3, h4, .brand-title {
 
   #print-report *,
   #print-inventory-report *,
-  #print-roles-report * {
+  #print-roles-report *,
+  #print-policy-report * {
     box-sizing: border-box !important;
   }
 
