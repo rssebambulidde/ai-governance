@@ -3,7 +3,7 @@
  * Aligned with NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1 · MAP 5.1 · MANAGE 1.1)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initAntigravityGovernanceApp() {
   // DOM Elements
   const stepperMenu = document.getElementById('stepper-menu');
   const sections = document.querySelectorAll('.form-section');
@@ -43,54 +43,58 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // 0. HUB NAVIGATION & INVENTORY REGISTRY (GOVERN 1.6)
   // ==========================================================================
-  const tabNavInventory = document.getElementById('tab-nav-inventory');
-  const tabNavRoles = document.getElementById('tab-nav-roles');
-  const tabNavAssessment = document.getElementById('tab-nav-assessment');
-  const viewInventory = document.getElementById('view-inventory');
-  const viewRoles = document.getElementById('view-roles');
-  const viewAssessment = document.getElementById('view-assessment');
-  const actionsInventory = document.getElementById('actions-inventory');
-  const actionsRoles = document.getElementById('actions-roles');
-  const actionsAssessment = document.getElementById('actions-assessment');
-
-  function switchHubView(target) {
-    const allTabs = [tabNavInventory, tabNavRoles, tabNavAssessment];
-    const allViews = [viewInventory, viewRoles, viewAssessment];
-    const allActions = [actionsInventory, actionsRoles, actionsAssessment];
+  function switchHubView(target, updateHash = true) {
+    const allTabs = [
+      { id: 'inventory', btn: document.getElementById('tab-nav-inventory'), view: document.getElementById('view-inventory'), act: document.getElementById('actions-inventory') },
+      { id: 'roles', btn: document.getElementById('tab-nav-roles'), view: document.getElementById('view-roles'), act: document.getElementById('actions-roles') },
+      { id: 'assessment', btn: document.getElementById('tab-nav-assessment'), view: document.getElementById('view-assessment'), act: document.getElementById('actions-assessment') }
+    ];
 
     allTabs.forEach(t => {
-      t?.classList.remove('active');
-      t?.setAttribute('aria-selected', 'false');
+      t.btn?.classList.remove('active');
+      t.btn?.setAttribute('aria-selected', 'false');
+      if (t.view) {
+        t.view.classList.remove('active');
+        t.view.style.display = 'none';
+      }
+      if (t.act) t.act.style.display = 'none';
     });
-    allViews.forEach(v => { if (v) v.style.display = 'none'; });
-    allActions.forEach(a => { if (a) a.style.display = 'none'; });
+
+    const activeItem = allTabs.find(t => t.id === target) || allTabs[0];
+    activeItem.btn?.classList.add('active');
+    activeItem.btn?.setAttribute('aria-selected', 'true');
+    if (activeItem.view) {
+      activeItem.view.classList.add('active');
+      activeItem.view.style.display = 'block';
+    }
+    if (activeItem.act) activeItem.act.style.display = 'flex';
 
     if (target === 'inventory') {
-      tabNavInventory?.classList.add('active');
-      tabNavInventory?.setAttribute('aria-selected', 'true');
-      if (viewInventory) viewInventory.style.display = 'block';
-      if (actionsInventory) actionsInventory.style.display = 'flex';
       renderInventoryTable();
     } else if (target === 'roles') {
-      tabNavRoles?.classList.add('active');
-      tabNavRoles?.setAttribute('aria-selected', 'true');
-      if (viewRoles) viewRoles.style.display = 'block';
-      if (actionsRoles) actionsRoles.style.display = 'flex';
       renderRolesModule();
     } else {
-      tabNavAssessment?.classList.add('active');
-      tabNavAssessment?.setAttribute('aria-selected', 'true');
-      if (viewAssessment) viewAssessment.style.display = 'block';
-      if (actionsAssessment) actionsAssessment.style.display = 'flex';
       syncHeaderBadges();
       updateProgress();
+    }
+
+    if (updateHash && window.location.hash !== `#${target}`) {
+      try {
+        window.history.replaceState(null, '', `#${target}`);
+      } catch (e) {
+        // Fallback for sandboxed iframes
+        window.location.hash = target;
+      }
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  tabNavInventory?.addEventListener('click', () => switchHubView('inventory'));
-  tabNavRoles?.addEventListener('click', () => switchHubView('roles'));
-  tabNavAssessment?.addEventListener('click', () => switchHubView('assessment'));
+  // Expose switchHubView globally for direct inline onclick and integrations
+  window.switchHubView = switchHubView;
+
+  document.getElementById('tab-nav-inventory')?.addEventListener('click', () => switchHubView('inventory'));
+  document.getElementById('tab-nav-roles')?.addEventListener('click', () => switchHubView('roles'));
+  document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
 
   // Inventory Data State
   let inventorySystems = [];
@@ -659,46 +663,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // 0.2 ROLES & RESPONSIBILITIES MATRIX MODULE (GOVERN 2 & 3.2)
   // ==========================================================================
-  const subBtnRaci = document.getElementById('btn-sub-raci');
-  const subBtnCatalog = document.getElementById('btn-sub-catalog');
-  const subBtnHaii = document.getElementById('btn-sub-haii');
-  const subBtnTraining = document.getElementById('btn-sub-training');
-
-  const subviewRaci = document.getElementById('subview-raci');
-  const subviewCatalog = document.getElementById('subview-catalog');
-  const subviewHaii = document.getElementById('subview-haii');
-  const subviewTraining = document.getElementById('subview-training');
-
   function switchRolesSubview(target) {
-    const allBtns = [subBtnRaci, subBtnCatalog, subBtnHaii, subBtnTraining];
-    const allPanels = [subviewRaci, subviewCatalog, subviewHaii, subviewTraining];
+    const subtabs = [
+      { id: 'raci', btn: document.getElementById('btn-sub-raci'), view: document.getElementById('subview-raci') },
+      { id: 'catalog', btn: document.getElementById('btn-sub-catalog'), view: document.getElementById('subview-catalog') },
+      { id: 'haii', btn: document.getElementById('btn-sub-haii'), view: document.getElementById('subview-haii') },
+      { id: 'training', btn: document.getElementById('btn-sub-training'), view: document.getElementById('subview-training') }
+    ];
 
-    allBtns.forEach(b => b?.classList.remove('active'));
-    allPanels.forEach(p => { if (p) p.style.display = 'none'; });
+    subtabs.forEach(s => {
+      s.btn?.classList.remove('active');
+      if (s.view) {
+        s.view.classList.remove('active');
+        s.view.style.display = 'none';
+      }
+    });
 
-    if (target === 'raci') {
-      subBtnRaci?.classList.add('active');
-      if (subviewRaci) subviewRaci.style.display = 'block';
-      renderRaciTable();
-    } else if (target === 'catalog') {
-      subBtnCatalog?.classList.add('active');
-      if (subviewCatalog) subviewCatalog.style.display = 'block';
-      renderRolesCatalog();
-    } else if (target === 'haii') {
-      subBtnHaii?.classList.add('active');
-      if (subviewHaii) subviewHaii.style.display = 'block';
-      renderHaiiRegister();
-    } else if (target === 'training') {
-      subBtnTraining?.classList.add('active');
-      if (subviewTraining) subviewTraining.style.display = 'block';
-      renderTrainingTracker();
+    const activeSub = subtabs.find(s => s.id === target) || subtabs[0];
+    activeSub.btn?.classList.add('active');
+    if (activeSub.view) {
+      activeSub.view.classList.add('active');
+      activeSub.view.style.display = 'block';
     }
+
+    if (target === 'raci') renderRaciTable();
+    else if (target === 'catalog') renderRolesCatalog();
+    else if (target === 'haii') renderHaiiRegister();
+    else if (target === 'training') renderTrainingTracker();
   }
 
-  subBtnRaci?.addEventListener('click', () => switchRolesSubview('raci'));
-  subBtnCatalog?.addEventListener('click', () => switchRolesSubview('catalog'));
-  subBtnHaii?.addEventListener('click', () => switchRolesSubview('haii'));
-  subBtnTraining?.addEventListener('click', () => switchRolesSubview('training'));
+  window.switchRolesSubview = switchRolesSubview;
+
+  document.getElementById('btn-sub-raci')?.addEventListener('click', () => switchRolesSubview('raci'));
+  document.getElementById('btn-sub-catalog')?.addEventListener('click', () => switchRolesSubview('catalog'));
+  document.getElementById('btn-sub-haii')?.addEventListener('click', () => switchRolesSubview('haii'));
+  document.getElementById('btn-sub-training')?.addEventListener('click', () => switchRolesSubview('training'));
 
   // Role IDs as columns in RACI table
   const RACI_ROLE_COLS = [
@@ -2732,9 +2731,16 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
   btnPrintPdf.addEventListener('click', triggerPrintPdf);
   btnPrintPdfBottom?.addEventListener('click', triggerPrintPdf);
 
-  // Initial Load
+  // Hash Navigation Listener
+  window.addEventListener('hashchange', () => {
+    const h = (window.location.hash || '').replace('#', '').toLowerCase();
+    if (h === 'roles') switchHubView('roles', false);
+    else if (h === 'assessment' || h === 'aiia') switchHubView('assessment', false);
+    else if (h === 'inventory') switchHubView('inventory', false);
+  });
+
+  // Initial Load & State Restoration
   loadInventoryState();
-  renderInventoryTable();
 
   const savedData = localStorage.getItem('aiia_assessment_data');
   if (savedData) {
@@ -2746,4 +2752,21 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
   } else {
     populateForm(FINASSIST_PRESET);
   }
-});
+
+  // Initial View Determination (URL Hash > Default to Inventory)
+  const initialHash = (window.location.hash || '').replace('#', '').toLowerCase();
+  if (initialHash === 'roles') {
+    switchHubView('roles', false);
+  } else if (initialHash === 'assessment' || initialHash === 'aiia') {
+    switchHubView('assessment', false);
+  } else {
+    switchHubView('inventory', false);
+  }
+}
+
+// Ensure execution whether loaded synchronously or after DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAntigravityGovernanceApp);
+} else {
+  initAntigravityGovernanceApp();
+}

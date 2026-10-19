@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261019-3">
 </head>
 <body>
   <!-- Header Bar -->
@@ -26,17 +26,17 @@
     <!-- Top-Level Hub Navigation Switcher -->
     <div class="header-center">
       <div class="hub-nav-group" role="tablist">
-        <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true">
+        <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true" onclick="window.switchHubView && window.switchHubView('inventory')">
           <span class="hub-nav-icon">📋</span>
           <span class="hub-nav-title">AI System Inventory</span>
           <span class="hub-nav-tag">GOVERN 1.6</span>
         </button>
-        <button type="button" class="hub-nav-btn" id="tab-nav-roles" role="tab" aria-selected="false">
+        <button type="button" class="hub-nav-btn" id="tab-nav-roles" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('roles')">
           <span class="hub-nav-icon">👥</span>
           <span class="hub-nav-title">Roles &amp; RACI</span>
           <span class="hub-nav-tag">GOVERN 2</span>
         </button>
-        <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false">
+        <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('assessment')">
           <span class="hub-nav-icon">⚖️</span>
           <span class="hub-nav-title">Impact Assessment</span>
           <span class="hub-nav-tag">GOVERN 4.2 · MAP · MANAGE</span>
@@ -231,6 +231,7 @@
           </table>
         </div>
       </div>
+    </div><!-- End of .inventory-container -->
   </div><!-- End of #view-inventory -->
 
   <!-- VIEW 3: ROLES & RACI MATRIX (GOVERN 2 & GOVERN 3.2) -->
@@ -296,16 +297,16 @@
 
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar">
-        <button type="button" class="sub-tab-btn active" id="btn-sub-raci">
+        <button type="button" class="sub-tab-btn active" id="btn-sub-raci" onclick="window.switchRolesSubview && window.switchRolesSubview('raci')">
           <span class="sub-tab-icon">📋</span> RACI Activity Matrix
         </button>
-        <button type="button" class="sub-tab-btn" id="btn-sub-catalog">
+        <button type="button" class="sub-tab-btn" id="btn-sub-catalog" onclick="window.switchRolesSubview && window.switchRolesSubview('catalog')">
           <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers
         </button>
-        <button type="button" class="sub-tab-btn" id="btn-sub-haii">
+        <button type="button" class="sub-tab-btn" id="btn-sub-haii" onclick="window.switchRolesSubview && window.switchRolesSubview('haii')">
           <span class="sub-tab-icon">🕹️</span> Human-AI Oversight (GOVERN 3.2)
         </button>
-        <button type="button" class="sub-tab-btn" id="btn-sub-training">
+        <button type="button" class="sub-tab-btn" id="btn-sub-training" onclick="window.switchRolesSubview && window.switchRolesSubview('training')">
           <span class="sub-tab-icon">🎓</span> Training Tracker (GOVERN 2.2)
         </button>
       </div>
@@ -1531,9 +1532,9 @@
   <div id="toast" class="toast">Portal state saved</div>
 
   <!-- Scripts -->
-  <script src="inventory-data.js"></script>
-  <script src="roles-data.js"></script>
-  <script src="finassist-data.js"></script>
-  <script src="app.js"></script>
+  <script src="inventory-data.js?v=20261019-3"></script>
+  <script src="roles-data.js?v=20261019-3"></script>
+  <script src="finassist-data.js?v=20261019-3"></script>
+  <script src="app.js?v=20261019-3"></script>
 </body>
 </html>
