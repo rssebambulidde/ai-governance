@@ -1,5 +1,5 @@
 /* ==========================================================================
-   AI Impact Assessment Studio — Modern Design System & Print Engine
+   AI Impact Assessment Studio — Design System & Executive Print Engine
    ========================================================================== */
 
 :root {
@@ -875,127 +875,289 @@ h1, h2, h3, h4, .brand-title {
   opacity: 1;
 }
 
+/* Hide print report from normal screen view */
+#print-report {
+  display: none;
+}
+
 /* ==========================================================================
-   PRINT ENGINE (Corporate Executive PDF Output)
+   EXECUTIVE PRINT ENGINE (Pure White Paper Audit Report)
    ========================================================================== */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 1.6cm 1.4cm 1.8cm 1.4cm;
+    margin: 12mm 10mm 12mm 10mm;
   }
 
-  body {
-    background: #fff !important;
-    color: #000 !important;
-    font-size: 9.5pt;
-    line-height: 1.4;
-    display: block !important;
+  /* Force light color scheme, pure white canvas, and crisp dark text */
+  :root, html, body {
+    color-scheme: light !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #0f172a !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 8pt !important;
+    line-height: 1.35 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Hide Application Chrome */
+  /* Hide screen interactive UI chrome */
   .app-header,
+  .app-layout,
   .sidebar-nav,
+  .main-content,
+  #aiia-form,
   .btn,
   .theme-toggle,
   .toast,
-  .btn-del-row,
-  .col-act,
-  .action-banner,
-  .card-header-row button {
+  .action-banner {
     display: none !important;
   }
 
-  .app-layout {
+  /* Executive Print Document Container */
+  #print-report {
     display: block !important;
-    max-width: 100% !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
     margin: 0 !important;
   }
 
-  .main-content {
-    padding: 0 !important;
+  #print-report * {
+    box-sizing: border-box !important;
   }
 
-  /* Display ALL sections sequentially in print */
-  .form-section {
-    display: block !important;
-    page-break-after: auto;
-    page-break-inside: avoid;
-    margin-bottom: 2rem;
+  .pr-header {
+    border-bottom: 2pt solid #0f172a;
+    padding-bottom: 8pt;
+    margin-bottom: 10pt;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 
-  #sec-part0, #sec-part5, #sec-part9, #sec-part10 {
-    page-break-before: always;
-  }
-  #sec-part0 {
-    page-break-before: avoid;
-  }
-
-  /* Print Cover Header */
-  .section-banner h2 {
-    font-size: 14pt !important;
-    color: #0f172a !important;
-    border-bottom: 2px solid #0f172a;
-    padding-bottom: 4px;
-    margin-top: 1.5rem;
-  }
-
-  .section-lead {
-    font-size: 8.5pt !important;
+  .pr-org {
+    font-size: 7.5pt;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     color: #475569 !important;
-    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    margin-bottom: 2pt;
   }
 
-  .card {
-    background: #fff !important;
+  .pr-title {
+    font-size: 16pt;
+    font-weight: 800;
+    color: #0f172a !important;
+    margin: 0 0 2pt 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .pr-subtitle {
+    font-size: 8pt;
+    color: #475569 !important;
+  }
+
+  /* Status Badges */
+  .pr-badge-go {
+    background-color: #dcfce7 !important;
+    color: #166534 !important;
+    border: 1.5px solid #16a34a !important;
+    padding: 3pt 8pt;
+    font-weight: 800;
+    font-size: 8.5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+
+  .pr-badge-cond {
+    background-color: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1.5px solid #d97706 !important;
+    padding: 3pt 8pt;
+    font-weight: 800;
+    font-size: 8.5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+
+  .pr-badge-nogo {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+    border: 1.5px solid #dc2626 !important;
+    padding: 3pt 8pt;
+    font-weight: 800;
+    font-size: 8.5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+
+  /* Risk Score Badges */
+  .pr-risk-low {
+    background-color: #dcfce7 !important;
+    color: #166534 !important;
+    font-weight: 700;
+    padding: 1.5pt 5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    font-size: 7.5pt;
+  }
+
+  .pr-risk-med {
+    background-color: #fef3c7 !important;
+    color: #92400e !important;
+    font-weight: 700;
+    padding: 1.5pt 5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    font-size: 7.5pt;
+  }
+
+  .pr-risk-high {
+    background-color: #ffedd5 !important;
+    color: #9a3412 !important;
+    font-weight: 700;
+    padding: 1.5pt 5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    font-size: 7.5pt;
+  }
+
+  .pr-risk-crit {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+    font-weight: 700;
+    padding: 1.5pt 5pt;
+    border-radius: 3pt;
+    display: inline-block;
+    font-size: 7.5pt;
+  }
+
+  .pr-meta-box {
     border: 1px solid #cbd5e1 !important;
-    border-radius: 4px !important;
-    box-shadow: none !important;
-    padding: 10pt !important;
-    margin-bottom: 12pt !important;
+    background-color: #f8fafc !important;
+    border-radius: 4pt;
+    padding: 7pt 9pt;
+    margin-bottom: 10pt;
     page-break-inside: avoid;
   }
 
-  .card h3 {
-    font-size: 11pt !important;
+  .pr-rec-banner {
+    border: 1.5px solid #0f172a !important;
+    padding: 8pt 10pt;
+    border-radius: 4pt;
+    background-color: #f8fafc !important;
+    margin-bottom: 12pt;
+    page-break-inside: avoid;
+  }
+
+  .pr-section {
+    margin-bottom: 12pt;
+    page-break-inside: avoid;
+  }
+
+  .pr-section-title {
+    font-size: 10pt;
+    font-weight: 800;
     color: #0f172a !important;
-    margin-bottom: 6pt !important;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 2pt;
+    margin-bottom: 5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 
-  /* Format Tables for Clean Print */
-  .data-table {
-    font-size: 8.5pt !important;
-    border: 1px solid #cbd5e1 !important;
+  .pr-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
   }
 
-  .data-table th {
-    background: #f1f5f9 !important;
+  .pr-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+  }
+
+  .pr-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7pt;
+  }
+
+  .pr-field {
+    margin-bottom: 4pt;
+  }
+
+  .pr-label {
+    font-size: 7pt;
+    font-weight: 700;
+    color: #475569 !important;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1pt;
+    letter-spacing: 0.02em;
+  }
+
+  .pr-value {
+    font-size: 8pt;
     color: #0f172a !important;
-    font-weight: 700 !important;
-    border: 1px solid #cbd5e1 !important;
-    padding: 4pt 6pt !important;
   }
 
-  .data-table td {
+  .pr-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 3pt;
+    margin-bottom: 5pt;
+    font-size: 7.5pt;
+  }
+
+  .pr-table th, .pr-table td {
     border: 1px solid #cbd5e1 !important;
-    padding: 4pt 6pt !important;
+    padding: 3pt 5pt;
+    text-align: left;
+    vertical-align: top;
+    color: #0f172a !important;
+  }
+
+  .pr-table th {
+    background-color: #f1f5f9 !important;
+    font-weight: 700;
     color: #1e293b !important;
   }
 
-  .form-input, .form-select, .form-textarea {
-    border: none !important;
-    background: transparent !important;
-    padding: 0 !important;
-    color: #000 !important;
-    font-weight: 500;
+  .pr-table tr {
+    page-break-inside: avoid;
   }
 
-  .badge-risk {
-    border: 1px solid #000 !important;
-    color: #000 !important;
-    background: #f8fafc !important;
+  .pr-page-break {
+    page-break-before: always;
   }
 
-  .badge-risk.crit { font-weight: bold; text-decoration: underline; }
+  .pr-footer {
+    font-size: 7pt;
+    color: #64748b !important;
+    text-align: center;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 4pt;
+    margin-top: 10pt;
+  }
 }
 
 /* Responsive */

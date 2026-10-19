@@ -1087,13 +1087,647 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
   btnExportMd.addEventListener('click', downloadMarkdown);
   btnExportMdBottom?.addEventListener('click', downloadMarkdown);
 
-  // 11. Print PDF Trigger
+  // 11. Executive Print & PDF Report Generation
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function getScoreBadgeClass(score) {
+    const num = parseInt(score, 10) || 1;
+    if (num <= 4) return 'pr-risk-low';
+    if (num <= 9) return 'pr-risk-med';
+    if (num <= 16) return 'pr-risk-high';
+    return 'pr-risk-crit';
+  }
+
+  function getLevelBadgeClass(lvl) {
+    const l = (lvl || '').toLowerCase();
+    if (l.includes('crit')) return 'pr-risk-crit';
+    if (l.includes('high')) return 'pr-risk-high';
+    if (l.includes('med')) return 'pr-risk-med';
+    return 'pr-risk-low';
+  }
+
+  function renderPrintReport(d) {
+    const container = document.getElementById('print-report');
+    if (!container) return;
+
+    const h = d.header || {};
+    const p1 = d.part1 || {};
+    const p2 = d.part2 || {};
+    const p3 = d.part3 || {};
+    const p4 = d.part4 || {};
+    const p5 = d.part5 || {};
+    const p6 = d.part6 || {};
+    const p7 = d.part7 || {};
+    const p8 = d.part8 || {};
+    const p9 = d.part9 || {};
+    const p10 = d.part10 || {};
+
+    const recDecision = p9.recommendation || 'GO';
+    let badgeClass = 'pr-badge-go';
+    if (recDecision === 'CONDITIONAL') badgeClass = 'pr-badge-cond';
+    if (recDecision === 'NO-GO') badgeClass = 'pr-badge-nogo';
+
+    const html = `
+      <!-- Executive Cover / Document Control -->
+      <div class="pr-header">
+        <div>
+          <div class="pr-org">SAMABRAINS ASSURANCE &amp; GOVERNANCE</div>
+          <h1 class="pr-title">AI Impact Assessment Report</h1>
+          <div class="pr-subtitle">Aligned with NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1) &amp; ISO/IEC 42001:2023</div>
+        </div>
+        <div>
+          <span class="${badgeClass}">${escapeHtml(recDecision)}</span>
+        </div>
+      </div>
+
+      <!-- Metadata Grid Box -->
+      <div class="pr-meta-box">
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">System Name</span>
+            <span class="pr-value" style="font-weight: 700;">${escapeHtml(h.systemName || 'N/A')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">System ID</span>
+            <span class="pr-value">${escapeHtml(h.systemId || 'N/A')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Assessment ID</span>
+            <span class="pr-value">${escapeHtml(h.assessmentId || 'N/A')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Version</span>
+            <span class="pr-value">${escapeHtml(h.version || 'v1.0')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Assessment Type</span>
+            <span class="pr-value">${escapeHtml(h.assessmentType || 'New System')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Business Unit</span>
+            <span class="pr-value">${escapeHtml(h.department || 'N/A')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Lead Assessor</span>
+            <span class="pr-value">${escapeHtml(h.lead || 'N/A')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Project / AI Lead</span>
+            <span class="pr-value">${escapeHtml(h.projectLead || 'N/A')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Assessment Period</span>
+            <span class="pr-value">${escapeHtml(h.startDate || '—')} to ${escapeHtml(h.completionDate || '—')}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Next Scheduled Review</span>
+            <span class="pr-value">${escapeHtml(h.nextReviewDate || '—')}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive Recommendation Banner -->
+      <div class="pr-rec-banner">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 5pt;">
+          <span style="font-size: 9.5pt; font-weight: 800; text-transform: uppercase;">Executive Recommendation Decision</span>
+          <span class="${badgeClass}">${escapeHtml(recDecision)}</span>
+        </div>
+        <div class="pr-field" style="margin-bottom: 5pt;">
+          <span class="pr-label">Deployment Conditions &amp; Directives</span>
+          <div class="pr-value">${escapeHtml(p9.conditions || 'None specified')}</div>
+        </div>
+        <div class="pr-grid-2" style="margin-top: 3pt; font-size: 7.8pt;">
+          <div><strong>Recommender:</strong> ${escapeHtml(p9.recommender || 'N/A')}</div>
+          <div><strong>Date:</strong> ${escapeHtml(p9.recommendationDate || 'N/A')}</div>
+        </div>
+        <div style="margin-top: 5pt; border-top: 1px dashed #cbd5e1; padding-top: 4pt;">
+          <span class="pr-label">Core Governance Verification Findings</span>
+          <div class="pr-grid-3" style="font-size: 7.5pt; margin-top: 2pt;">
+            <div>Legal: <strong>${escapeHtml(p9.findings?.legal || 'Clear')}</strong></div>
+            <div>Mission: <strong>${escapeHtml(p9.findings?.mission || 'Aligned')}</strong></div>
+            <div>Net Benefit: <strong>${escapeHtml(p9.findings?.netBenefit || 'Positive')}</strong></div>
+            <div>Residual Risk: <strong>${escapeHtml(p9.findings?.residualRisk || 'Low')}</strong></div>
+            <div>TEVV Passed: <strong>${escapeHtml(p9.findings?.tevvPassed || 'Yes')}</strong></div>
+            <div>Stakeholders: <strong>${escapeHtml(p9.findings?.stakeholderEngaged || 'Yes')}</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 1 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 1 — System Purpose &amp; Operational Context (MAP 1 &amp; MAP 2)</div>
+        <div class="pr-field">
+          <span class="pr-label">Purpose &amp; Description</span>
+          <div class="pr-value">${escapeHtml(p1.purpose || 'N/A')}</div>
+        </div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">Tasks Performed</span>
+            <div class="pr-value">${escapeHtml((p1.tasks || []).join(', ') || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Minimum Acceptable Performance</span>
+            <div class="pr-value">${escapeHtml(p1.minAcceptablePerformance || 'N/A')}</div>
+          </div>
+        </div>
+        <div class="pr-field">
+          <span class="pr-label">Problem Solved &amp; Business Value</span>
+          <div class="pr-value">${escapeHtml(p1.problemSolved || 'N/A')}</div>
+        </div>
+        <div class="pr-grid-3">
+          <div class="pr-field">
+            <span class="pr-label">Deployment Environment</span>
+            <div class="pr-value">${escapeHtml(p1.deploymentEnv || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Target Geography</span>
+            <div class="pr-value">${escapeHtml(p1.geography || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">User Scale</span>
+            <div class="pr-value">${escapeHtml(p1.scale || 'N/A')}</div>
+          </div>
+        </div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">Decision Stakes</span>
+            <div class="pr-value">${escapeHtml(p1.decisionStakes || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Non-AI Baseline Process</span>
+            <div class="pr-value">${escapeHtml(p1.nonAiDescription || 'N/A')}</div>
+          </div>
+        </div>
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Oversight Model</span>
+            <div class="pr-value">${escapeHtml(p1.oversightLevel || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Human Override</span>
+            <div class="pr-value">${escapeHtml(p1.canOverride || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">AI Labeled</span>
+            <div class="pr-value">${escapeHtml(p1.clearlyLabeled || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Override Authority</span>
+            <div class="pr-value">${escapeHtml(p1.overrideAuthority || 'N/A')}</div>
+          </div>
+        </div>
+        <div class="pr-field">
+          <span class="pr-label">User Recourse Mechanism</span>
+          <div class="pr-value">${escapeHtml(p1.recourseMechanism || 'N/A')}</div>
+        </div>
+
+        <div style="margin-top: 5pt;">
+          <span class="pr-label">Impacted User Groups</span>
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th>User Group</th>
+                <th>Role &amp; Interaction Mode</th>
+                <th>Estimated Count</th>
+                <th>AI Literacy Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(p1.users || []).map(u => `
+                <tr>
+                  <td><strong>${escapeHtml(u.group)}</strong></td>
+                  <td>${escapeHtml(u.role)}</td>
+                  <td>${escapeHtml(u.count)}</td>
+                  <td>${escapeHtml(u.literacy)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Part 2 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 2 — Organizational Alignment &amp; Trustworthy AI (GOVERN 1 &amp; MAP 1)</div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">Mission Alignment</span>
+            <div class="pr-value">${escapeHtml(p2.missionAlignment || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Principles Alignment</span>
+            <div class="pr-value">${escapeHtml(p2.principlesAlignment || 'N/A')}</div>
+          </div>
+        </div>
+        <div class="pr-field">
+          <span class="pr-label">Latent Incentives &amp; Unintended Behaviors</span>
+          <div class="pr-value">${escapeHtml(p2.latentIncentives || 'N/A')}</div>
+        </div>
+        <div style="margin-top: 5pt;">
+          <span class="pr-label">NIST Trustworthy AI Characteristics Review</span>
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Characteristic</th>
+                <th style="width: 15%;">Aligned</th>
+                <th>Operational Notes &amp; Governance Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(p2.values || []).map(v => `
+                <tr>
+                  <td><strong>${escapeHtml(v.name)}</strong></td>
+                  <td>${escapeHtml(v.status)}</td>
+                  <td>${escapeHtml(v.notes)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Part 3 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 3 — Legal, Regulatory &amp; Governance Baseline (GOVERN 4.2 · MAP 1.1)</div>
+        <div class="pr-field">
+          <span class="pr-label">Applicable Legal &amp; Regulatory Standards</span>
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th>Regulatory Area</th>
+                <th>Applicable</th>
+                <th>Relevant Law / Standard</th>
+                <th>Compliance Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(p3.regulations || []).map(r => `
+                <tr>
+                  <td><strong>${escapeHtml(r.area)}</strong></td>
+                  <td>${escapeHtml(r.applicable)}</td>
+                  <td>${escapeHtml(r.law)}</td>
+                  <td>${escapeHtml(r.status)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="pr-grid-3">
+          <div class="pr-field">
+            <span class="pr-label">Legal Reviewer</span>
+            <div class="pr-value">${escapeHtml(p3.legalReviewer || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Review Date</span>
+            <div class="pr-value">${escapeHtml(p3.legalReviewDate || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Review Outcome</span>
+            <div class="pr-value"><strong>${escapeHtml(p3.legalOutcome || 'N/A')}</strong></div>
+          </div>
+        </div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">Maximum Acceptable Risk Threshold</span>
+            <div class="pr-value">${escapeHtml(p3.maxAcceptableRisk || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Explicitly Prohibited Uses</span>
+            <div class="pr-value">${escapeHtml(p3.prohibitedUses || 'N/A')}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 4 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 4 — Expected Benefits &amp; Value Justification (MAP 3.1)</div>
+        <div class="pr-field">
+          <span class="pr-label">Benefits Inventory</span>
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th>Expected Benefit</th>
+                <th>Primary Beneficiary</th>
+                <th>Measurement Metric / Target</th>
+                <th>Confidence Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(p4.benefits || []).map(b => `
+                <tr>
+                  <td><strong>${escapeHtml(b.benefit)}</strong></td>
+                  <td>${escapeHtml(b.beneficiary)}</td>
+                  <td>${escapeHtml(b.howMeasured)}</td>
+                  <td>${escapeHtml(b.confidence)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="pr-field">
+          <span class="pr-label">Distribution of Benefits &amp; Equity Assessment</span>
+          <div class="pr-value">${escapeHtml(p4.equityBenefits || 'N/A')}</div>
+        </div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">Evidence Base</span>
+            <div class="pr-value">${escapeHtml((p4.evidenceBase || []).join(', ') || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Evidence Limitations</span>
+            <div class="pr-value">${escapeHtml(p4.evidenceLimitations || 'N/A')}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 5 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 5 — Potential Harms &amp; Inherent Risk Scorecard (MAP 5.1 · MEASURE 2)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 8%;">ID</th>
+              <th>Potential Harm Description</th>
+              <th>Who is Impacted</th>
+              <th>NIST Dimension</th>
+              <th style="width: 5%; text-align:center;">L</th>
+              <th style="width: 5%; text-align:center;">I</th>
+              <th style="width: 8%; text-align:center;">Score</th>
+              <th style="width: 14%;">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(p5.harms || []).map(h => {
+              const l = parseInt(h.likelihood, 10) || 1;
+              const i = parseInt(h.impact, 10) || 1;
+              const score = l * i;
+              let rating = 'Low (🟢)';
+              if (score > 16) rating = 'Critical (🔴)';
+              else if (score > 9) rating = 'High (🟠)';
+              else if (score > 4) rating = 'Medium (🟡)';
+              return `
+                <tr>
+                  <td><strong>${escapeHtml(h.id)}</strong></td>
+                  <td>${escapeHtml(h.description)}</td>
+                  <td>${escapeHtml(h.who)}</td>
+                  <td>${escapeHtml(h.dimension)}</td>
+                  <td style="text-align:center;">${l}</td>
+                  <td style="text-align:center;">${i}</td>
+                  <td style="text-align:center;"><strong>${score}</strong></td>
+                  <td><span class="${getScoreBadgeClass(score)}">${rating}</span></td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+        <div class="pr-field">
+          <span class="pr-label">Systemic &amp; Compounding Risks</span>
+          <div class="pr-value">${escapeHtml(p5.systemicRisks || 'N/A')}</div>
+        </div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">AI-to-AI / System Interactions</span>
+            <div class="pr-value">${escapeHtml(p5.aiInteractions || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Decommissioning &amp; Transition Risks</span>
+            <div class="pr-value">${escapeHtml(p5.postDecomRisks || 'N/A')}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 6 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 6 — Risk Mitigation &amp; Treatment Plan (MANAGE 1.1 · MANAGE 2.1)</div>
+        <span class="pr-label">Mitigation Controls &amp; Actions</span>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Harm ID</th>
+              <th style="width: 12%;">Response</th>
+              <th>Mitigation Action / Control</th>
+              <th style="width: 14%;">Owner</th>
+              <th style="width: 12%;">Target Date</th>
+              <th style="width: 12%;">Residual</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(p6.mitigations || []).map(m => `
+              <tr>
+                <td><strong>${escapeHtml(m.harmId)}</strong></td>
+                <td>${escapeHtml(m.responseType)}</td>
+                <td>${escapeHtml(m.action)}</td>
+                <td>${escapeHtml(m.owner)}</td>
+                <td>${escapeHtml(m.targetDate)}</td>
+                <td><span class="${getLevelBadgeClass(m.residual)}">${escapeHtml(m.residual)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        ${(p6.acceptedRisks && p6.acceptedRisks.length > 0) ? `
+          <span class="pr-label" style="margin-top: 5pt;">Formally Accepted Residual Risks</span>
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th style="width: 10%;">Harm ID</th>
+                <th style="width: 12%;">Residual Level</th>
+                <th>Business Justification / Rationale</th>
+                <th style="width: 16%;">Accepted By</th>
+                <th style="width: 12%;">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${p6.acceptedRisks.map(a => `
+                <tr>
+                  <td><strong>${escapeHtml(a.harmId)}</strong></td>
+                  <td><span class="${getLevelBadgeClass(a.residualLevel)}">${escapeHtml(a.residualLevel)}</span></td>
+                  <td>${escapeHtml(a.rationale)}</td>
+                  <td>${escapeHtml(a.acceptedBy)}</td>
+                  <td>${escapeHtml(a.date)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        ` : ''}
+      </div>
+
+      <!-- Part 7 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 7 — Stakeholder Engagement &amp; Affected Communities (GOVERN 5.1 · MAP 1.5)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th>Stakeholder Group</th>
+              <th>Type</th>
+              <th>Method</th>
+              <th>Date</th>
+              <th>Key Concerns &amp; Actions Taken</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(p7.stakeholders || []).map(s => `
+              <tr>
+                <td><strong>${escapeHtml(s.group)}</strong></td>
+                <td>${escapeHtml(s.type)}</td>
+                <td>${escapeHtml(s.method)}</td>
+                <td>${escapeHtml(s.date)}</td>
+                <td>${escapeHtml(s.feedback)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div style="margin-top: 5pt;">
+          <span class="pr-label">Engagement Quality Checks</span>
+          <table class="pr-table">
+            <thead>
+              <tr>
+                <th style="width: 35%;">Quality Criterion</th>
+                <th style="width: 15%;">Met</th>
+                <th>Audit Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(p7.qualityChecks || []).map(q => `
+                <tr>
+                  <td><strong>${escapeHtml(q.criterion)}</strong></td>
+                  <td>${escapeHtml(q.met)}</td>
+                  <td>${escapeHtml(q.notes)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Part 8 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 8 — Testing, Evaluation, Verification &amp; Validation (MEASURE 1 · MEASURE 2)</div>
+        <div class="pr-grid-2">
+          <div class="pr-field">
+            <span class="pr-label">TEVV Dossier Reference</span>
+            <div class="pr-value">${escapeHtml(p8.tevvReference || 'N/A')}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Independent Validator</span>
+            <div class="pr-value">${escapeHtml(p8.independentValidator || 'N/A')}</div>
+          </div>
+        </div>
+        <span class="pr-label" style="margin-top: 4pt;">TEVV Activities</span>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th>TEVV Activity</th>
+              <th>Completed</th>
+              <th>Date</th>
+              <th>Conducted By</th>
+              <th>Key Findings &amp; Observations</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(p8.tevvActivities || []).map(t => `
+              <tr>
+                <td><strong>${escapeHtml(t.activity)}</strong></td>
+                <td>${escapeHtml(t.completed)}</td>
+                <td>${escapeHtml(t.date)}</td>
+                <td>${escapeHtml(t.conductedBy)}</td>
+                <td>${escapeHtml(t.findings)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <span class="pr-label" style="margin-top: 5pt;">Key Performance &amp; Safety Thresholds</span>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th>Evaluation Metric</th>
+              <th>Target Threshold</th>
+              <th>Actual Observed</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(p8.metrics || []).map(m => `
+              <tr>
+                <td><strong>${escapeHtml(m.metric)}</strong></td>
+                <td>${escapeHtml(m.threshold)}</td>
+                <td>${escapeHtml(m.actual)}</td>
+                <td><strong>${escapeHtml(m.result)}</strong></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Part 10 -->
+      <div class="pr-section">
+        <div class="pr-section-title">Part 10 — Governance Sign-Off &amp; Approvals (GOVERN 4.2)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Governance Role</th>
+              <th style="width: 18%;">Signatory Name</th>
+              <th style="width: 14%;">Decision</th>
+              <th>Conditions / Notes</th>
+              <th style="width: 10%;">Date</th>
+              <th style="width: 16%;">Signature Stamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(p10.approvals || []).map(a => `
+              <tr>
+                <td><strong>${escapeHtml(a.role)}</strong></td>
+                <td>${escapeHtml(a.name)}</td>
+                <td><strong>${escapeHtml(a.decision)}</strong></td>
+                <td>${escapeHtml(a.notes)}</td>
+                <td>${escapeHtml(a.date)}</td>
+                <td><code style="font-family: monospace; font-size: 7pt;">${escapeHtml(a.signature)}</code></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="pr-footer">
+          Official AI Impact Assessment Document · Generated by SamaBrains AIIA Studio · Aligned with NIST AI RMF 1.0 &amp; ISO/IEC 42001:2023 · Assessment ID: ${escapeHtml(h.assessmentId)}
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+  }
+
   function triggerPrintPdf() {
-    showToast('Preparing executive print view...');
+    const data = serializeForm();
+    renderPrintReport(data);
+
+    // Save active theme & switch temporarily to light mode for printing
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    showToast('Opening Executive Print / PDF dialog...');
+
     setTimeout(() => {
       window.print();
-    }, 250);
+      // Restore theme after print dialog initiates
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
   }
+
+  window.addEventListener('afterprint', () => {
+    const savedTheme = localStorage.getItem('aiia_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  });
 
   btnPrintPdf.addEventListener('click', triggerPrintPdf);
   btnPrintPdfBottom?.addEventListener('click', triggerPrintPdf);
