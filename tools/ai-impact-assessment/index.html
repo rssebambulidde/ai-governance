@@ -31,6 +31,11 @@
           <span class="hub-nav-title">AI System Inventory</span>
           <span class="hub-nav-tag">GOVERN 1.6</span>
         </button>
+        <button type="button" class="hub-nav-btn" id="tab-nav-roles" role="tab" aria-selected="false">
+          <span class="hub-nav-icon">👥</span>
+          <span class="hub-nav-title">Roles &amp; RACI</span>
+          <span class="hub-nav-tag">GOVERN 2</span>
+        </button>
         <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false">
           <span class="hub-nav-icon">⚖️</span>
           <span class="hub-nav-title">Impact Assessment</span>
@@ -56,6 +61,16 @@
         <input type="file" id="inventory-csv-input" accept=".csv" style="display: none;">
         <button type="button" class="btn btn-secondary btn-sm" id="btn-print-inventory-pdf" title="Export executive printable inventory report">
           Registry PDF
+        </button>
+      </div>
+
+      <!-- Roles view actions -->
+      <div class="view-actions-roles" id="actions-roles" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-raci-csv" title="Export RACI Matrix CSV">
+          Export RACI CSV
+        </button>
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-roles-pdf" title="Export Executive RACI Matrix PDF">
+          RACI PDF
         </button>
       </div>
 
@@ -216,8 +231,204 @@
           </table>
         </div>
       </div>
+  </div><!-- End of #view-inventory -->
+
+  <!-- VIEW 3: ROLES & RACI MATRIX (GOVERN 2 & GOVERN 3.2) -->
+  <div id="view-roles" class="portal-view" style="display: none;">
+    <div class="inventory-container">
+      <!-- Hero -->
+      <div class="inventory-hero">
+        <div>
+          <div class="section-tag">NIST AI RMF GOVERN 2 &amp; 3.2</div>
+          <h1 class="inventory-title">AI Roles &amp; Responsibilities Matrix</h1>
+          <p class="inventory-desc">
+            Operational governance RACI matrix, role hierarchy, veto authorities, human-AI oversight configuration register, and mandatory personnel training tracker.
+          </p>
+        </div>
+        <div class="inventory-hero-actions">
+          <div class="raci-legend-pill">
+            <span class="raci-badge a">A</span> Accountable
+            <span class="raci-badge r">R</span> Responsible
+            <span class="raci-badge c">C</span> Consulted
+            <span class="raci-badge i">I</span> Informed
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Executive Metrics -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Defined Roles</span>
+            <span class="kpi-icon">👥</span>
+          </div>
+          <div class="kpi-value" id="kpi-roles-count">18</div>
+          <div class="kpi-sub">Across 4 governance tiers</div>
+        </div>
+
+        <div class="kpi-card crit-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Mandatory Veto Roles</span>
+            <span class="kpi-icon">⛔</span>
+          </div>
+          <div class="kpi-value">7</div>
+          <div class="kpi-sub">Veto authority blocks deployment</div>
+        </div>
+
+        <div class="kpi-card prod-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Lifecycle Activities</span>
+            <span class="kpi-icon">📋</span>
+          </div>
+          <div class="kpi-value">28</div>
+          <div class="kpi-sub">Mapped across 6 lifecycle phases</div>
+        </div>
+
+        <div class="kpi-card review-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Human Oversight Systems</span>
+            <span class="kpi-icon">🔍</span>
+          </div>
+          <div class="kpi-value" id="kpi-oversight-count">6</div>
+          <div class="kpi-sub">GOVERN 3.2 Configurations registered</div>
+        </div>
+      </div>
+
+      <!-- Module Sub-Tabs Switcher -->
+      <div class="sub-tab-bar">
+        <button type="button" class="sub-tab-btn active" id="btn-sub-raci">
+          <span class="sub-tab-icon">📋</span> RACI Activity Matrix
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-catalog">
+          <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-haii">
+          <span class="sub-tab-icon">🕹️</span> Human-AI Oversight (GOVERN 3.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-training">
+          <span class="sub-tab-icon">🎓</span> Training Tracker (GOVERN 2.2)
+        </button>
+      </div>
+
+      <!-- SUB-VIEW 1: RACI ACTIVITY MATRIX -->
+      <div id="subview-raci" class="subview-panel active">
+        <!-- Filter Toolbar -->
+        <div class="inventory-toolbar card">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="raci-search" placeholder="Search governance activities or NIST references...">
+          </div>
+          <div class="filter-controls">
+            <select id="raci-filter-phase" class="filter-select">
+              <option value="ALL">All Lifecycle Phases</option>
+              <option value="Governance & Policy">Governance &amp; Policy</option>
+              <option value="Project Lifecycle">Project Lifecycle</option>
+              <option value="Deployment & Monitoring">Deployment &amp; Monitoring</option>
+              <option value="Incident Response">Incident Response</option>
+              <option value="Decommissioning">Decommissioning</option>
+              <option value="Third-Party AI">Third-Party AI</option>
+            </select>
+            <select id="raci-filter-role" class="filter-select">
+              <option value="ALL">All Roles</option>
+            </select>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-raci-filters">Reset</button>
+          </div>
+        </div>
+
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>NIST AI RMF Governance &amp; Lifecycle RACI Matrix</h3>
+              <p class="text-muted" id="raci-count-text">Showing 28 lifecycle activities</p>
+            </div>
+            <div class="table-actions">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-export-raci-csv-table">
+                Export RACI CSV
+              </button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table raci-table" id="table-raci">
+              <thead id="raci-table-head">
+                <!-- Populated dynamically -->
+              </thead>
+              <tbody id="raci-table-body">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 2: ROLE DIRECTORY & VETO POWERS -->
+      <div id="subview-catalog" class="subview-panel" style="display: none;">
+        <div class="roles-grid" id="roles-catalog-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 3: HUMAN-AI OVERSIGHT REGISTER (GOVERN 3.2) -->
+      <div id="subview-haii" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Human-AI Configuration Register (GOVERN 3.2)</h3>
+              <p class="text-muted">Mandatory oversight definitions, human roles in output, and override authorities per registered system.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table" id="table-haii">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">System ID</th>
+                  <th style="width: 18%;">System Name</th>
+                  <th style="width: 16%;">Configuration Level</th>
+                  <th style="width: 24%;">Human Role in Output</th>
+                  <th style="width: 16%;">Override Authority</th>
+                  <th style="width: 16%;">Mandatory Review Triggers</th>
+                </tr>
+              </thead>
+              <tbody id="haii-table-body">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 4: TRAINING TRACKER (GOVERN 2.2) -->
+      <div id="subview-training" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Mandatory AI Governance Training Completion Tracker (GOVERN 2.2)</h3>
+              <p class="text-muted">Tracks personnel training across NIST AI RMF core risk domains.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table" id="table-training">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Staff Member</th>
+                  <th style="width: 20%;">Governance Role</th>
+                  <th style="width: 10%; text-align: center;">AI Ethics</th>
+                  <th style="width: 10%; text-align: center;">NIST RMF</th>
+                  <th style="width: 10%; text-align: center;">Bias/Fairness</th>
+                  <th style="width: 10%; text-align: center;">AI Security</th>
+                  <th style="width: 10%; text-align: center;">Incident Resp.</th>
+                  <th style="width: 10%; text-align: center;">Policy</th>
+                </tr>
+              </thead>
+              <tbody id="training-table-body">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </div><!-- End of #view-roles -->
 
   <!-- VIEW 2: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
   <div id="view-assessment" class="portal-view" style="display: none;">
@@ -1314,12 +1525,14 @@
   <!-- Dedicated Executive Print Reports (Generated live on Print) -->
   <div id="print-report" class="print-report"></div>
   <div id="print-inventory-report" class="print-report"></div>
+  <div id="print-roles-report" class="print-report"></div>
 
   <!-- Notification Toast -->
   <div id="toast" class="toast">Portal state saved</div>
 
   <!-- Scripts -->
   <script src="inventory-data.js"></script>
+  <script src="roles-data.js"></script>
   <script src="finassist-data.js"></script>
   <script src="app.js"></script>
 </body>

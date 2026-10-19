@@ -246,6 +246,7 @@ h1, h2, h3, h4, .brand-title {
 }
 
 .view-actions-inventory,
+.view-actions-roles,
 .view-actions-assessment {
   display: flex;
   align-items: center;
@@ -649,6 +650,238 @@ h1, h2, h3, h4, .brand-title {
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
   margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   AI ROLES & RACI MATRIX (GOVERN 2 & 3.2)
+   ========================================================================== */
+.raci-legend-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.raci-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.raci-badge.a {
+  background: var(--color-crit-bg);
+  color: var(--color-crit);
+  border: 1px solid var(--color-crit);
+}
+
+.raci-badge.r {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue);
+}
+
+.raci-badge.c {
+  background: var(--color-med-bg);
+  color: var(--color-med);
+  border: 1px solid var(--color-med);
+}
+
+.raci-badge.i {
+  background: rgba(107, 114, 128, 0.18);
+  color: var(--text-muted);
+  border: 1px solid var(--text-muted);
+}
+
+/* Sub-Tab Navigation Bar */
+.sub-tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+}
+
+.sub-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sub-tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.sub-tab-btn.active {
+  background: var(--bg-input);
+  color: var(--accent-blue);
+  border-bottom: 2px solid var(--accent-blue);
+}
+
+.subview-panel {
+  display: none;
+}
+
+.subview-panel.active {
+  display: block;
+}
+
+/* RACI Table */
+.raci-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.raci-table th {
+  white-space: nowrap;
+  font-size: 0.72rem;
+  padding: 0.6rem 0.45rem;
+  text-align: center;
+}
+
+.raci-table th:first-child,
+.raci-table th:nth-child(2),
+.raci-table th:nth-child(3) {
+  text-align: left;
+}
+
+.raci-table td {
+  padding: 0.6rem 0.45rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.raci-table td:first-child,
+.raci-table td:nth-child(2),
+.raci-table td:nth-child(3) {
+  text-align: left;
+}
+
+.raci-table td.highlight-col {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* Role Catalog Grid */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.role-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.role-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.role-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+}
+
+.role-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.role-reports {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.role-tier-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--bg-input);
+  color: var(--accent-cyan);
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.role-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.role-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.role-veto-badge {
+  font-weight: 700;
+  color: var(--color-crit);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.role-veto-badge.none {
+  color: var(--text-muted);
+}
+
+.select-haii-config {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.cell-check {
+  font-size: 1rem;
+  text-align: center;
 }
 
 /* Theme Toggle */
@@ -1331,7 +1564,8 @@ h1, h2, h3, h4, .brand-title {
 
 /* Hide print report from normal screen view */
 #print-report,
-#print-inventory-report {
+#print-inventory-report,
+#print-roles-report {
   display: none !important;
 }
 
@@ -1381,7 +1615,8 @@ h1, h2, h3, h4, .brand-title {
 
   /* Executive Print Document Containers */
   #print-report,
-  #print-inventory-report {
+  #print-inventory-report,
+  #print-roles-report {
     display: block !important;
     visibility: visible !important;
     position: static !important;
@@ -1394,7 +1629,8 @@ h1, h2, h3, h4, .brand-title {
   }
 
   #print-report *,
-  #print-inventory-report * {
+  #print-inventory-report *,
+  #print-roles-report * {
     box-sizing: border-box !important;
   }
 

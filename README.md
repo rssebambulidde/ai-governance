@@ -78,22 +78,19 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
 
 ---
 
-### Project 3: Interactive AI Impact Assessment Studio (Cloudflare Pages)
+### Project 3: Interactive NIST AI RMF Governance Hub (Cloudflare Pages)
 > **Live Web Application:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)  
 > **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
 > **Deployment:** Cloudflare Pages (Turnkey static edge application)  
-> **Standards:** NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1/5.1 · MANAGE 1.1) & ISO/IEC 42001
+> **Standards Exclusively:** NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN · MAP · MEASURE · MANAGE)
 
-A dynamic, audit-ready web tool that operationalizes [AI-Impact-Assessment-Template.md](docs/01-govern/AI-Impact-Assessment-Template.md) into an interactive assessment experience:
+A dynamic, audit-ready operational suite uniting three core governance modules into a single synchronized interface:
 
-* **Interactive Risk Calculator:** Real-time Likelihood (1–5) × Impact (1–5) calculations, automated risk level badging (Low, Medium, High, Critical), and risk heat counter.
-* **Preloaded Example & Auto-Save:** Instantly load the complete FinAssist AI assessment dataset or start blank with browser `localStorage` persistence.
-* **Multi-Format Export Engine:**
-  * **Executive PDF:** Formatted for executive review and formal board submissions via `@media print` with cover headers, summary scorecards, and digital signature stamps.
-  * **Markdown Export:** One-click download of audit-ready `.md` files.
-  * **JSON State:** Import/export full assessment states for cross-team collaboration.
+1. **AI System Inventory & Registry (GOVERN 1.6):** Real-time searchable registry, KPI cards, bidirectional CSV sync with repository inventory, and one-click assessment launches.
+2. **AI Roles & Responsibilities Matrix (GOVERN 2.1 · 2.2 · 2.3 · 3.2):** Interactive 28-activity RACI lifecycle matrix, 18-role catalog with explicit Veto authorities, Human-AI Oversight Configurations (HITL/HOTL/HIC), and Workforce Training Tracker.
+3. **AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1):** 10-part assessment wizard with real-time Likelihood × Impact calculator, FinAssist AI preloads, executive white-paper PDF export, Markdown download, and JSON state persistence.
 
-[Explore the AI Impact Assessment Studio Guide →](tools/ai-impact-assessment/README.md)
+[Explore the NIST AI RMF Governance Hub Guide →](tools/ai-impact-assessment/README.md)
 
 ---
 

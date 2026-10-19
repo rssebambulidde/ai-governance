@@ -44,32 +44,44 @@ document.addEventListener('DOMContentLoaded', () => {
   // 0. HUB NAVIGATION & INVENTORY REGISTRY (GOVERN 1.6)
   // ==========================================================================
   const tabNavInventory = document.getElementById('tab-nav-inventory');
+  const tabNavRoles = document.getElementById('tab-nav-roles');
   const tabNavAssessment = document.getElementById('tab-nav-assessment');
   const viewInventory = document.getElementById('view-inventory');
+  const viewRoles = document.getElementById('view-roles');
   const viewAssessment = document.getElementById('view-assessment');
   const actionsInventory = document.getElementById('actions-inventory');
+  const actionsRoles = document.getElementById('actions-roles');
   const actionsAssessment = document.getElementById('actions-assessment');
 
   function switchHubView(target) {
+    const allTabs = [tabNavInventory, tabNavRoles, tabNavAssessment];
+    const allViews = [viewInventory, viewRoles, viewAssessment];
+    const allActions = [actionsInventory, actionsRoles, actionsAssessment];
+
+    allTabs.forEach(t => {
+      t?.classList.remove('active');
+      t?.setAttribute('aria-selected', 'false');
+    });
+    allViews.forEach(v => { if (v) v.style.display = 'none'; });
+    allActions.forEach(a => { if (a) a.style.display = 'none'; });
+
     if (target === 'inventory') {
       tabNavInventory?.classList.add('active');
       tabNavInventory?.setAttribute('aria-selected', 'true');
-      tabNavAssessment?.classList.remove('active');
-      tabNavAssessment?.setAttribute('aria-selected', 'false');
       if (viewInventory) viewInventory.style.display = 'block';
-      if (viewAssessment) viewAssessment.style.display = 'none';
       if (actionsInventory) actionsInventory.style.display = 'flex';
-      if (actionsAssessment) actionsAssessment.style.display = 'none';
       renderInventoryTable();
+    } else if (target === 'roles') {
+      tabNavRoles?.classList.add('active');
+      tabNavRoles?.setAttribute('aria-selected', 'true');
+      if (viewRoles) viewRoles.style.display = 'block';
+      if (actionsRoles) actionsRoles.style.display = 'flex';
+      renderRolesModule();
     } else {
       tabNavAssessment?.classList.add('active');
       tabNavAssessment?.setAttribute('aria-selected', 'true');
-      tabNavInventory?.classList.remove('active');
-      tabNavInventory?.setAttribute('aria-selected', 'false');
       if (viewAssessment) viewAssessment.style.display = 'block';
-      if (viewInventory) viewInventory.style.display = 'none';
       if (actionsAssessment) actionsAssessment.style.display = 'flex';
-      if (actionsInventory) actionsInventory.style.display = 'none';
       syncHeaderBadges();
       updateProgress();
     }
@@ -77,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   tabNavInventory?.addEventListener('click', () => switchHubView('inventory'));
+  tabNavRoles?.addEventListener('click', () => switchHubView('roles'));
   tabNavAssessment?.addEventListener('click', () => switchHubView('assessment'));
 
   // Inventory Data State
@@ -642,6 +655,390 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('btn-print-inventory-pdf')?.addEventListener('click', triggerPrintInventoryPdf);
+
+  // ==========================================================================
+  // 0.2 ROLES & RESPONSIBILITIES MATRIX MODULE (GOVERN 2 & 3.2)
+  // ==========================================================================
+  const subBtnRaci = document.getElementById('btn-sub-raci');
+  const subBtnCatalog = document.getElementById('btn-sub-catalog');
+  const subBtnHaii = document.getElementById('btn-sub-haii');
+  const subBtnTraining = document.getElementById('btn-sub-training');
+
+  const subviewRaci = document.getElementById('subview-raci');
+  const subviewCatalog = document.getElementById('subview-catalog');
+  const subviewHaii = document.getElementById('subview-haii');
+  const subviewTraining = document.getElementById('subview-training');
+
+  function switchRolesSubview(target) {
+    const allBtns = [subBtnRaci, subBtnCatalog, subBtnHaii, subBtnTraining];
+    const allPanels = [subviewRaci, subviewCatalog, subviewHaii, subviewTraining];
+
+    allBtns.forEach(b => b?.classList.remove('active'));
+    allPanels.forEach(p => { if (p) p.style.display = 'none'; });
+
+    if (target === 'raci') {
+      subBtnRaci?.classList.add('active');
+      if (subviewRaci) subviewRaci.style.display = 'block';
+      renderRaciTable();
+    } else if (target === 'catalog') {
+      subBtnCatalog?.classList.add('active');
+      if (subviewCatalog) subviewCatalog.style.display = 'block';
+      renderRolesCatalog();
+    } else if (target === 'haii') {
+      subBtnHaii?.classList.add('active');
+      if (subviewHaii) subviewHaii.style.display = 'block';
+      renderHaiiRegister();
+    } else if (target === 'training') {
+      subBtnTraining?.classList.add('active');
+      if (subviewTraining) subviewTraining.style.display = 'block';
+      renderTrainingTracker();
+    }
+  }
+
+  subBtnRaci?.addEventListener('click', () => switchRolesSubview('raci'));
+  subBtnCatalog?.addEventListener('click', () => switchRolesSubview('catalog'));
+  subBtnHaii?.addEventListener('click', () => switchRolesSubview('haii'));
+  subBtnTraining?.addEventListener('click', () => switchRolesSubview('training'));
+
+  // Role IDs as columns in RACI table
+  const RACI_ROLE_COLS = [
+    { id: "gov-comm", short: "Gov Comm", full: "AI Governance Committee" },
+    { id: "caio", short: "CAIO", full: "Chief AI Officer" },
+    { id: "ai-risk-off", short: "Risk Off", full: "AI Risk Officer" },
+    { id: "ai-ethics-off", short: "Ethics Off", full: "AI Ethics Officer" },
+    { id: "legal-comp", short: "Legal", full: "Legal & Compliance" },
+    { id: "dpo", short: "DPO", full: "Data Protection Officer" },
+    { id: "ai-proj-lead", short: "Proj Lead", full: "AI Project Lead" },
+    { id: "ml-eng", short: "ML Eng", full: "AI/ML Engineer" },
+    { id: "data-eng", short: "Data Eng", full: "Data Engineer" },
+    { id: "haii-spec", short: "HAII Spec", full: "Human-AI Specialist" },
+    { id: "tevv-lead", short: "TEVV Lead", full: "TEVV Lead" },
+    { id: "tevv-analyst", short: "TEVV Analyst", full: "TEVV Analyst" },
+    { id: "ai-operator", short: "Operator", full: "AI System Operator" },
+    { id: "inv-mgr", short: "Inv Mgr", full: "AI Inventory Manager" },
+    { id: "incident-lead", short: "Incident", full: "Incident Response Lead" },
+    { id: "comms-lead", short: "Comms", full: "Communications Lead" },
+    { id: "red-team", short: "Red Team", full: "Adversarial Red Team" }
+  ];
+
+  const raciSearch = document.getElementById('raci-search');
+  const raciFilterPhase = document.getElementById('raci-filter-phase');
+  const raciFilterRole = document.getElementById('raci-filter-role');
+  const btnResetRaciFilters = document.getElementById('btn-reset-raci-filters');
+  const raciTableHead = document.getElementById('raci-table-head');
+  const raciTableBody = document.getElementById('raci-table-body');
+  const raciCountText = document.getElementById('raci-count-text');
+
+  function populateRaciRoleFilter() {
+    if (!raciFilterRole) return;
+    const currentVal = raciFilterRole.value;
+    raciFilterRole.innerHTML = '<option value="ALL">All Roles</option>';
+    RACI_ROLE_COLS.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = `${r.full} (${r.short})`;
+      raciFilterRole.appendChild(opt);
+    });
+    if (RACI_ROLE_COLS.some(r => r.id === currentVal)) {
+      raciFilterRole.value = currentVal;
+    }
+  }
+
+  function getRoleRaciTitle(code) {
+    if (code === 'A') return 'Accountable (Decision owner)';
+    if (code === 'R') return 'Responsible (Executes activity)';
+    if (code === 'C') return 'Consulted (Two-way input)';
+    if (code === 'I') return 'Informed (One-way update)';
+    return code;
+  }
+
+  function renderRaciTable() {
+    if (!raciTableHead || !raciTableBody) return;
+    populateRaciRoleFilter();
+
+    const selectedPhase = raciFilterPhase?.value || 'ALL';
+    const selectedRole = raciFilterRole?.value || 'ALL';
+    const query = (raciSearch?.value || '').toLowerCase().trim();
+
+    // Table Header
+    raciTableHead.innerHTML = `
+      <tr>
+        <th style="width: 4%;">#</th>
+        <th style="width: 14%;">Phase</th>
+        <th style="width: 8%;">Ref</th>
+        <th style="width: 24%;">NIST AI RMF Lifecycle Activity</th>
+        ${RACI_ROLE_COLS.map(r => `
+          <th style="width: 3%;" title="${escapeHtml(r.full)}">${escapeHtml(r.short)}</th>
+        `).join('')}
+      </tr>
+    `;
+
+    const activities = typeof RACI_ACTIVITIES !== 'undefined' ? RACI_ACTIVITIES : [];
+    const filtered = activities.filter(act => {
+      if (selectedPhase !== 'ALL' && act.phase !== selectedPhase) return false;
+      if (selectedRole !== 'ALL' && !act.raci[selectedRole]) return false;
+      if (query) {
+        const text = `${act.activity} ${act.phase} ${act.ref}`.toLowerCase();
+        if (!text.includes(query)) return false;
+      }
+      return true;
+    });
+
+    if (raciCountText) {
+      raciCountText.textContent = `Showing ${filtered.length} of ${activities.length} lifecycle activities`;
+    }
+
+    if (filtered.length === 0) {
+      raciTableBody.innerHTML = `
+        <tr>
+          <td colspan="${4 + RACI_ROLE_COLS.length}" style="text-align:center; padding: 2.5rem; color: var(--text-muted);">
+            No matching governance activities found.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    raciTableBody.innerHTML = filtered.map((act, idx) => `
+      <tr>
+        <td style="font-family: monospace; color: var(--text-muted);">${idx + 1}</td>
+        <td><span style="font-size: 0.76rem; font-weight: 600;">${escapeHtml(act.phase)}</span></td>
+        <td><code style="font-size: 0.72rem; color: var(--accent-cyan);">${escapeHtml(act.ref)}</code></td>
+        <td style="font-weight: 600;">${escapeHtml(act.activity)}</td>
+        ${RACI_ROLE_COLS.map(r => {
+          const roleCode = act.raci[r.id];
+          const isHighlight = selectedRole !== 'ALL' && selectedRole === r.id;
+          const hlClass = isHighlight ? 'highlight-col' : '';
+          if (!roleCode) {
+            return `<td class="${hlClass}"><span style="color: var(--border-color); font-size: 0.75rem;">—</span></td>`;
+          }
+          const badgeClass = roleCode.toLowerCase();
+          return `
+            <td class="${hlClass}">
+              <span class="raci-badge ${badgeClass}" title="${escapeHtml(r.full)}: ${getRoleRaciTitle(roleCode)}">${roleCode}</span>
+            </td>
+          `;
+        }).join('')}
+      </tr>
+    `).join('');
+  }
+
+  raciSearch?.addEventListener('input', renderRaciTable);
+  raciFilterPhase?.addEventListener('change', renderRaciTable);
+  raciFilterRole?.addEventListener('change', renderRaciTable);
+  btnResetRaciFilters?.addEventListener('click', () => {
+    if (raciSearch) raciSearch.value = '';
+    if (raciFilterPhase) raciFilterPhase.value = 'ALL';
+    if (raciFilterRole) raciFilterRole.value = 'ALL';
+    renderRaciTable();
+  });
+
+  // Render Role Catalog Cards
+  function renderRolesCatalog() {
+    const grid = document.getElementById('roles-catalog-grid');
+    if (!grid) return;
+    const roles = typeof ROLES_CATALOG !== 'undefined' ? ROLES_CATALOG : [];
+
+    grid.innerHTML = roles.map(role => `
+      <div class="role-card">
+        <div class="role-card-header">
+          <div>
+            <h4 class="role-title">${escapeHtml(role.name)}</h4>
+            <div class="role-reports">Reports to: <strong>${escapeHtml(role.reportsTo)}</strong></div>
+          </div>
+          <span class="role-tier-badge">${escapeHtml(role.tier)}</span>
+        </div>
+        <p class="role-desc">${escapeHtml(role.description)}</p>
+        <div class="role-card-footer">
+          <span>Deployment Authority:</span>
+          ${role.vetoPower ? `
+            <span class="role-veto-badge">⛔ Mandatory Veto</span>
+          ` : `
+            <span class="role-veto-badge none">— Operational Advisory</span>
+          `}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Render Human-AI Oversight Configuration Register (GOVERN 3.2)
+  function renderHaiiRegister() {
+    const tbody = document.getElementById('haii-table-body');
+    if (!tbody) return;
+    const configs = typeof HUMAN_AI_CONFIGS !== 'undefined' ? HUMAN_AI_CONFIGS : [];
+
+    tbody.innerHTML = configs.map(c => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(c.systemId)}</td>
+        <td><strong>${escapeHtml(c.systemName)}</strong></td>
+        <td>
+          <span class="status-badge-pill ${getHaiiClass(c.level)}">${escapeHtml(c.level)}</span>
+        </td>
+        <td style="font-size: 0.8rem; color: var(--text-secondary);">${escapeHtml(c.roleInOutput)}</td>
+        <td style="font-weight: 600; font-size: 0.8rem;">${escapeHtml(c.overrideAuthority)}</td>
+        <td style="font-size: 0.8rem;">${escapeHtml(c.mandatoryReview)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function getHaiiClass(level) {
+    if (level.includes('Control')) return 'decom';
+    if (level.includes('Loop')) return 'testing';
+    if (level.includes('Automated')) return 'crit';
+    return 'prod';
+  }
+
+  // Render Training Tracker (GOVERN 2.2)
+  function renderTrainingTracker() {
+    const tbody = document.getElementById('training-table-body');
+    if (!tbody) return;
+    const trainees = typeof TRAINING_TRACKER !== 'undefined' ? TRAINING_TRACKER : [];
+
+    tbody.innerHTML = trainees.map(t => `
+      <tr>
+        <td><strong>${escapeHtml(t.name)}</strong></td>
+        <td>${escapeHtml(t.role)}</td>
+        <td class="cell-check">${t.basics ? '✅' : '⬜'}</td>
+        <td class="cell-check">${t.nistRmf ? '✅' : '⬜'}</td>
+        <td class="cell-check">${t.biasFairness ? '✅' : '⬜'}</td>
+        <td class="cell-check">${t.securityPrivacy ? '✅' : '⬜'}</td>
+        <td class="cell-check">${t.incidentResp ? '✅' : '⬜'}</td>
+        <td class="cell-check">${t.policy ? '✅' : '⬜'}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderRolesModule() {
+    renderRaciTable();
+    renderRolesCatalog();
+    renderHaiiRegister();
+    renderTrainingTracker();
+  }
+
+  // Export RACI CSV
+  function exportRaciCsv() {
+    const cols = ['Activity_ID', 'Lifecycle_Phase', 'NIST_Ref', 'Activity_Name', ...RACI_ROLE_COLS.map(r => r.id)];
+    const rows = [cols.join(',')];
+
+    (typeof RACI_ACTIVITIES !== 'undefined' ? RACI_ACTIVITIES : []).forEach(act => {
+      const row = [
+        escapeCsvCell(act.id),
+        escapeCsvCell(act.phase),
+        escapeCsvCell(act.ref),
+        escapeCsvCell(act.activity),
+        ...RACI_ROLE_COLS.map(r => escapeCsvCell(act.raci[r.id] || ''))
+      ];
+      rows.push(row.join(','));
+    });
+
+    const csvContent = rows.join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AI-Roles-RACI-Matrix.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Exported AI-Roles-RACI-Matrix.csv');
+  }
+
+  document.getElementById('btn-export-raci-csv')?.addEventListener('click', exportRaciCsv);
+  document.getElementById('btn-export-raci-csv-table')?.addEventListener('click', exportRaciCsv);
+
+  // Executive RACI Matrix PDF Generator
+  function triggerPrintRolesPdf() {
+    const container = document.getElementById('print-roles-report');
+    if (!container) return;
+
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    const activities = typeof RACI_ACTIVITIES !== 'undefined' ? RACI_ACTIVITIES : [];
+
+    const html = `
+      <div class="pr-header">
+        <div>
+          <div class="pr-org">SAMABRAINS ASSURANCE &amp; GOVERNANCE</div>
+          <h1 class="pr-title">AI Roles &amp; Responsibilities RACI Matrix</h1>
+          <div class="pr-subtitle">Operationalizing NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN 2.1, 2.2, 2.3 &amp; 3.2)</div>
+        </div>
+        <div>
+          <span class="pr-badge-go">GOVERN 2 COMPLIANT</span>
+        </div>
+      </div>
+
+      <div class="pr-meta-box">
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Total Defined Roles</span>
+            <span class="pr-value" style="font-weight: 700;">18 Roles</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Lifecycle Activities</span>
+            <span class="pr-value" style="font-weight: 700;">28 Tasks</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Veto Authority Roles</span>
+            <span class="pr-value" style="font-weight: 700;">7 Roles</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Date Generated</span>
+            <span class="pr-value">${new Date().toISOString().slice(0, 10)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">NIST AI RMF Lifecycle RACI Matrix</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 14%;">Phase</th>
+              <th style="width: 8%;">Ref</th>
+              <th style="width: 25%;">Lifecycle Activity</th>
+              ${RACI_ROLE_COLS.slice(0, 10).map(r => `
+                <th style="text-align: center;">${escapeHtml(r.short)}</th>
+              `).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${activities.map((act, i) => `
+              <tr>
+                <td style="font-family: monospace;">${i + 1}</td>
+                <td>${escapeHtml(act.phase)}</td>
+                <td><strong>${escapeHtml(act.ref)}</strong></td>
+                <td>${escapeHtml(act.activity)}</td>
+                ${RACI_ROLE_COLS.slice(0, 10).map(r => {
+                  const val = act.raci[r.id] || '—';
+                  return `<td style="text-align: center; font-weight: 700;">${val}</td>`;
+                }).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div style="font-size: 7.5pt; color: #475569; margin-top: 4pt;">
+          <strong>Legend:</strong> A = Accountable (Final decision owner) · R = Responsible (Executes task) · C = Consulted (Two-way input) · I = Informed (One-way notice)
+        </div>
+        <div class="pr-footer">
+          Official AI Roles &amp; Responsibilities Document · Generated by SamaBrains NIST AI Governance Hub · NIST AI RMF 1.0 (GOVERN 2)
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    showToast('Opening Executive RACI Print / PDF dialog...');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
+  }
+
+  document.getElementById('btn-print-roles-pdf')?.addEventListener('click', triggerPrintRolesPdf);
 
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {

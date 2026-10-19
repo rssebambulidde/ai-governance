@@ -16,7 +16,14 @@
 * **One-Click AIIA Launch:** Instantly transition any system into the Impact Assessment Studio with pre-bound metadata.
 * **Executive Registry PDF:** Pure white A4 printable registry report for board review and audit submissions.
 
-### 2. AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
+### 2. AI Roles & Responsibilities Matrix (GOVERN 2.1 · GOVERN 2.2 · GOVERN 2.3 · GOVERN 3.2)
+* **Interactive RACI Lifecycle Matrix:** 28 governance activities across 6 phases (Governance & Policy, Project Lifecycle, Deployment & Monitoring, Incident Response, Decommissioning, Third-Party AI) mapped against enterprise roles with instant tier-filtering and text search.
+* **Role Catalog & Veto Authority Directory:** 18 defined enterprise roles across 4 tiers (Governance & Leadership, Project-Level, Operational, External/Advisory) documenting reporting lines, primary responsibilities, and hard veto authorities.
+* **Human-AI Oversight Register (GOVERN 3.2):** Explicit human-in-the-loop (HITL), human-on-the-loop (HOTL), and human-in-command (HIC) operational boundaries tied to AI inventory systems (`AI-001` through `AI-006`).
+* **Workforce Competency Tracker (GOVERN 2.2):** Role-based training records, mandatory certification tracking, and compliance audit readiness.
+* **Executive Role & RACI PDF Exporter:** Dedicated light-theme, pure white PDF engine with formal executive signatures and CSV export.
+
+### 3. AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
 * **10-Part Assessment Wizard:** Guides users through all sections of the NIST AI RMF Impact Assessment lifecycle.
 * **Interactive Risk Calculator:** Real-time Likelihood (1–5) × Impact (1–5) calculation with dynamic risk badges (Low, Medium, High, Critical) and risk scorecard heat counter.
 * **Preset Switcher:** Instant *"Load FinAssist AI Example"* for demonstration and benchmarking, or *"New Blank"* for net-new assessments.
