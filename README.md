@@ -46,9 +46,8 @@ flowchart TD
 
 ```
 ai-governance/
-├── README.md                                  <- Master Workspace Overview & Technical Index
+├── README.md                                  <- Master Workspace Overview & Technical Index (Single Source of Truth)
 ├── docs/                                      <- Operational NIST AI RMF Governance Deliverables
-│   ├── README.md                              <- FinAssist AI Governance Framework Overview
 │   ├── 00-references/                         <- Primary Standards, Study Notes & Playbook Spreadsheets
 │   │   ├── NIST-AI-RMF-Learning-Guide.md      <- 40+ page breakdown of NIST AI 100-1
 │   │   ├── NIST-AI-RMF-Playbook-Study-Notes.md<- Deep dive across all 72 NIST subcategories
@@ -77,7 +76,6 @@ ai-governance/
 │       └── AI-Incident-Log.md                 <- Standardized incident reporting register
 ├── solutions/                                 <- Practical AI Governance Architectures
 │   └── ai-governance-kb-assistant/            <- Grounded Regulatory Knowledge Base & Assistant
-│       └── README.md                          <- Dual-door RAG architecture & evaluation case study
 └── tools/                                     <- Live Production Web Applications
     └── ai-impact-assessment/                  <- SamaBrains NIST AI Governance Hub
         ├── index.html                         <- Main 4-module portal application markup
@@ -87,8 +85,7 @@ ai-governance/
         ├── roles-data.js                      <- 28 RACI activities, 18 roles & training data
         ├── policy-data.js                     <- 4 deployment gates, 8 principles & 9 artifacts
         ├── finassist-data.js                  <- Preloaded FinAssist AI impact assessment dataset
-        ├── _headers                           <- Cloudflare security & cache-invalidation headers
-        └── README.md                          <- Web suite user documentation & deployment guide
+        └── _headers                           <- Cloudflare security & cache-invalidation headers
 ```
 
 ---
@@ -151,7 +148,7 @@ flowchart LR
 
 ## Pillar 2: Enterprise AI Governance Framework & TEVV Case Study (FinAssist AI)
 
-> **Full Operational Case Study:** [`docs/README.md`](docs/README.md)  
+> **Operational Case Study Location:** [`docs/`](docs/)  
 > **Domain:** Commercial Retail Banking / Generative AI Customer Assistant (`SYS-FIN-001`)  
 > **Framework:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1)
 
@@ -187,7 +184,7 @@ Most AI governance initiatives remain confined to abstract principles. This fram
 
 ## Pillar 3: Grounded Regulatory Knowledge Base & Assistant
 
-> **Solution Write-up:** [`solutions/ai-governance-kb-assistant/README.md`](solutions/ai-governance-kb-assistant/README.md)  
+> **Solution Directory:** [`solutions/ai-governance-kb-assistant/`](solutions/ai-governance-kb-assistant/)  
 > **Live Advisory Demo:** [https://samabrains.com/ask/](https://samabrains.com/ask/)
 
 A production RAG solution demonstrating how enterprises can deliver **instant, cited answers** over bounded, authoritative AI governance corpora:

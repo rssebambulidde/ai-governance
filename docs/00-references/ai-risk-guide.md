@@ -445,7 +445,7 @@ Official and primary sources (verify current versions):
 - [EU Artificial Intelligence Act — official information](https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai)
 - [ISO/IEC 42001 — AI management system](https://www.iso.org/standard/81230.html) (standard available via ISO / national bodies)
 
-Related SamaBrains context: this guide lives in the [AI Governance](../README.md) solutions repo as an educational reference alongside grounded assistants and lab materials.
+Related SamaBrains context: this guide lives in the [AI Governance Master Guide](../../README.md) solutions repo as an educational reference alongside grounded assistants and lab materials.
 
 ---
 
