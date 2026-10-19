@@ -1,52 +1,194 @@
-# SamaBrains AI Governance & Risk Solutions
+# AI Governance & Safety Engineering Portfolio
 
 [![Framework: NIST AI RMF 1.0](https://img.shields.io/badge/Framework-NIST%20AI%20RMF%201.0-blue?style=for-the-badge)](https://www.nist.gov/itl/ai-risk-management-framework)
 [![Deployment: Cloudflare Pages](https://img.shields.io/badge/Deployment-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare)](https://ai-impact-assessment-20y.pages.dev)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)]()
 [![Practice: SamaBrains](https://img.shields.io/badge/Practice-SamaBrains-purple?style=for-the-badge)](https://samabrains.com/)
 
-> **Audit-ready AI governance frameworks, quantitative TEVV evaluations, and interactive operational tools.**  
-> Dedicated exclusively to operationalizing the **NIST AI Risk Management Framework 1.0 (NIST AI RMF 1.0 — NIST AI 100-1)** across enterprise AI lifecycles.  
-> Built at and for **[SamaBrains](https://samabrains.com/)**, an independent AI governance, safety, and security advisory practice led by **Robert Ssebambulidde**.
+> **Executive AI Governance Portfolio of Robert Ssebambulidde**  
+> *Founder & AI Governance Practice Lead at [SamaBrains](https://samabrains.com/)*  
+> **Demonstrated Disciplines:** AI Risk Architecture · Algorithmic Auditing & TEVV · Policy Operationalization · Human-AI Interaction Design · Grounded RAG Systems  
+> **Primary Standard:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1 — GOVERN · MAP · MEASURE · MANAGE)  
+> **Live Production Suite:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)
 
 ---
 
-## Executive Architecture & Workspace Map
+## Executive Summary for Hiring Teams & Governance Leaders
 
-This unified repository bridges the gap between high-level regulatory frameworks and real-world engineering operations. It consists of three tightly coupled, production-ready pillars:
+Most enterprise AI governance initiatives fail at the translation layer:
+* **Legal and compliance teams** draft high-level principles that lack technical enforcement mechanisms.
+* **Engineering and data science teams** optimize for benchmark accuracy while blind to demographic bias, failure cascades, and post-deployment accountability.
+
+This repository demonstrates the ability to bridge that divide. It provides a complete, audit-ready operationalization of the **NIST AI Risk Management Framework 1.0 (NIST AI 100-1)**, progressing from boardroom oversight charters down to quantitative metric breach triggers, statistical bias testing code, emergency containment SLAs, and a live web governance hub.
 
 ```mermaid
 flowchart TD
-    SB["SamaBrains AI Governance Practice\n(Robert Ssebambulidde)"]
+    Candidate["Robert Ssebambulidde\n(AI Governance & Safety Practice Lead)"]
 
-    Pillar1["Pillar 1: Interactive Web Governance Hub\n(Live Cloudflare Pages Suite)\ntools/ai-impact-assessment/"]
-    Pillar2["Pillar 2: Enterprise Governance Framework\n(Operational FinAssist AI Case Study)\ndocs/"]
-    Pillar3["Pillar 3: Grounded Regulatory Assistant\n(Bounded Corpus RAG Solution)\nsolutions/ai-governance-kb-assistant/"]
+    P1["Pillar 1: Interactive Web Governance Hub\n(Live Cloudflare Pages Edge Suite)\ntools/ai-impact-assessment/"]
+    P2["Pillar 2: Enterprise Governance Framework\n(Operational FinAssist AI Case Study)\ndocs/"]
+    P3["Pillar 3: Grounded Regulatory RAG Assistant\n(Production Retrieval Architecture)\nsolutions/ai-governance-kb-assistant/"]
 
-    SB --> Pillar1
-    SB --> Pillar2
-    SB --> Pillar3
+    Candidate --> P1
+    Candidate --> P2
+    Candidate --> P3
 
-    Pillar1 --> M1["Module 1: AI System Inventory\n(GOVERN 1.6)"]
-    Pillar1 --> M2["Module 2: Roles & RACI Matrix\n(GOVERN 2.1 · 2.2 · 2.3 · 3.2)"]
-    Pillar1 --> M3["Module 3: Policy & Gatekeeper\n(GOVERN 1.1–1.7 · 4.1 · 6.1–6.2)"]
-    Pillar1 --> M4["Module 4: Impact Assessment Studio\n(GOVERN 4.2 · MAP · MANAGE)"]
+    P1 --> M1["Module 1: AI System Inventory\n(GOVERN 1.6 · Lifecycle Tracking)"]
+    P1 --> M2["Module 2: Roles & RACI Matrix\n(GOVERN 2 & 3 · Veto Powers)"]
+    P1 --> M3["Module 3: Policy & Gatekeeper\n(GOVERN 1 & 6 · Release Gates)"]
+    P1 --> M4["Module 4: Impact Assessment Studio\n(GOVERN 4.2 · Risk Calculator)"]
 
-    Pillar2 --> G["GOVERN Function\nPolicy, Roles, Inventory, AIIA"]
-    Pillar2 --> M["MAP Function\nContext, Stakeholders, 13 Risks"]
-    Pillar2 --> ME["MEASURE Function\nTEVV, Bias Audit, 20 Metrics"]
-    Pillar2 --> MA["MANAGE Function\nResponse Plans, Incident Playbook"]
+    P2 --> Gov["GOVERN Function\nPolicy, Roles, Inventory, AIIA"]
+    P2 --> Map["MAP Function\n13 Profiled Risks (R-01..R-13)"]
+    P2 --> Meas["MEASURE Function\nTEVV, Bias Audit, 20 Metrics"]
+    P2 --> Man["MANAGE Function\n15-Min Containment Playbook"]
 
-    Pillar3 --> RAG["Dual-Door Knowledge Base\nInternal Ctrl+K & Public /ask/"]
+    P3 --> RAG["Dual-Door Knowledge Base\nInternal Ctrl+K & Public /ask/"]
 ```
+
+---
+
+## Core Competencies & Demonstrated Skills Matrix
+
+This portfolio provides tangible, code- and document-level proof of competencies across the full AI lifecycle:
+
+| Governance Competency | Demonstrated Capability | Key Repository Deliverables |
+|---|---|---|
+| **Institutional Policy & Release Gating** | Architecting enterprise policy charters, 4 mandatory Go/No-Go release gates (`GATE-01` to `GATE-04`), third-party foundation model screening, and policy exception registers. | [`AI-Governance-Policy.md`](docs/01-govern/AI-Governance-Policy.md)<br>[Policy & Gatekeeper Web Module](https://ai-impact-assessment-20y.pages.dev/#policy) |
+| **Accountability & Veto Structuring** | Establishing 4-tier RACI structures across 18 enterprise roles, formalizing binding veto authorities for Ethics/Legal officers, and defining operational HITL/HOTL/HIC boundaries. | [`AI-Roles-Matrix.md`](docs/01-govern/AI-Roles-Matrix.md)<br>[Roles & RACI Web Module](https://ai-impact-assessment-20y.pages.dev/#roles) |
+| **Socio-Technical Risk Profiling** | Contextualizing AI deployment boundaries, mapping disparate impact on vulnerable customer populations, and analyzing 13 distinct socio-technical failure modes (`R-01` to `R-13`). | [`MAP-AI-System-Context-Report.md`](docs/02-map/MAP-AI-System-Context-Report.md)<br>[`MAP-Stakeholder-Analysis.md`](docs/02-map/MAP-Stakeholder-Analysis.md) |
+| **TEVV & Algorithmic Bias Auditing** | Formulating empirical testing protocols, disparate impact ratio evaluation ($0.80–1.25$), counterfactual fairness testing, and 20 line-item quantitative metrics with hard breach thresholds. | [`MEASURE-Bias-Testing-Methodology.md`](docs/03-measure/MEASURE-Bias-Testing-Methodology.md)<br>[`MEASURE-Metrics-Tracker.csv`](docs/03-measure/MEASURE-Metrics-Tracker.csv) |
+| **Incident Response & Safety Engineering** | Designing SEV-1 to SEV-4 incident escalation matrix, emergency human-failover triggers, 15-minute containment SLAs, and continuous retraining feedback loops. | [`MANAGE-Incident-Response-Playbook.md`](docs/04-manage/MANAGE-Incident-Response-Playbook.md)<br>[`AI-Incident-Log.md`](docs/04-manage/AI-Incident-Log.md) |
+| **Full-Stack Governance Tooling** | Developing high-performance, turnkey client-side web applications with live state management, two-way CSV synchronizers, dynamic risk calculators, and executive PDF print engines. | [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)<br>[Live Cloudflare Pages Hub](https://ai-impact-assessment-20y.pages.dev) |
+| **Grounded Retrieval-Augmented Generation (RAG)** | Designing bounded-corpus RAG systems over regulatory texts, dual-door access routing (internal vs. public), query rewrites, and strict source attribution without hallucination. | [`solutions/ai-governance-kb-assistant/`](solutions/ai-governance-kb-assistant/)<br>[Live Assistant Demo](https://samabrains.com/ask/) |
+
+---
+
+## Live Interactive Demonstrations (Click to Evaluate)
+
+Recruiters and hiring managers can directly test the production systems developed in this portfolio:
+
+* **[Live 4-Module AI Governance Hub](https://ai-impact-assessment-20y.pages.dev):**
+  * **[AI System Inventory & Registry](https://ai-impact-assessment-20y.pages.dev/#inventory):** Real-time tracking of 6 enterprise AI systems, risk tiers, and two-way CSV synchronization.
+  * **[Roles & RACI Lifecycle Matrix](https://ai-impact-assessment-20y.pages.dev/#roles):** 28 governance activities mapped against 18 roles, binding veto rights, and human-in-the-loop oversight modes.
+  * **[Policy & Deployment Gatekeeper](https://ai-impact-assessment-20y.pages.dev/#policy):** Dynamic Go/No-Go gate evaluation toggling between approved systems (`AI-001`) and blocked systems (`AI-004`).
+  * **[Impact Assessment Studio](https://ai-impact-assessment-20y.pages.dev/#assessment):** 10-part assessment wizard with real-time Likelihood $\times$ Impact risk matrix, preloaded FinAssist data, and audit-ready PDF generation.
+* **[Live Grounded Regulatory Assistant](https://samabrains.com/ask/):**
+  * Bounded query retrieval answering questions on NIST AI RMF 1.0, data privacy regulations, and risk controls with exact paragraph-level citations.
+
+---
+
+## Pillar 1: Full-Stack Web Governance Suite (Cloudflare Pages)
+
+> **Live Deployment:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)  
+> **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
+> **Engineering Architecture:** Vanilla HTML5, CSS3, modern JavaScript (ES6+), zero external runtime dependencies, 100% turnkey for static edge hosting on Cloudflare Pages.
+
+The web suite operationalizes governance artifacts into an intuitive, high-velocity operational cockpit:
+
+### 1. AI System Inventory & Registry (GOVERN 1.6)
+* Real-time model registry tracking model classes, task types, risk tiers, third-party foundation models, data classifications, and lifecycle states.
+* Executive KPI indicators for total registered systems, critical-risk assets, and active production deployments.
+* Two-way CSV synchronization compatible with enterprise GRC registers.
+* One-click transition of any inventory system directly into the Impact Assessment Studio with pre-bound metadata.
+* Printable white-paper registry reports formatted specifically for board reviews.
+
+### 2. AI Roles & RACI Matrix (GOVERN 2.1 · 2.2 · 2.3 · 3.2)
+* Interactive RACI matrix spanning 28 governance activities across 6 lifecycle phases mapped against 18 roles.
+* Role catalog documenting reporting lines, responsibilities, and hard veto rights for Ethics, Legal, and Risk leads.
+* Human-AI oversight configuration register documenting HITL, HOTL, and HIC operational boundaries per system.
+* Role-based training and competency compliance tracker across 6 core AI risk domains.
+
+### 3. Policy & Deployment Gatekeeper (GOVERN 1.1–1.7 · 4.1 · 6.1–6.2)
+* Live Go/No-Go deployment gate validator evaluating systems against the 4 non-negotiable policy release criteria:
+  1. *GATE-01: Zero Unmitigated Critical Risks*
+  2. *GATE-02: Legal & Regulatory Compliance Sign-off*
+  3. *GATE-03: Independent TEVV Validation Dossier*
+  4. *GATE-04: Executive Governance & Veto Sign-off*
+* Real-time clearance status badging (`CLEARED FOR DEPLOYMENT`, `CONDITIONAL HOLD`, `BLOCKED`).
+* Verification checklist across all 8 Trustworthy AI principles.
+* Mandatory lifecycle artifact tracker evaluating the readiness of all 9 required governance documents.
+* Decommissioning triggers, third-party model due diligence rubric, and formal policy exceptions register.
+* Executive Policy Attestation PDF generation with formal signature stamps.
+
+### 4. AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
+* 10-part assessment wizard covering business justification, operational envelopes, trustworthy characteristics, legal thresholds, potential harms, mitigations, and consultation logs.
+* Interactive Likelihood (1–5) $\times$ Impact (1–5) matrix with dynamic heat badges and risk scorecards.
+* Instant demonstration preset (*"Load FinAssist AI Example"*) and clean slate (*"New Blank"*).
+* Multi-format export engine: Executive light-theme printable PDF, audit-ready Markdown, and JSON state persistence.
+
+---
+
+## Pillar 2: Enterprise AI Governance Framework & Case Study (FinAssist AI)
+
+> **Case Study Location:** [`docs/`](docs/)  
+> **Domain Focus:** Commercial Retail Banking / Generative AI Customer Assistant (`SYS-FIN-001`)  
+> **Standard:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1)
+
+This case study demonstrates the formulation of complete, audit-ready operational deliverables across all four NIST AI RMF functions:
+
+### 1. GOVERN Function Deliverables
+* [AI-Governance-Policy.md](docs/01-govern/AI-Governance-Policy.md): Enterprise charter establishing principles, 4 Go/No-Go gates, third-party model standards, and review cadences.
+* [AI-Roles-Matrix.md](docs/01-govern/AI-Roles-Matrix.md): 4-tier RACI matrix across 18 roles detailing binding veto rights for Ethics, Legal, and Risk officers.
+* [AI-System-Inventory.csv](docs/01-govern/AI-System-Inventory.csv): Standardized model inventory tracking 20 attributes per AI asset.
+* [AI-Impact-Assessment-Template.md](docs/01-govern/AI-Impact-Assessment-Template.md): 10-section pre-deployment assessment covering civil rights, privacy, failure modes, and human agency.
+
+### 2. MAP Function Deliverables
+* [MAP-AI-System-Context-Report.md](docs/02-map/MAP-AI-System-Context-Report.md): Technical boundaries, non-AI alternatives, and deep-dive risk profiles for **13 distinct harm scenarios (`R-01` to `R-13`)**.
+* [MAP-Stakeholder-Analysis.md](docs/02-map/MAP-Stakeholder-Analysis.md): Systematic analysis of vulnerable customer cohorts, frontline operators, and community grievance mechanisms.
+* [MAP-Risk-Benefit-Matrix.csv](docs/02-map/MAP-Risk-Benefit-Matrix.csv): Quantitative risk vs. utility scoring balancing speed against potential harms.
+
+### 3. MEASURE Function Deliverables
+* [MEASURE-TEVV-Metrics-Framework.md](docs/03-measure/MEASURE-TEVV-Metrics-Framework.md): Independent TEVV testing protocols covering trustworthiness, robustness, and safety.
+* [MEASURE-Bias-Testing-Methodology.md](docs/03-measure/MEASURE-Bias-Testing-Methodology.md): Statistical testing methodologies for disparate impact ratios ($0.80–1.25$ threshold) and counterfactual evaluations.
+* [MEASURE-Metrics-Tracker.csv](docs/03-measure/MEASURE-Metrics-Tracker.csv): **20 quantitative production metrics (`M-01` to `M-20`)** with hard breach thresholds, evaluation cadences, and assigned owners:
+  * *Hallucination Rate (M-01):* Target $<1.0\%$, Breach threshold $>2.0\%$.
+  * *Prompt Injection Bypass Rate (M-02):* Target $0.0\%$, Breach threshold $>1.0\%$.
+  * *Disparate Impact Ratio (M-03):* Target $0.90–1.10$, Breach threshold $<0.80$ or $>1.25$.
+  * *P95 Inference Latency (M-05):* Target $<1200\text{ms}$, Breach threshold $>1800\text{ms}$.
+
+### 4. MANAGE Function Deliverables
+* [MANAGE-Risk-Response-Plan.md](docs/04-manage/MANAGE-Risk-Response-Plan.md): Actionable response strategies and residual risk acceptances for all 13 mapped risks.
+* [MANAGE-Incident-Response-Playbook.md](docs/04-manage/MANAGE-Incident-Response-Playbook.md): Operational incident handling classifying `SEV-1` through `SEV-4` events with a mandatory **15-minute containment SLA**.
+* [MANAGE-Continuous-Improvement-Log.csv](docs/04-manage/MANAGE-Continuous-Improvement-Log.csv): Closed-loop log linking monitoring alerts and post-mortems to model retraining.
+* [AI-Incident-Log.md](docs/04-manage/AI-Incident-Log.md): Standardized incident reporting register with root-cause analysis templates.
+
+---
+
+## Pillar 3: Grounded Regulatory Knowledge Base & Assistant
+
+> **Solution Directory:** [`solutions/ai-governance-kb-assistant/`](solutions/ai-governance-kb-assistant/)  
+> **Live Advisory Demo:** [https://samabrains.com/ask/](https://samabrains.com/ask/)
+
+A production RAG solution demonstrating how enterprises can deliver **instant, cited answers** over bounded, authoritative AI governance corpora:
+
+* **Bounded Corpus Grounding:** Queries are indexed exclusively against official regulatory publications (NIST AI RMF 1.0, Uganda Data Protection and Privacy Act 2019, SamaBrains advisory playbooks), preventing unbounded hallucinations.
+* **Dual-Door Access Architecture:**
+  1. *Internal Staff Knowledge Base (`Ctrl+K`):* Rapid regulatory clause lookup during risk assessments.
+  2. *Public Advisory Assistant (`/ask/`):* Transparent, source-attributed answers for enterprise clients.
+* **Strict Source Attribution:** Every response includes direct document citations and paragraph-level references.
+
+---
+
+## Enterprise AI GRC & Telemetry Integration Architecture
+
+This repository's deliverables are structured for direct ingestion into modern enterprise AI GRC and telemetry platforms:
+
+| Platform Category | Target Platforms | Direct Integration Mapping |
+|---|---|---|
+| **AI GRC Platforms** | [VerifyWise.ai](https://verifywise.ai/) · Credo AI · Holistic AI | Ingests [`AI-System-Inventory.csv`](docs/01-govern/AI-System-Inventory.csv), [`AI-Roles-Matrix.md`](docs/01-govern/AI-Roles-Matrix.md), and [`AI-Governance-Policy.md`](docs/01-govern/AI-Governance-Policy.md) into automated compliance registers. |
+| **Enterprise Compliance** | Vanta AI · OneTrust · ServiceNow GRC | Ingests deployment gate records and formal executive attestations as audit evidence. |
+| **LLM Observability** | Langfuse · Arize Phoenix · OpenTelemetry | Real-time production telemetry feeds into the 20 line-item metrics in [`MEASURE-Metrics-Tracker.csv`](docs/03-measure/MEASURE-Metrics-Tracker.csv). |
 
 ---
 
 ## Workspace Directory Structure
 
+The repository maintains an uncluttered, single-master-document structure where all deliverables are indexed directly from this file:
+
 ```
 ai-governance/
-├── README.md                                  <- Master Workspace Overview & Technical Index (Single Source of Truth)
+├── README.md                                  <- Master Portfolio Overview & Technical Index (Single Source of Truth)
 ├── docs/                                      <- Operational NIST AI RMF Governance Deliverables
 │   ├── 00-references/                         <- Primary Standards, Study Notes & Playbook Spreadsheets
 │   │   ├── NIST-AI-RMF-Learning-Guide.md      <- 40+ page breakdown of NIST AI 100-1
@@ -90,125 +232,6 @@ ai-governance/
 
 ---
 
-## Pillar 1: Interactive NIST AI RMF Governance Hub (Cloudflare Pages)
-
-> **Live Production Web Application:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)  
-> **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
-> **Infrastructure:** Turnkey static edge deployment on Cloudflare Pages (Zero server backend, zero tracking, pure client-side cryptographic and local storage persistence).
-
-The **SamaBrains NIST AI Governance Hub** operationalizes the NIST AI Risk Management Framework into four synchronized, interactive modules:
-
-```mermaid
-flowchart LR
-    M1["1. AI System Inventory\n(GOVERN 1.6)"] --> M2["2. Roles & RACI Matrix\n(GOVERN 2)"]
-    M2 --> M3["3. Policy & Gatekeeper\n(GOVERN 1 & 6)"]
-    M3 --> M4["4. Impact Assessment Studio\n(GOVERN 4.2 · MAP · MANAGE)"]
-    M4 --> Export["Executive Print Engine\n(Pure White Corporate PDFs)"]
-```
-
-### Module 1: AI System Inventory & Registry (GOVERN 1.6)
-* **Direct Link:** [https://ai-impact-assessment-20y.pages.dev/#inventory](https://ai-impact-assessment-20y.pages.dev/#inventory)
-* **Real-Time Model Registry:** Searchable and filterable registry tracking model classes, task types, risk tiers, third-party foundation models, data classifications, and lifecycle states.
-* **Executive KPI Cards:** Live indicators for total registered systems, critical/high-risk count, active production deployments, and assurance review readiness.
-* **Two-Way CSV Synchronization:** Seamless export and import fully compatible with [`docs/01-govern/AI-System-Inventory.csv`](docs/01-govern/AI-System-Inventory.csv).
-* **One-Click AIIA Launch:** Instantly transitions any inventory system into the Impact Assessment Studio with pre-bound identification metadata.
-* **Executive Registry PDF:** Pure white A4 printable registry report for board review and compliance audits.
-
-### Module 2: AI Roles & Responsibilities Matrix (GOVERN 2.1 · 2.2 · 2.3 · 3.2)
-* **Direct Link:** [https://ai-impact-assessment-20y.pages.dev/#roles](https://ai-impact-assessment-20y.pages.dev/#roles)
-* **Interactive RACI Lifecycle Matrix:** 28 governance activities across 6 phases (Governance & Policy, Conception & Design, Deployment & Release, Monitoring & TEVV, Incident Response, Decommissioning) mapped against 18 enterprise roles with instant role-highlighting and text search.
-* **Role Catalog & Veto Authority Directory:** Complete directory of 18 roles across 4 tiers (Governance & Leadership, Project Delivery, Operational Oversight, External Advisory) documenting reporting lines, responsibilities, and hard veto authorities.
-* **Human-AI Oversight Configuration Register (GOVERN 3.2):** Explicit human-in-the-loop (HITL), human-on-the-loop (HOTL), and human-in-command (HIC) operational boundaries tied to inventory systems (`AI-001` through `AI-006`).
-* **Workforce Competency Tracker (GOVERN 2.2):** Role-based training records tracking compliance across 6 core AI risk domains.
-* **Dedicated RACI Exporter:** One-click RACI CSV download and executive white-paper print view.
-
-### Module 3: AI Governance Policy & Deployment Gatekeeper (GOVERN 1.1–1.7 · 4.1 · 6.1–6.2)
-* **Direct Link:** [https://ai-impact-assessment-20y.pages.dev/#policy](https://ai-impact-assessment-20y.pages.dev/#policy)
-* **Live 4-Tier Go/No-Go Gatekeeper (GOVERN 1.3):** Interactive gate validator evaluating any selected system against the 4 non-negotiable policy release criteria:
-  1. *Zero Unmitigated Critical Risks Gate (GATE-01)*
-  2. *Legal & Regulatory Compliance Sign-off Gate (GATE-02)*
-  3. *Independent TEVV Validation Dossier Gate (GATE-03)*
-  4. *Executive Governance & Veto Sign-Off Gate (GATE-04)*
-* **Real-Time Clearance Status:** Evaluates systems dynamically with live status badging (`CLEARED FOR DEPLOYMENT`, `CONDITIONAL HOLD`, `BLOCKED (GATE FAILURE)`).
-* **Trustworthy AI Principles Audit (GOVERN 1.2):** Verification checklist across all 8 core principles (Accountability, Transparency, Fairness, Safety, Privacy, Security, Reliability, Explainability).
-* **Mandatory Lifecycle Documentation Standards (GOVERN 1.4):** Real-time readiness matrix tracking all 9 required governance artifacts per system.
-* **Decommissioning Triggers (GOVERN 1.7):** 5 standard triggers requiring immediate system suspension, human failover, or retirement.
-* **Third-Party AI & Supply Chain Screener (GOVERN 6.1 & 6.2):** Foundation model due diligence evaluating licensing, data retention SLAs, uptime, and adversarial red-teaming.
-* **Formal Policy Exceptions & Waivers Register (GOVERN 1.1):** Active deviation tracker with expiry countdowns, compensating controls, and approving officers.
-* **Executive Policy Attestation PDF:** One-click generation of the formal Policy Attestation Statement in audit-ready white-paper PDF and Markdown.
-
-### Module 4: AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
-* **Direct Link:** [https://ai-impact-assessment-20y.pages.dev/#assessment](https://ai-impact-assessment-20y.pages.dev/#assessment)
-* **10-Part Wizard:** Comprehensive assessment guiding teams through identification, operational context, trustworthy alignment, legal thresholds, benefits, harms, mitigations, consultations, TEVV summary, and deployment sign-offs.
-* **Interactive Risk Calculator:** Real-time Likelihood (1–5) $\times$ Impact (1–5) calculation with dynamic risk badges (Low, Medium, High, Critical) and risk scorecard heat counter.
-* **Preset Switcher:** Instant *"Load FinAssist AI Example"* for demonstration and benchmarking, or *"New Blank"* for net-new assessments.
-* **Multi-Format Export Engine:** High-design executive PDF with digital signature stamps, audit-ready Markdown download, and full JSON state backup.
-
----
-
-## Pillar 2: Enterprise AI Governance Framework & TEVV Case Study (FinAssist AI)
-
-> **Operational Case Study Location:** [`docs/`](docs/)  
-> **Domain:** Commercial Retail Banking / Generative AI Customer Assistant (`SYS-FIN-001`)  
-> **Framework:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1)
-
-Most AI governance initiatives remain confined to abstract principles. This framework represents a **field-tested, audit-ready operational implementation** detailing line-item organizational and technical controls across all four NIST AI RMF functions:
-
-### 1. GOVERN Function Deliverables
-* [AI-Governance-Policy.md](docs/01-govern/AI-Governance-Policy.md): Enterprise policy establishing principles, 4 Go/No-Go gates, third-party model standards, and review cadences.
-* [AI-Roles-Matrix.md](docs/01-govern/AI-Roles-Matrix.md): 4-tier RACI matrix across 18 roles detailing binding veto rights for Ethics, Legal, and Risk officers.
-* [AI-System-Inventory.csv](docs/01-govern/AI-System-Inventory.csv): Standardized model inventory tracking 20 attributes per AI asset.
-* [AI-Impact-Assessment-Template.md](docs/01-govern/AI-Impact-Assessment-Template.md): 10-section pre-deployment assessment covering civil rights, privacy, failure modes, and human agency.
-
-### 2. MAP Function Deliverables
-* [MAP-AI-System-Context-Report.md](docs/02-map/MAP-AI-System-Context-Report.md): Technical boundaries, non-AI alternatives, and deep-dive risk profiles for **13 distinct harm scenarios (`R-01` to `R-13`)**.
-* [MAP-Stakeholder-Analysis.md](docs/02-map/MAP-Stakeholder-Analysis.md): Systematic analysis of vulnerable groups, frontline operators, and community grievance mechanisms.
-* [MAP-Risk-Benefit-Matrix.csv](docs/02-map/MAP-Risk-Benefit-Matrix.csv): Quantitative risk vs. utility scoring balancing speed against potential harms.
-
-### 3. MEASURE Function Deliverables
-* [MEASURE-TEVV-Metrics-Framework.md](docs/03-measure/MEASURE-TEVV-Metrics-Framework.md): Independent TEVV testing protocols covering trustworthiness, robustness, and safety.
-* [MEASURE-Bias-Testing-Methodology.md](docs/03-measure/MEASURE-Bias-Testing-Methodology.md): Statistical testing methodologies for disparate impact ratios ($0.80–1.25$ threshold) and counterfactual evaluations.
-* [MEASURE-Metrics-Tracker.csv](docs/03-measure/MEASURE-Metrics-Tracker.csv): **20 quantitative production metrics (`M-01` to `M-20`)** with hard breach thresholds, evaluation cadences, and assigned owners:
-  * *Hallucination Rate (M-01):* Target $<1.0\%$, Breach threshold $>2.0\%$.
-  * *Prompt Injection Bypass Rate (M-02):* Target $0.0\%$, Breach threshold $>1.0\%$.
-  * *Disparate Impact Ratio (M-03):* Target $0.90–1.10$, Breach threshold $<0.80$ or $>1.25$.
-  * *P95 Inference Latency (M-05):* Target $<1200\text{ms}$, Breach threshold $>1800\text{ms}$.
-
-### 4. MANAGE Function Deliverables
-* [MANAGE-Risk-Response-Plan.md](docs/04-manage/MANAGE-Risk-Response-Plan.md): Actionable response strategies and residual risk acceptances for all 13 mapped risks.
-* [MANAGE-Incident-Response-Playbook.md](docs/04-manage/MANAGE-Incident-Response-Playbook.md): Operational incident handling classifying `SEV-1` through `SEV-4` events with a mandatory **15-minute containment SLA**.
-* [MANAGE-Continuous-Improvement-Log.csv](docs/04-manage/MANAGE-Continuous-Improvement-Log.csv): Closed-loop log linking monitoring alerts and post-mortems to model retraining.
-* [AI-Incident-Log.md](docs/04-manage/AI-Incident-Log.md): Standardized incident reporting register with root-cause analysis templates.
-
----
-
-## Pillar 3: Grounded Regulatory Knowledge Base & Assistant
-
-> **Solution Directory:** [`solutions/ai-governance-kb-assistant/`](solutions/ai-governance-kb-assistant/)  
-> **Live Advisory Demo:** [https://samabrains.com/ask/](https://samabrains.com/ask/)
-
-A production RAG solution demonstrating how enterprises can deliver **instant, cited answers** over bounded, authoritative AI governance corpora:
-
-* **Bounded Corpus Grounding:** Queries are indexed exclusively against official regulatory publications (NIST AI RMF 1.0, Uganda Data Protection and Privacy Act 2019, SamaBrains advisory playbooks), preventing unbounded hallucinations.
-* **Dual-Door Access Architecture:**
-  1. *Internal Staff Knowledge Base (`Ctrl+K`):* Rapid regulatory clause lookup during risk assessments.
-  2. *Public Advisory Assistant (`/ask/`):* Transparent, source-attributed answers for enterprise clients.
-* **Strict Source Attribution:** Every response includes direct document citations and paragraph-level references.
-
----
-
-## Enterprise AI GRC & Observability Integration
-
-This repository's deliverables are structured for direct ingestion into modern AI GRC and telemetry platforms:
-
-| Platform Category | Target Platforms | Direct Integration Mapping |
-|---|---|---|
-| **AI GRC Platforms** | [VerifyWise.ai](https://verifywise.ai/) · Credo AI · Holistic AI | Ingests [`AI-System-Inventory.csv`](docs/01-govern/AI-System-Inventory.csv), [`AI-Roles-Matrix.md`](docs/01-govern/AI-Roles-Matrix.md), and [`AI-Governance-Policy.md`](docs/01-govern/AI-Governance-Policy.md) into automated compliance registers. |
-| **Enterprise Compliance** | Vanta AI · OneTrust · ServiceNow GRC | Ingests deployment gate records and formal executive attestations as audit evidence. |
-| **LLM Observability** | Langfuse · Arize Phoenix · OpenTelemetry | Real-time production telemetry feeds into the 20 line-item metrics in [`MEASURE-Metrics-Tracker.csv`](docs/03-measure/MEASURE-Metrics-Tracker.csv). |
-
----
-
 ## Deployment & Local Development
 
 ### Deploying the Web Suite to Cloudflare Pages
@@ -217,7 +240,6 @@ The web application requires zero external build steps or server runtime. It can
 
 #### Method A: Direct Upload via Wrangler CLI
 ```powershell
-# Authenticate and deploy directly to Cloudflare Pages
 $env:CLOUDFLARE_ACCOUNT_ID="d77cecb6dcb60741b68f2f1f59f897d2"
 npx wrangler pages deploy tools/ai-impact-assessment --project-name="ai-impact-assessment" --branch="main"
 ```
@@ -251,9 +273,12 @@ Open `http://localhost:8080` in your browser.
 
 ---
 
-## Author & Practice Contact
+## Candidate Profile & Professional Inquiries
 
-* **Practice Lead:** Robert Ssebambulidde
+* **Candidate:** Robert Ssebambulidde
 * **Practice:** [SamaBrains AI Governance & Security](https://samabrains.com/)
+* **Specialization:** Enterprise AI Governance Architecture, NIST AI RMF Implementation, Algorithmic Auditing (TEVV), and Responsible AI Engineering.
+* **GitHub:** [https://github.com/rssebambulidde](https://github.com/rssebambulidde)
 * **Repository:** [https://github.com/rssebambulidde/ai-governance](https://github.com/rssebambulidde/ai-governance)
-* **Live Web Suite:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)
+* **Live Interactive Suite:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)
+* **Live Assistant Demo:** [https://samabrains.com/ask/](https://samabrains.com/ask/)
