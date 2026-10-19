@@ -16,6 +16,7 @@
 flowchart TD
     SB["SamaBrains AI Governance Practice"] --> P1["1. Enterprise AI Governance Framework\n(NIST AI RMF 1.0 Implementation)"]
     SB --> P2["2. Grounded AI Governance Assistant\n(Bounded Corpus RAG)"]
+    SB --> P3["3. AI Impact Assessment Studio\n(Cloudflare Pages Tool)"]
 
     P1 --> G["GOVERN\nPolicy & RACI"]
     P1 --> M1["MAP\nContext & Risk Profiling"]
@@ -74,6 +75,24 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
   * Continuous indexing of emerging regulatory texts and practice guidance.
 
 [Read the Knowledge Base Case Study →](solutions/ai-governance-kb-assistant/)
+
+---
+
+### Project 3: Interactive AI Impact Assessment Studio (Cloudflare Pages)
+> **Web Application:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
+> **Deployment:** Cloudflare Pages (Turnkey static application)  
+> **Standards:** NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1/5.1 · MANAGE 1.1) & ISO/IEC 42001
+
+A dynamic, audit-ready web tool that operationalizes [AI-Impact-Assessment-Template.md](docs/01-govern/AI-Impact-Assessment-Template.md) into an interactive assessment experience:
+
+* **Interactive Risk Calculator:** Real-time Likelihood (1–5) × Impact (1–5) calculations, automated risk level badging (Low, Medium, High, Critical), and risk heat counter.
+* **Preloaded Example & Auto-Save:** Instantly load the complete FinAssist AI assessment dataset or start blank with browser `localStorage` persistence.
+* **Multi-Format Export Engine:**
+  * **Executive PDF:** Formatted for executive review and formal board submissions via `@media print` with cover headers, summary scorecards, and digital signature stamps.
+  * **Markdown Export:** One-click download of audit-ready `.md` files.
+  * **JSON State:** Import/export full assessment states for cross-team collaboration.
+
+[Explore the AI Impact Assessment Studio Guide →](tools/ai-impact-assessment/README.md)
 
 ---
 

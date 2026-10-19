@@ -34,7 +34,7 @@ All files in this directory are interlinked with relative markdown links, making
 | [AI-Governance-Policy.md](./01-govern/AI-Governance-Policy.md) | Markdown | Comprehensive enterprise policy establishing AI governance principles, compliance requirements, third-party LLM standards, and mandatory oversight gates. | GOVERN 1.1–1.3, 2.1–2.3 |
 | [AI-Roles-Matrix.md](./01-govern/AI-Roles-Matrix.md) | Markdown | 3-tier RACI matrix across Board/C-Suite, AI Ethics Board, System Owner, TEVV Team Lead, SecOps, and Legal/Compliance. Identifies absolute veto holders. | GOVERN 2.1, 4.1 |
 | [AI-System-Inventory.csv](./01-govern/AI-System-Inventory.csv) | CSV | Formal inventory registry tracking model class, risk tier, vendor (Anthropic/OpenAI/Cloudflare), hosting model, data classification, and lifecycle state. | GOVERN 3.1, 3.2 |
-| [AI-Impact-Assessment-Template.md](./01-govern/AI-Impact-Assessment-Template.md) | Markdown | Mandatory 6-section pre-deployment questionnaire evaluating business need, rights impact, data privacy, failure modes, and human-in-the-loop controls. | GOVERN 1.2, MAP 1.1 |
+| [AI-Impact-Assessment-Template.md](./01-govern/AI-Impact-Assessment-Template.md) · [Web Studio Tool](../tools/ai-impact-assessment/) | Markdown / Web App | Mandatory 10-section pre-deployment assessment evaluating business need, rights impact, data privacy, failure modes, and human-in-the-loop controls. Operationalized via interactive Cloudflare Pages tool. | GOVERN 1.2, MAP 1.1 |
 
 ---
 

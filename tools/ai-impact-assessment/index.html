@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Impact Assessment Studio | SamaBrains</title>
+  <meta name="description" content="Operational AI Impact Assessment tool aligned with NIST AI RMF 1.0 (GOVERN 4.2, MAP, MANAGE) and ISO/IEC 42001. Interactive form, risk calculator, and executive PDF exporter.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand-badge">
+        <span class="brand-logo">SB</span>
+        <div class="brand-info">
+          <span class="brand-title">SamaBrains <span class="gradient-text">AIIA Studio</span></span>
+          <span class="brand-sub">NIST AI RMF 1.0 & ISO/IEC 42001 Assessment Engine</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="status-pill" id="system-badge-pill">
+        <span class="pulse-dot"></span>
+        <span id="badge-system-id">SYS-FIN-001</span>
+        <span class="badge-separator">·</span>
+        <span id="badge-system-name">FinAssist AI</span>
+        <span class="badge-recommendation go" id="badge-rec-status">GO</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-load-preset" title="Load full FinAssist AI assessment example">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Load Example
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-blank-form" title="Clear and start a blank assessment">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        New Blank
+      </button>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json" title="Export assessment JSON backup">JSON</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-import-json-trigger" title="Import assessment JSON">Import</button>
+        <input type="file" id="json-file-input" accept=".json" style="display: none;">
+      </div>
+
+      <button type="button" class="btn btn-secondary btn-sm" id="btn-export-md" title="Download audit-ready Markdown document">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Export .MD
+      </button>
+
+      <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-pdf" title="Export high-design print-ready Executive PDF">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Export PDF
+      </button>
+
+      <button type="button" class="theme-toggle" id="theme-toggle-btn" title="Toggle Light / Dark mode" aria-label="Toggle theme">
+        <span class="theme-icon sun">☀️</span>
+        <span class="theme-icon moon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container with Sidebar Navigation + Content Area -->
+  <div class="app-layout">
+    <!-- Sidebar Stepper -->
+    <aside class="sidebar-nav">
+      <div class="nav-header">
+        <span class="nav-title">Assessment Sections</span>
+        <span class="nav-progress-pct" id="progress-indicator">100% Complete</span>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar" style="width: 100%;"></div>
+      </div>
+
+      <nav class="stepper-menu" id="stepper-menu">
+        <button type="button" class="step-item active" data-tab="part0">
+          <span class="step-num">0</span>
+          <div class="step-text">
+            <span class="step-title">Header & Metadata</span>
+            <span class="step-desc">System ID, Leads & Scope</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part1">
+          <span class="step-num">1</span>
+          <div class="step-text">
+            <span class="step-title">System Overview</span>
+            <span class="step-desc">Tasks, Context & Oversight</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part2">
+          <span class="step-num">2</span>
+          <div class="step-text">
+            <span class="step-title">Mission Alignment</span>
+            <span class="step-desc">Principles & Societal Values</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part3">
+          <span class="step-num">3</span>
+          <div class="step-text">
+            <span class="step-title">Risk & Legal Review</span>
+            <span class="step-desc">Regulations & Prohibitions</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part4">
+          <span class="step-num">4</span>
+          <div class="step-text">
+            <span class="step-title">Benefits & Evidence</span>
+            <span class="step-desc">Metrics & Equity Impacts</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part5">
+          <span class="step-num">5</span>
+          <div class="step-text">
+            <span class="step-title">Harms & Risk Matrix</span>
+            <span class="step-desc">Interactive Risk Calculator</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part6">
+          <span class="step-num">6</span>
+          <div class="step-text">
+            <span class="step-title">Risk Mitigation Plan</span>
+            <span class="step-desc">Controls & Residual Risks</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part7">
+          <span class="step-num">7</span>
+          <div class="step-text">
+            <span class="step-title">Stakeholder Engagement</span>
+            <span class="step-desc">Consultations & Quality</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part8">
+          <span class="step-num">8</span>
+          <div class="step-text">
+            <span class="step-title">TEVV & Metrics</span>
+            <span class="step-desc">Validation & Benchmarks</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part9">
+          <span class="step-num">9</span>
+          <div class="step-text">
+            <span class="step-title">Go / No-Go Decision</span>
+            <span class="step-desc">Deployment Gate</span>
+          </div>
+        </button>
+
+        <button type="button" class="step-item" data-tab="part10">
+          <span class="step-num">10</span>
+          <div class="step-text">
+            <span class="step-title">Sign-Off & Approvals</span>
+            <span class="step-desc">Executive Signatures</span>
+          </div>
+        </button>
+      </nav>
+
+      <!-- Risk Scorecard Widget -->
+      <div class="sidebar-card">
+        <div class="card-title-sm">Active Risk Scorecard</div>
+        <div class="risk-counters-grid">
+          <div class="risk-stat-badge stat-crit"><span class="stat-count" id="count-crit">0</span><span class="stat-lbl">Critical</span></div>
+          <div class="risk-stat-badge stat-high"><span class="stat-count" id="count-high">0</span><span class="stat-lbl">High</span></div>
+          <div class="risk-stat-badge stat-med"><span class="stat-count" id="count-med">4</span><span class="stat-lbl">Medium</span></div>
+          <div class="risk-stat-badge stat-low"><span class="stat-count" id="count-low">0</span><span class="stat-lbl">Low</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Assessment Form Area -->
+    <main class="main-content">
+      <form id="aiia-form" autocomplete="off">
+
+        <!-- PART 0: HEADER -->
+        <section class="form-section active" id="sec-part0">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 0</span>
+              <span class="badge badge-outline">NIST AI RMF Core: GOVERN 4.2</span>
+            </div>
+            <h2>Assessment Header & Identification</h2>
+            <p class="section-lead">Establish the formal identification, system classification, and accountable roles for this AI Impact Assessment before proceeding to system mapping.</p>
+          </div>
+
+          <div class="card grid-2">
+            <div class="form-group">
+              <label for="f-assessment-id">Assessment ID <span class="req">*</span></label>
+              <input type="text" id="f-assessment-id" class="form-input" value="AIIA-2026-001" placeholder="e.g. AIIA-2026-001">
+            </div>
+
+            <div class="form-group">
+              <label for="f-version">Assessment Version</label>
+              <input type="text" id="f-version" class="form-input" value="v1.0" placeholder="v1.0">
+            </div>
+
+            <div class="form-group">
+              <label for="f-system-name">AI System Name <span class="req">*</span></label>
+              <input type="text" id="f-system-name" class="form-input" value="FinAssist AI" placeholder="e.g. FinAssist AI">
+            </div>
+
+            <div class="form-group">
+              <label for="f-system-id">AI System ID (per Inventory) <span class="req">*</span></label>
+              <input type="text" id="f-system-id" class="form-input" value="SYS-FIN-001" placeholder="e.g. SYS-FIN-001">
+            </div>
+
+            <div class="form-group">
+              <label for="f-assessment-type">Assessment Type</label>
+              <select id="f-assessment-type" class="form-select">
+                <option value="New System" selected>New System (Pre-Deployment Gate)</option>
+                <option value="Major Update">Major Update / Retraining</option>
+                <option value="Re-Evaluation">Annual Re-Evaluation of Live System</option>
+                <option value="Post-Incident">Post-Incident Assessment Review</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="f-department">Department / Business Unit</label>
+              <input type="text" id="f-department" class="form-input" value="Customer Experience & Retail Banking">
+            </div>
+
+            <div class="form-group">
+              <label for="f-lead">Assessment Lead (AI Ethics Officer) <span class="req">*</span></label>
+              <input type="text" id="f-lead" class="form-input" value="Dr. Elena Vance (AI Ethics Officer)">
+            </div>
+
+            <div class="form-group">
+              <label for="f-project-lead">AI Project Lead (Engineering/Product)</label>
+              <input type="text" id="f-project-lead" class="form-input" value="Marcus Sterling (Lead AI Engineer)">
+            </div>
+
+            <div class="form-group">
+              <label for="f-start-date">Assessment Start Date</label>
+              <input type="date" id="f-start-date" class="form-input" value="2026-08-15">
+            </div>
+
+            <div class="form-group">
+              <label for="f-completion-date">Completion Date</label>
+              <input type="date" id="f-completion-date" class="form-input" value="2026-10-18">
+            </div>
+
+            <div class="form-group grid-col-2">
+              <label for="f-next-review">Next Scheduled Governance Review Date</label>
+              <input type="date" id="f-next-review" class="form-input" value="2027-04-18">
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 1: SYSTEM OVERVIEW -->
+        <section class="form-section" id="sec-part1">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 1</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 1.1, MAP 2.1</span>
+            </div>
+            <h2>AI System Overview & Context of Use</h2>
+            <p class="section-lead">Define system capabilities, operational context, human oversight boundaries, and available non-AI alternatives.</p>
+          </div>
+
+          <div class="card">
+            <h3>1.1 System Purpose & Tasks</h3>
+            <div class="form-group">
+              <label for="f-purpose">What is this AI system designed to do? (Plain Language)</label>
+              <textarea id="f-purpose" class="form-textarea" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>AI Task Types (Select all that apply)</label>
+              <div class="checkbox-grid" id="cb-task-types">
+                <label class="cb-label"><input type="checkbox" value="Natural Language Processing" checked> Natural Language Processing</label>
+                <label class="cb-label"><input type="checkbox" value="Generation (text/image/audio)" checked> Generation (LLM text/audio)</label>
+                <label class="cb-label"><input type="checkbox" value="Recommendation" checked> Recommendation / Guidance</label>
+                <label class="cb-label"><input type="checkbox" value="Classification"> Classification / Intent Parsing</label>
+                <label class="cb-label"><input type="checkbox" value="Anomaly Detection"> Anomaly Detection</label>
+                <label class="cb-label"><input type="checkbox" value="Decision Support"> Decision Support</label>
+                <label class="cb-label"><input type="checkbox" value="Computer Vision"> Computer Vision</label>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="f-problem">Organizational Problem Solved</label>
+                <textarea id="f-problem" class="form-textarea" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="f-min-perf">Minimum Acceptable Performance</label>
+                <textarea id="f-min-perf" class="form-textarea" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>1.2 Context of Use & Alternatives</h3>
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="f-deploy-env">Deployment Environment</label>
+                <input type="text" id="f-deploy-env" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-geography">Operational Geography</label>
+                <input type="text" id="f-geography" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-scale">Scale of Deployment</label>
+                <input type="text" id="f-scale" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-decision-stakes">Decision Stakes</label>
+                <select id="f-decision-stakes" class="form-select">
+                  <option value="Low (informational only)">Low (informational only)</option>
+                  <option value="Medium (influences decisions)" selected>Medium (influences decisions)</option>
+                  <option value="High (determines significant outcomes)">High (determines significant outcomes)</option>
+                  <option value="Critical (rights, safety, livelihoods)">Critical (rights, safety, livelihoods)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="f-non-ai-desc">Non-AI Alternative & Justification for AI</label>
+              <textarea id="f-non-ai-desc" class="form-textarea" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>1.3 Intended Users & Operators</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-user-row">+ Add User Group</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-users">
+                <thead>
+                  <tr>
+                    <th>User / Operator Group</th>
+                    <th>Role in System</th>
+                    <th>Estimated Count</th>
+                    <th>Technical Literacy</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>1.4 Human-AI Configuration & Oversight</h3>
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="f-oversight">Oversight Level</label>
+                <select id="f-oversight" class="form-select">
+                  <option value="Human-in-the-Loop" selected>Human-in-the-Loop (Human approves outputs)</option>
+                  <option value="Human-on-the-Loop">Human-on-the-Loop (Human monitors & intervenes)</option>
+                  <option value="Full Human Control">Full Human Control</option>
+                  <option value="Fully Automated">Fully Automated (Autonomous)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-override">Can humans override the AI output?</label>
+                <select id="f-override" class="form-select">
+                  <option value="Yes — always" selected>Yes — always</option>
+                  <option value="Yes — under specific conditions">Yes — under specific conditions</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-override-authority">Override Authority Role(s)</label>
+                <input type="text" id="f-override-authority" class="form-input">
+              </div>
+
+              <div class="form-group">
+                <label for="f-labeled">Is AI output clearly labeled as AI-generated?</label>
+                <select id="f-labeled" class="form-select">
+                  <option value="Yes" selected>Yes — Clear banner / label</option>
+                  <option value="Partially">Partially</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="f-recourse">Recourse Mechanism for Affected Parties</label>
+              <textarea id="f-recourse" class="form-textarea" rows="2"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 2: MISSION & VALUES ALIGNMENT -->
+        <section class="form-section" id="sec-part2">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 2</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 1.3, MAP 1.4</span>
+            </div>
+            <h2>Organizational Mission Alignment & Values</h2>
+            <p class="section-lead">Verify that the AI system supports strategic objectives and aligns with fundamental trustworthy AI values.</p>
+          </div>
+
+          <div class="card">
+            <div class="form-group">
+              <label for="f-mission">Strategic Mission Alignment</label>
+              <textarea id="f-mission" class="form-textarea" rows="2"></textarea>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="f-principles">Alignment with Stated AI Principles</label>
+                <select id="f-principles" class="form-select">
+                  <option value="Yes — fully aligned" selected>Yes — fully aligned</option>
+                  <option value="Partially">Partially — tradeoffs identified</option>
+                  <option value="No">No — requires governance exemption</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-latent">Latent Incentive Risks (e.g. quota/speed incentives)</label>
+                <input type="text" id="f-latent" class="form-input">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Societal Values Alignment Verification</h3>
+            <div class="table-responsive">
+              <table class="data-table" id="table-values">
+                <thead>
+                  <tr>
+                    <th>Trustworthy AI Value</th>
+                    <th>Aligned?</th>
+                    <th>Evidence & Operational Controls</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 3: RISK TOLERANCE & LEGAL -->
+        <section class="form-section" id="sec-part3">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 3</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 1.5, GOVERN 1.1</span>
+            </div>
+            <h2>Risk Tolerance & Legal Review</h2>
+            <p class="section-lead">Document legal compliance requirements, sign-offs, risk thresholds, and explicitly prohibited off-label uses.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>3.1 Legal & Regulatory Compliance Review</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-reg-row">+ Add Regulation</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-regulations">
+                <thead>
+                  <tr>
+                    <th>Requirement Area</th>
+                    <th>Applicable?</th>
+                    <th>Specific Law / Regulation</th>
+                    <th>Compliance Status</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="grid-3" style="margin-top: 1rem;">
+              <div class="form-group">
+                <label for="f-legal-reviewer">Legal Review Completed By</label>
+                <input type="text" id="f-legal-reviewer" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-legal-date">Legal Review Date</label>
+                <input type="date" id="f-legal-date" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-legal-outcome">Legal Outcome</label>
+                <select id="f-legal-outcome" class="form-select">
+                  <option value="Cleared" selected>Cleared</option>
+                  <option value="Conditional Clearance">Conditional Clearance</option>
+                  <option value="Further Review Required">Further Review Required</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>3.2 Organizational Risk Appetite & Prohibitions</h3>
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="f-max-risk">Maximum Acceptable Risk Level for this System</label>
+                <select id="f-max-risk" class="form-select">
+                  <option value="Low (🟢) only — High-stakes / sensitive system">Low (🟢) only — High-stakes / sensitive system</option>
+                  <option value="Medium (🟡) with controls" selected>Medium (🟡) with verified controls</option>
+                  <option value="High (🟠) — experimental / sandboxed only">High (🟠) — experimental / sandboxed only</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-prohibited">Explicitly Prohibited "Off-Label" Uses</label>
+                <textarea id="f-prohibited" class="form-textarea" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 4: POTENTIAL BENEFITS -->
+        <section class="form-section" id="sec-part4">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 4</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 3.1</span>
+            </div>
+            <h2>Potential Benefits & Evidence Base</h2>
+            <p class="section-lead">Quantify expected organizational, consumer, and societal utility, and evaluate empirical evidence reliability.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>4.1 Intended Benefits Matrix</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-benefit-row">+ Add Benefit</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-benefits">
+                <thead>
+                  <tr>
+                    <th>Intended Benefit</th>
+                    <th>Beneficiary Group</th>
+                    <th>How Measured (Metric)</th>
+                    <th>Confidence Level</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>4.2 Equity Impact & Evidence Validation</h3>
+            <div class="form-group">
+              <label for="f-equity-benefits">Equity & Inclusivity Benefits (Underserved Populations)</label>
+              <textarea id="f-equity-benefits" class="form-textarea" rows="2"></textarea>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Evidence Base Supporting Claimed Benefits</label>
+                <div class="checkbox-grid" id="cb-evidence-base">
+                  <label class="cb-label"><input type="checkbox" value="Internal pilot study" checked> Internal pilot study</label>
+                  <label class="cb-label"><input type="checkbox" value="Comparison to human performance baseline" checked> Comparison to human baseline</label>
+                  <label class="cb-label"><input type="checkbox" value="Peer-reviewed research"> Peer-reviewed research</label>
+                  <label class="cb-label"><input type="checkbox" value="Vendor-provided benchmarks"> Vendor-provided benchmarks</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="f-evidence-limits">Evidence Limitations & Uncertainties</label>
+                <textarea id="f-evidence-limits" class="form-textarea" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 5: HARMS & RISK MATRIX (CALCULATOR) -->
+        <section class="form-section" id="sec-part5">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 5</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 3.2, MAP 5.1</span>
+            </div>
+            <h2>Potential Harms & Interactive Risk Scoring Matrix</h2>
+            <p class="section-lead">Profile specific harm mechanisms, evaluate likelihood and severity, and calculate standardized risk scores.</p>
+          </div>
+
+          <!-- Risk Matrix Calculator Card -->
+          <div class="card highlight-card">
+            <div class="card-header-row">
+              <div>
+                <h3>5.1 & 5.2 Identified Harms & Risk Calculator</h3>
+                <p class="text-muted">Likelihood (1–5) × Impact (1–5) = Risk Score (1–25). Scores update live.</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-add-harm-row">+ Add Harm Row</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table" id="table-harms">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Harm Description & Failure Mechanism</th>
+                    <th>Affected Group & Asset</th>
+                    <th>Dimension</th>
+                    <th>Likelihood (1–5)</th>
+                    <th>Impact (1–5)</th>
+                    <th>Score</th>
+                    <th>Risk Level</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="scale-legend">
+              <div class="legend-item"><span class="badge-dot dot-low"></span> <strong>1–6 Low:</strong> Routine monitoring</div>
+              <div class="legend-item"><span class="badge-dot dot-med"></span> <strong>7–12 Medium:</strong> Mitigations required</div>
+              <div class="legend-item"><span class="badge-dot dot-high"></span> <strong>13–19 High:</strong> Active controls & escalation</div>
+              <div class="legend-item"><span class="badge-dot dot-crit"></span> <strong>20–25 Critical:</strong> Blocks deployment</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>5.3 Systemic, Multi-Agent & Lifecycle Harms</h3>
+            <div class="grid-3">
+              <div class="form-group">
+                <label for="f-systemic">Systemic Population Risks</label>
+                <textarea id="f-systemic" class="form-textarea" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="f-ai-interactions">Multi-AI System Interactions</label>
+                <textarea id="f-ai-interactions" class="form-textarea" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="f-post-decom">Post-Decommissioning Risks</label>
+                <textarea id="f-post-decom" class="form-textarea" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 6: RISK MITIGATION PLAN -->
+        <section class="form-section" id="sec-part6">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 6</span>
+              <span class="badge badge-outline">NIST AI RMF: MANAGE 1.3</span>
+            </div>
+            <h2>Risk Mitigation Plan & Residual Risk Acceptance</h2>
+            <p class="section-lead">Specify active mitigations for all Medium, High, and Critical harms, assign accountable owners, and record accepted residual risks.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>6.1 Mitigation Controls by Harm ID</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-mitigation-row">+ Add Mitigation</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-mitigations">
+                <thead>
+                  <tr>
+                    <th>Harm ID</th>
+                    <th>Response Type</th>
+                    <th>Concrete Mitigation Control</th>
+                    <th>Owner</th>
+                    <th>Target Date</th>
+                    <th>Residual Risk</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>6.2 Formally Accepted Residual Risks</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-accepted-row">+ Add Accepted Risk</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-accepted-risks">
+                <thead>
+                  <tr>
+                    <th>Harm ID</th>
+                    <th>Residual Level</th>
+                    <th>Acceptance Rationale</th>
+                    <th>Accepted By (Role)</th>
+                    <th>Date</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 7: STAKEHOLDER ENGAGEMENT -->
+        <section class="form-section" id="sec-part7">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 7</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 5.2, GOVERN 5.1</span>
+            </div>
+            <h2>Stakeholder Consultations & Quality Verification</h2>
+            <p class="section-lead">Document direct engagement with affected populations, frontline operators, domain experts, and marginalized groups.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>7.1 Stakeholder Engagement Log</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-stakeholder-row">+ Add Stakeholder</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-stakeholders">
+                <thead>
+                  <tr>
+                    <th>Stakeholder Group</th>
+                    <th>Type</th>
+                    <th>Method</th>
+                    <th>Date</th>
+                    <th>Key Feedback Received</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>7.2 Meaningful Engagement Quality Check</h3>
+            <div class="table-responsive">
+              <table class="data-table" id="table-engagement-checks">
+                <thead>
+                  <tr>
+                    <th>Quality Criterion</th>
+                    <th>Met?</th>
+                    <th>Evidence & Action Taken</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 8: TEVV SUMMARY -->
+        <section class="form-section" id="sec-part8">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 8</span>
+              <span class="badge badge-outline">NIST AI RMF: MAP 2.3, MEASURE 1.1</span>
+            </div>
+            <h2>TEVV Summary & Quantitative Benchmarks</h2>
+            <p class="section-lead">Review independent Test, Evaluation, Verification, and Validation (TEVV) results and metric thresholds.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>8.1 TEVV Activities Conducted</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-tevv-row">+ Add Activity</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-tevv-activities">
+                <thead>
+                  <tr>
+                    <th>TEVV Activity</th>
+                    <th>Completed?</th>
+                    <th>Date</th>
+                    <th>Conducted By</th>
+                    <th>Key Findings & Observations</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <h3>8.2 Key Performance & Trustworthiness Metrics</h3>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-add-metric-row">+ Add Metric</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="table-metrics">
+                <thead>
+                  <tr>
+                    <th>Metric Name</th>
+                    <th>Required Threshold</th>
+                    <th>Actual Test Result</th>
+                    <th>Pass / Fail</th>
+                    <th class="col-act">Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="grid-2" style="margin-top: 1rem;">
+              <div class="form-group">
+                <label for="f-tevv-ref">TEVV Report Reference</label>
+                <input type="text" id="f-tevv-ref" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-independent-validator">Independent Validator Organization</label>
+                <input type="text" id="f-independent-validator" class="form-input">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 9: GO / NO-GO RECOMMENDATION -->
+        <section class="form-section" id="sec-part9">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 9</span>
+              <span class="badge badge-outline">NIST AI RMF: MANAGE 1.1</span>
+            </div>
+            <h2>Go / No-Go Deployment Recommendation</h2>
+            <p class="section-lead">Synthesize findings across all pillars to issue an evidence-backed deployment recommendation.</p>
+          </div>
+
+          <div class="card">
+            <h3>9.1 Executive Summary Scorecard</h3>
+            <div class="grid-3">
+              <div class="form-group">
+                <label for="f-find-legal">Legal & Regulatory Compliance</label>
+                <select id="f-find-legal" class="form-select">
+                  <option value="Clear" selected>✅ Clear (Full Compliance)</option>
+                  <option value="Conditional">⚠️ Conditional</option>
+                  <option value="Non-Compliant">❌ Non-Compliant</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-find-mission">Mission & Values Alignment</label>
+                <select id="f-find-mission" class="form-select">
+                  <option value="Aligned" selected>✅ Aligned</option>
+                  <option value="Tensions Identified">⚠️ Tensions Identified</option>
+                  <option value="Misaligned">❌ Misaligned</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-find-benefit">Net Benefit vs. Risk</label>
+                <select id="f-find-benefit" class="form-select">
+                  <option value="Benefits outweigh risks" selected>✅ Benefits outweigh risks</option>
+                  <option value="Marginal">⚠️ Marginal</option>
+                  <option value="Risks outweigh benefits">❌ Risks outweigh benefits</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-find-residual">Residual Risk Level</label>
+                <select id="f-find-residual" class="form-select">
+                  <option value="Low" selected>🟢 Low</option>
+                  <option value="Medium">🟡 Medium</option>
+                  <option value="High">🟠 High</option>
+                  <option value="Critical">🔴 Critical</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-find-tevv">TEVV Validation Passed</label>
+                <select id="f-find-tevv" class="form-select">
+                  <option value="Yes" selected>✅ Yes (Passed all gates)</option>
+                  <option value="Conditional">⚠️ Conditional</option>
+                  <option value="No">❌ No</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-find-stakeholder">Stakeholder Consultations</label>
+                <select id="f-find-stakeholder" class="form-select">
+                  <option value="Yes" selected>✅ Yes (Completed & Addressed)</option>
+                  <option value="Partial">⚠️ Partial</option>
+                  <option value="No">❌ No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card highlight-card">
+            <h3>9.2 Formal Recommendation</h3>
+            <div class="rec-radio-group">
+              <label class="rec-option-card go">
+                <input type="radio" name="rec-decision" value="GO" checked>
+                <div class="rec-card-content">
+                  <span class="rec-icon">✅</span>
+                  <div class="rec-meta">
+                    <strong>GO (Approved for Deployment)</strong>
+                    <span>System meets all safety thresholds and risk controls.</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="rec-option-card cond">
+                <input type="radio" name="rec-decision" value="CONDITIONAL GO">
+                <div class="rec-card-content">
+                  <span class="rec-icon">⚠️</span>
+                  <div class="rec-meta">
+                    <strong>CONDITIONAL GO</strong>
+                    <span>Deploy only after specified pre-conditions are verified.</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="rec-option-card nogo">
+                <input type="radio" name="rec-decision" value="NO-GO">
+                <div class="rec-card-content">
+                  <span class="rec-icon">❌</span>
+                  <div class="rec-meta">
+                    <strong>NO-GO (Deployment Blocked)</strong>
+                    <span>Excessive risk or failed benchmarks block launch.</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+              <label for="f-rec-conditions">Deployment Conditions & Phasing Requirements</label>
+              <textarea id="f-rec-conditions" class="form-textarea" rows="3"></textarea>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="f-recommender">Recommendation Prepared By</label>
+                <input type="text" id="f-recommender" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="f-rec-date">Date</label>
+                <input type="date" id="f-rec-date" class="form-input">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PART 10: SIGN-OFF & APPROVALS -->
+        <section class="form-section" id="sec-part10">
+          <div class="section-banner">
+            <div class="section-meta">
+              <span class="badge badge-accent">Part 10</span>
+              <span class="badge badge-outline">NIST AI RMF: GOVERN 2.1, 4.1</span>
+            </div>
+            <h2>Accountability Sign-Off & Approvals</h2>
+            <p class="section-lead">Formal sign-off matrix across mandatory veto holders and accountable officers.</p>
+          </div>
+
+          <div class="card">
+            <div class="table-responsive">
+              <table class="data-table" id="table-approvals">
+                <thead>
+                  <tr>
+                    <th>Role</th>
+                    <th>Signatory Name</th>
+                    <th>Decision</th>
+                    <th>Conditions / Notes</th>
+                    <th>Date</th>
+                    <th>Digital Signature / Stamp</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="alert-box alert-info" style="margin-top: 1.5rem;">
+              <strong>Independence Note (NIST MANAGE 1.1):</strong> A veto (Rejection) from the AI Ethics Officer, AI Risk Officer, or Legal & Compliance blocks deployment regardless of business timeline or executive pressure.
+            </div>
+          </div>
+
+          <!-- Bottom Actions -->
+          <div class="card action-banner">
+            <div>
+              <h3>Assessment Ready for Audit Submission</h3>
+              <p class="text-muted">You can export this completed assessment to an Executive PDF report or Markdown file.</p>
+            </div>
+            <div class="action-btn-row">
+              <button type="button" class="btn btn-secondary" id="btn-export-md-bottom">Export Markdown</button>
+              <button type="button" class="btn btn-primary glow-btn" id="btn-print-pdf-bottom">Export Executive PDF</button>
+            </div>
+          </div>
+        </section>
+
+      </form>
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast">Assessment saved to local storage</div>
+
+  <!-- Scripts -->
+  <script src="finassist-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
