@@ -2,6 +2,7 @@
 
 [![Framework: NIST AI RMF 1.0](https://img.shields.io/badge/Framework-NIST%20AI%20RMF%201.0-blue?style=for-the-badge)](https://www.nist.gov/itl/ai-risk-management-framework)
 [![Live Web Suite: Cloudflare Pages](https://img.shields.io/badge/Live%20Web%20Suite-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare)](https://ai-impact-assessment-20y.pages.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Practice: SamaBrains](https://img.shields.io/badge/Practice-SamaBrains-purple?style=for-the-badge)](https://samabrains.com/)
 
 A working AI governance toolkit: policy release gates, a risk register, bias-testing metrics, and a live impact assessment tool, built by **Robert Ssebambulidde** ([SamaBrains](https://samabrains.com/)) on the **NIST AI Risk Management Framework 1.0 (NIST AI 100-1)**. This portfolio demonstrates how to translate high-level governance principles into production engineering controls, quantitative evaluation metrics, and verifiable deployment safeguards.
@@ -212,6 +213,7 @@ AI Governance & Safety Practice Lead, [SamaBrains](https://samabrains.com/)
 Specializing in Enterprise AI Governance Architecture, NIST AI RMF Implementation, Algorithmic Auditing (TEVV), and Responsible AI Engineering.
 
 * **Practice Website:** [samabrains.com](https://samabrains.com/)
+* **Direct Email:** [rssebambulidde@gmail.com](mailto:rssebambulidde@gmail.com)
 * **Repository:** [github.com/rssebambulidde/ai-governance](https://github.com/rssebambulidde/ai-governance)
 * **GitHub Profile:** [@rssebambulidde](https://github.com/rssebambulidde)
 * **Live Interactive Suite:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)

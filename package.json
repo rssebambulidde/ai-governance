@@ -1,4 +1,35 @@
 {
+  "name": "ai-governance",
+  "version": "1.0.0",
+  "description": "Enterprise AI Governance & Safety Engineering Portfolio — NIST AI RMF 1.0 (NIST AI 100-1) operationalization, TEVV evaluations, and interactive web suite.",
+  "main": "tools/ai-impact-assessment/app.js",
+  "scripts": {
+    "serve": "python -m http.server 8080 --directory tools/ai-impact-assessment",
+    "serve:node": "npx serve tools/ai-impact-assessment",
+    "deploy": "npx wrangler pages deploy tools/ai-impact-assessment --project-name=ai-impact-assessment --branch=main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rssebambulidde/ai-governance.git"
+  },
+  "keywords": [
+    "ai-governance",
+    "nist-ai-rmf",
+    "nist-ai-100-1",
+    "responsible-ai",
+    "ai-safety",
+    "tevv",
+    "ai-risk-management",
+    "ai-impact-assessment",
+    "cloudflare-pages",
+    "samabrains"
+  ],
+  "author": "Robert Ssebambulidde <rssebambulidde@gmail.com> (https://samabrains.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rssebambulidde/ai-governance/issues"
+  },
+  "homepage": "https://ai-impact-assessment-20y.pages.dev",
   "dependencies": {
     "md-to-pdf": "^5.2.5"
   },
