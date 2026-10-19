@@ -79,8 +79,9 @@ A grounded retrieval-augmented AI assistant designed to deliver **instant, cited
 ---
 
 ### Project 3: Interactive AI Impact Assessment Studio (Cloudflare Pages)
-> **Web Application:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
-> **Deployment:** Cloudflare Pages (Turnkey static application)  
+> **Live Web Application:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)  
+> **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
+> **Deployment:** Cloudflare Pages (Turnkey static edge application)  
 > **Standards:** NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1/5.1 · MANAGE 1.1) & ISO/IEC 42001
 
 A dynamic, audit-ready web tool that operationalizes [AI-Impact-Assessment-Template.md](docs/01-govern/AI-Impact-Assessment-Template.md) into an interactive assessment experience:
