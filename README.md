@@ -2,6 +2,7 @@
 
 [![Framework: NIST AI RMF 1.0](https://img.shields.io/badge/Framework-NIST%20AI%20RMF%201.0-blue?style=for-the-badge)](https://www.nist.gov/itl/ai-risk-management-framework)
 [![Live Web Suite: Cloudflare Pages](https://img.shields.io/badge/Live%20Web%20Suite-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare)](https://ai-impact-assessment-20y.pages.dev)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/robert-ssebambulidde/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Practice: SamaBrains](https://img.shields.io/badge/Practice-SamaBrains-purple?style=for-the-badge)](https://samabrains.com/)
 
@@ -209,9 +210,10 @@ Open `http://localhost:8080` in any web browser.
 ## Contact & Inquiries
 
 **Robert Ssebambulidde**  
-AI Governance & Safety Practice Lead, [SamaBrains](https://samabrains.com/)  
-Specializing in Enterprise AI Governance Architecture, NIST AI RMF Implementation, Algorithmic Auditing (TEVV), and Responsible AI Engineering.
+AI Governance Professional Practitioner | Risk & Responsible AI  
+Practice Lead at [SamaBrains](https://samabrains.com/)
 
+* **LinkedIn:** [linkedin.com/in/robert-ssebambulidde](https://www.linkedin.com/in/robert-ssebambulidde/)
 * **Practice Website:** [samabrains.com](https://samabrains.com/)
 * **Direct Email:** [rssebambulidde@gmail.com](mailto:rssebambulidde@gmail.com)
 * **Repository:** [github.com/rssebambulidde/ai-governance](https://github.com/rssebambulidde/ai-governance)
