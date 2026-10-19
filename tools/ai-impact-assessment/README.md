@@ -1,7 +1,7 @@
 # AI Impact Assessment Studio
 
 > **Interactive, audit-ready AI Impact Assessment (AIIA) web application.**  
-> Built for **[SamaBrains](https://samabrains.com/)** and aligned with **NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1/5.1 · MANAGE 1.1)** and **ISO/IEC 42001**.  
+> Dedicated exclusively to operationalizing the **NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN · MAP · MEASURE · MANAGE)**.  
 > **Live Web Application:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)
 
 ---

@@ -53,7 +53,7 @@ const FINASSIST_PRESET = {
       { area: "Data privacy (e.g. GDPR / Uganda DPPA)", applicable: "Yes", law: "Uganda Data Protection and Privacy Act 2019 / GDPR Art. 22", status: "Compliant" },
       { area: "Anti-discrimination law", applicable: "Yes", law: "Equal Opportunities Commission Act / Fair Lending Guidelines", status: "Compliant" },
       { area: "Sector-specific financial regulation", applicable: "Yes", law: "Bank of Uganda Consumer Protection Guidelines", status: "Compliant" },
-      { area: "AI-specific regulation", applicable: "Yes", law: "NIST AI RMF 1.0 / ISO/IEC 42001 / EU AI Act (High-Risk Governance Alignment)", status: "Compliant" },
+      { area: "AI-specific governance", applicable: "Yes", law: "NIST AI RMF 1.0 (GOVERN 4.2 & MAP 1.1 Baseline)", status: "Compliant" },
       { area: "Consumer protection law", applicable: "Yes", law: "Financial Consumer Protection Directive", status: "Compliant" },
       { area: "Procurement / vendor rules", applicable: "Yes", law: "Cloud Computing Vendor Due Diligence Framework", status: "Compliant" }
     ],
