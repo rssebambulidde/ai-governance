@@ -40,6 +40,609 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-add-tevv-row')?.addEventListener('click', () => addTevvActivityRow());
   document.getElementById('btn-add-metric-row')?.addEventListener('click', () => addMetricRow());
 
+  // ==========================================================================
+  // 0. HUB NAVIGATION & INVENTORY REGISTRY (GOVERN 1.6)
+  // ==========================================================================
+  const tabNavInventory = document.getElementById('tab-nav-inventory');
+  const tabNavAssessment = document.getElementById('tab-nav-assessment');
+  const viewInventory = document.getElementById('view-inventory');
+  const viewAssessment = document.getElementById('view-assessment');
+  const actionsInventory = document.getElementById('actions-inventory');
+  const actionsAssessment = document.getElementById('actions-assessment');
+
+  function switchHubView(target) {
+    if (target === 'inventory') {
+      tabNavInventory?.classList.add('active');
+      tabNavInventory?.setAttribute('aria-selected', 'true');
+      tabNavAssessment?.classList.remove('active');
+      tabNavAssessment?.setAttribute('aria-selected', 'false');
+      if (viewInventory) viewInventory.style.display = 'block';
+      if (viewAssessment) viewAssessment.style.display = 'none';
+      if (actionsInventory) actionsInventory.style.display = 'flex';
+      if (actionsAssessment) actionsAssessment.style.display = 'none';
+      renderInventoryTable();
+    } else {
+      tabNavAssessment?.classList.add('active');
+      tabNavAssessment?.setAttribute('aria-selected', 'true');
+      tabNavInventory?.classList.remove('active');
+      tabNavInventory?.setAttribute('aria-selected', 'false');
+      if (viewAssessment) viewAssessment.style.display = 'block';
+      if (viewInventory) viewInventory.style.display = 'none';
+      if (actionsAssessment) actionsAssessment.style.display = 'flex';
+      if (actionsInventory) actionsInventory.style.display = 'none';
+      syncHeaderBadges();
+      updateProgress();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabNavInventory?.addEventListener('click', () => switchHubView('inventory'));
+  tabNavAssessment?.addEventListener('click', () => switchHubView('assessment'));
+
+  // Inventory Data State
+  let inventorySystems = [];
+
+  function loadInventoryState() {
+    const saved = localStorage.getItem('ai_inventory_systems');
+    if (saved) {
+      try {
+        inventorySystems = JSON.parse(saved);
+      } catch (e) {
+        inventorySystems = typeof DEFAULT_INVENTORY_SYSTEMS !== 'undefined' ? [...DEFAULT_INVENTORY_SYSTEMS] : [];
+      }
+    } else {
+      inventorySystems = typeof DEFAULT_INVENTORY_SYSTEMS !== 'undefined' ? [...DEFAULT_INVENTORY_SYSTEMS] : [];
+    }
+  }
+
+  function saveInventoryState() {
+    localStorage.setItem('ai_inventory_systems', JSON.stringify(inventorySystems));
+  }
+
+  // Inventory UI Elements
+  const inventoryTbody = document.getElementById('inventory-table-body');
+  const searchInput = document.getElementById('inventory-search');
+  const filterDept = document.getElementById('filter-dept');
+  const filterRisk = document.getElementById('filter-risk');
+  const filterStatus = document.getElementById('filter-status');
+  const btnResetFilters = document.getElementById('btn-reset-filters');
+  const inventoryCountText = document.getElementById('inventory-count-text');
+
+  // KPI elements
+  const kpiTotal = document.getElementById('kpi-total-systems');
+  const kpiHighRisk = document.getElementById('kpi-high-risk-systems');
+  const kpiProd = document.getElementById('kpi-prod-systems');
+  const kpiAssessed = document.getElementById('kpi-assessed-systems');
+
+  function updateKpis() {
+    if (!kpiTotal) return;
+    kpiTotal.textContent = inventorySystems.length;
+    const highCrit = inventorySystems.filter(s => s.riskLevel === 'Critical' || s.riskLevel === 'High').length;
+    if (kpiHighRisk) kpiHighRisk.textContent = highCrit;
+    const prod = inventorySystems.filter(s => (s.deploymentStatus || '').includes('Production')).length;
+    if (kpiProd) kpiProd.textContent = prod;
+    const assessed = inventorySystems.filter(s => s.assessmentStatus === 'Signed Off').length;
+    if (kpiAssessed) kpiAssessed.textContent = `${assessed} / ${inventorySystems.length}`;
+  }
+
+  function populateDeptDropdown() {
+    if (!filterDept) return;
+    const currentVal = filterDept.value;
+    const depts = Array.from(new Set(inventorySystems.map(s => s.department).filter(Boolean))).sort();
+    filterDept.innerHTML = '<option value="ALL">All Departments</option>';
+    depts.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d;
+      filterDept.appendChild(opt);
+    });
+    if (depts.includes(currentVal)) {
+      filterDept.value = currentVal;
+    }
+  }
+
+  function getStatusBadgeHtml(status) {
+    const s = status || 'Planning';
+    let cls = 'prod';
+    if (s.includes('Testing') || s.includes('TEVV')) cls = 'testing';
+    else if (s.includes('Planning') || s.includes('Development') || s.includes('Pre-Development')) cls = 'predev';
+    else if (s.includes('Decom')) cls = 'decom';
+    return `<span class="status-badge-pill ${cls}">${escapeHtml(s)}</span>`;
+  }
+
+  function getRiskBadgeHtml(risk) {
+    const r = (risk || 'Low').toLowerCase();
+    let cls = 'low';
+    let label = 'Low (🟢)';
+    if (r.includes('crit')) { cls = 'crit'; label = 'Critical (🔴)'; }
+    else if (r.includes('high')) { cls = 'high'; label = 'High (🟠)'; }
+    else if (r.includes('med')) { cls = 'med'; label = 'Medium (🟡)'; }
+    return `<span class="badge-risk ${cls}">${label}</span>`;
+  }
+
+  function renderInventoryTable() {
+    if (!inventoryTbody) return;
+    updateKpis();
+    populateDeptDropdown();
+
+    const q = (searchInput?.value || '').toLowerCase().trim();
+    const selDept = filterDept?.value || 'ALL';
+    const selRisk = filterRisk?.value || 'ALL';
+    const selStatus = filterStatus?.value || 'ALL';
+
+    const filtered = inventorySystems.filter(s => {
+      if (selDept !== 'ALL' && s.department !== selDept) return false;
+      if (selRisk !== 'ALL' && s.riskLevel !== selRisk) return false;
+      if (selStatus !== 'ALL' && s.deploymentStatus !== selStatus) return false;
+      if (q) {
+        const text = `${s.id} ${s.name} ${s.department} ${s.purpose} ${s.taskType} ${s.accountableOwner} ${s.thirdParty}`.toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      return true;
+    });
+
+    if (inventoryCountText) {
+      inventoryCountText.textContent = `Showing ${filtered.length} of ${inventorySystems.length} systems`;
+    }
+
+    if (filtered.length === 0) {
+      inventoryTbody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align:center; padding: 2.5rem; color: var(--text-muted);">
+            No matching AI systems found in registry.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    inventoryTbody.innerHTML = filtered.map(sys => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(sys.id)}</td>
+        <td>
+          <span class="inv-name">${escapeHtml(sys.name)}</span>
+          <span class="inv-dept">${escapeHtml(sys.department)}</span>
+        </td>
+        <td>
+          <div class="inv-purpose" title="${escapeHtml(sys.purpose)}">${escapeHtml(sys.purpose)}</div>
+          <div class="inv-task">${escapeHtml(sys.taskType)}</div>
+        </td>
+        <td>${getRiskBadgeHtml(sys.riskLevel)}</td>
+        <td>${getStatusBadgeHtml(sys.deploymentStatus)}</td>
+        <td>
+          <span style="font-weight: 600; font-size: 0.8rem;">${escapeHtml(sys.tevvStatus || 'N/A')}</span>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">AIIA: ${escapeHtml(sys.assessmentStatus || 'Not Started')}</div>
+        </td>
+        <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(sys.nextReviewDate || '—')}</td>
+        <td style="text-align: center;">
+          <div class="inv-row-actions">
+            <button type="button" class="btn-action-assess" data-assess-id="${escapeHtml(sys.id)}" title="Open in Impact Assessment Studio">
+              Assess
+            </button>
+            <button type="button" class="btn-action-icon" data-edit-id="${escapeHtml(sys.id)}" title="Edit system entry">
+              ✏️
+            </button>
+            <button type="button" class="btn-action-icon del" data-del-id="${escapeHtml(sys.id)}" title="Delete system entry">
+              🗑️
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    // Attach listeners
+    inventoryTbody.querySelectorAll('.btn-action-assess').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-assess-id');
+        launchSystemAssessment(id);
+      });
+    });
+
+    inventoryTbody.querySelectorAll('[data-edit-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-edit-id');
+        openEditModal(id);
+      });
+    });
+
+    inventoryTbody.querySelectorAll('[data-del-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-del-id');
+        deleteSystem(id);
+      });
+    });
+  }
+
+  // Launch Assessment from Inventory
+  function launchSystemAssessment(id) {
+    const sys = inventorySystems.find(s => s.id === id);
+    if (!sys) return;
+
+    if (sys.id === 'AI-001' || sys.id === 'SYS-FIN-001') {
+      populateForm(FINASSIST_PRESET);
+    } else {
+      document.getElementById('f-system-id').value = sys.id;
+      document.getElementById('f-system-name').value = sys.name;
+      document.getElementById('f-department').value = sys.department || '';
+      document.getElementById('f-purpose').value = sys.purpose || '';
+      document.getElementById('f-project-lead').value = sys.projectLead || '';
+      document.getElementById('f-lead').value = sys.accountableOwner || '';
+      const numPart = sys.id.replace(/\D/g, '') || '001';
+      document.getElementById('f-assessment-id').value = `AIIA-2026-${numPart.padStart(3, '0')}`;
+      syncHeaderBadges();
+    }
+
+    switchHubView('assessment');
+    showToast(`Loaded ${sys.name} (${sys.id}) into Impact Assessment Studio`);
+  }
+
+  // Modal Handlers
+  const modalSystem = document.getElementById('modal-register-system');
+  const formSystemRegistry = document.getElementById('form-system-registry');
+  const btnCloseModal = document.getElementById('btn-close-modal');
+  const btnCancelModal = document.getElementById('btn-cancel-modal');
+  const modalTitle = document.getElementById('modal-system-title');
+  const regEditId = document.getElementById('reg-edit-id');
+
+  function openNewModal() {
+    if (!modalSystem) return;
+    regEditId.value = '';
+    modalTitle.textContent = 'Register New AI System';
+    formSystemRegistry.reset();
+    const nextNum = inventorySystems.length + 1;
+    document.getElementById('reg-system-id').value = `AI-${String(nextNum).padStart(3, '0')}`;
+    document.getElementById('reg-last-review').value = '2026-10-18';
+    document.getElementById('reg-next-review').value = '2027-04-18';
+    modalSystem.style.display = 'flex';
+  }
+
+  function openEditModal(id) {
+    if (!modalSystem) return;
+    const sys = inventorySystems.find(s => s.id === id);
+    if (!sys) return;
+    regEditId.value = sys.id;
+    modalTitle.textContent = `Edit AI System: ${sys.name} (${sys.id})`;
+
+    document.getElementById('reg-system-id').value = sys.id;
+    document.getElementById('reg-system-name').value = sys.name;
+    document.getElementById('reg-department').value = sys.department;
+    document.getElementById('reg-task-type').value = sys.taskType;
+    document.getElementById('reg-purpose').value = sys.purpose;
+    document.getElementById('reg-risk-level').value = sys.riskLevel;
+    document.getElementById('reg-deployment-status').value = sys.deploymentStatus;
+    document.getElementById('reg-tevv-status').value = sys.tevvStatus;
+    document.getElementById('reg-data-types').value = sys.dataTypes;
+    document.getElementById('reg-third-party').value = sys.thirdParty || '';
+    document.getElementById('reg-accountable-owner').value = sys.accountableOwner;
+    document.getElementById('reg-project-lead').value = sys.projectLead;
+    document.getElementById('reg-dev-team').value = sys.devTeam || '';
+    document.getElementById('reg-operator-team').value = sys.operatorTeam || '';
+    document.getElementById('reg-last-review').value = sys.lastReviewDate || '';
+    document.getElementById('reg-next-review').value = sys.nextReviewDate || '';
+    document.getElementById('reg-assessment-status').value = sys.assessmentStatus || 'Signed Off';
+    document.getElementById('reg-doc-link').value = sys.docLink || '';
+    document.getElementById('reg-incident-link').value = sys.incidentLogLink || '';
+    document.getElementById('reg-notes').value = sys.notes || '';
+
+    modalSystem.style.display = 'flex';
+  }
+
+  function closeModal() {
+    if (modalSystem) modalSystem.style.display = 'none';
+  }
+
+  document.getElementById('btn-open-register-modal')?.addEventListener('click', openNewModal);
+  document.getElementById('btn-hero-register-modal')?.addEventListener('click', openNewModal);
+  btnCloseModal?.addEventListener('click', closeModal);
+  btnCancelModal?.addEventListener('click', closeModal);
+
+  formSystemRegistry?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const isEdit = Boolean(regEditId.value);
+    const sysData = {
+      id: document.getElementById('reg-system-id').value.trim(),
+      name: document.getElementById('reg-system-name').value.trim(),
+      department: document.getElementById('reg-department').value.trim(),
+      purpose: document.getElementById('reg-purpose').value.trim(),
+      taskType: document.getElementById('reg-task-type').value.trim(),
+      deploymentStatus: document.getElementById('reg-deployment-status').value,
+      riskLevel: document.getElementById('reg-risk-level').value,
+      dataTypes: document.getElementById('reg-data-types').value.trim(),
+      thirdParty: document.getElementById('reg-third-party').value.trim(),
+      accountableOwner: document.getElementById('reg-accountable-owner').value.trim(),
+      projectLead: document.getElementById('reg-project-lead').value.trim(),
+      devTeam: document.getElementById('reg-dev-team').value.trim(),
+      operatorTeam: document.getElementById('reg-operator-team').value.trim(),
+      tevvStatus: document.getElementById('reg-tevv-status').value,
+      lastReviewDate: document.getElementById('reg-last-review').value,
+      nextReviewDate: document.getElementById('reg-next-review').value,
+      assessmentStatus: document.getElementById('reg-assessment-status').value,
+      docLink: document.getElementById('reg-doc-link').value.trim(),
+      incidentLogLink: document.getElementById('reg-incident-link').value.trim(),
+      notes: document.getElementById('reg-notes').value.trim()
+    };
+
+    if (isEdit) {
+      const idx = inventorySystems.findIndex(s => s.id === regEditId.value);
+      if (idx !== -1) {
+        inventorySystems[idx] = sysData;
+        showToast(`Updated ${sysData.name} in inventory registry`);
+      }
+    } else {
+      inventorySystems.push(sysData);
+      showToast(`Registered ${sysData.name} (${sysData.id}) in inventory registry`);
+    }
+
+    saveInventoryState();
+    closeModal();
+    renderInventoryTable();
+  });
+
+  function deleteSystem(id) {
+    const sys = inventorySystems.find(s => s.id === id);
+    if (!sys) return;
+    if (confirm(`Are you sure you want to delete ${sys.name} (${sys.id}) from the inventory registry?`)) {
+      inventorySystems = inventorySystems.filter(s => s.id !== id);
+      saveInventoryState();
+      renderInventoryTable();
+      showToast(`Removed ${sys.name} from inventory`);
+    }
+  }
+
+  // Search & Filter Events
+  searchInput?.addEventListener('input', renderInventoryTable);
+  filterDept?.addEventListener('change', renderInventoryTable);
+  filterRisk?.addEventListener('change', renderInventoryTable);
+  filterStatus?.addEventListener('change', renderInventoryTable);
+  btnResetFilters?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (filterDept) filterDept.value = 'ALL';
+    if (filterRisk) filterRisk.value = 'ALL';
+    if (filterStatus) filterStatus.value = 'ALL';
+    renderInventoryTable();
+  });
+
+  // CSV Generation matching docs/01-govern/AI-System-Inventory.csv
+  const CSV_HEADERS = [
+    'ID', 'System_Name', 'Department_Owner', 'Business_Purpose', 'AI_Task_Type',
+    'Deployment_Status', 'Risk_Level', 'Data_Types_Used', 'Third_Party_Components',
+    'Accountable_Owner', 'AI_Project_Lead', 'Developer_Team', 'Operator_Team',
+    'TEVV_Status', 'Last_Review_Date', 'Next_Review_Date', 'Impact_Assessment_Done',
+    'Documentation_Repo_Link', 'Incident_Log_Link', 'Notes'
+  ];
+
+  function escapeCsvCell(val) {
+    if (val === null || val === undefined) return '';
+    const s = String(val);
+    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+      return `"${s.replace(/"/g, '""')}"`;
+    }
+    return s;
+  }
+
+  function exportInventoryCsv() {
+    const rows = [CSV_HEADERS.join(',')];
+    inventorySystems.forEach(s => {
+      const row = [
+        escapeCsvCell(s.id),
+        escapeCsvCell(s.name),
+        escapeCsvCell(s.department),
+        escapeCsvCell(s.purpose),
+        escapeCsvCell(s.taskType),
+        escapeCsvCell(s.deploymentStatus),
+        escapeCsvCell(s.riskLevel),
+        escapeCsvCell(s.dataTypes),
+        escapeCsvCell(s.thirdParty),
+        escapeCsvCell(s.accountableOwner),
+        escapeCsvCell(s.projectLead),
+        escapeCsvCell(s.devTeam),
+        escapeCsvCell(s.operatorTeam),
+        escapeCsvCell(s.tevvStatus),
+        escapeCsvCell(s.lastReviewDate),
+        escapeCsvCell(s.nextReviewDate),
+        escapeCsvCell(s.assessmentStatus),
+        escapeCsvCell(s.docLink),
+        escapeCsvCell(s.incidentLogLink),
+        escapeCsvCell(s.notes)
+      ];
+      rows.push(row.join(','));
+    });
+
+    const csvContent = rows.join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AI-System-Inventory.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Exported AI-System-Inventory.csv');
+  }
+
+  document.getElementById('btn-export-inventory-csv')?.addEventListener('click', exportInventoryCsv);
+  document.getElementById('btn-sync-csv-repo')?.addEventListener('click', exportInventoryCsv);
+
+  // CSV Import Parser
+  const inventoryCsvInput = document.getElementById('inventory-csv-input');
+  document.getElementById('btn-import-inventory-csv-trigger')?.addEventListener('click', () => {
+    inventoryCsvInput?.click();
+  });
+
+  inventoryCsvInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const text = evt.target.result;
+        parseAndLoadCsv(text);
+      } catch (err) {
+        alert('Failed to parse CSV file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    inventoryCsvInput.value = '';
+  });
+
+  function parseAndLoadCsv(text) {
+    const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+    if (lines.length < 2) throw new Error('CSV is empty or missing data rows');
+
+    function parseCsvLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            current += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          result.push(current);
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current);
+      return result;
+    }
+
+    const parsedSystems = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = parseCsvLine(lines[i]);
+      if (cols.length < 2 || !cols[0]) continue;
+      const sys = {
+        id: cols[0]?.trim() || `AI-${i}`,
+        name: cols[1]?.trim() || 'Untitled AI System',
+        department: cols[2]?.trim() || 'General Operations',
+        purpose: cols[3]?.trim() || '',
+        taskType: cols[4]?.trim() || '',
+        deploymentStatus: cols[5]?.trim() || 'Planning / Pre-Development',
+        riskLevel: cols[6]?.trim() || 'High',
+        dataTypes: cols[7]?.trim() || '',
+        thirdParty: cols[8]?.trim() || '',
+        accountableOwner: cols[9]?.trim() || '',
+        projectLead: cols[10]?.trim() || '',
+        devTeam: cols[11]?.trim() || '',
+        operatorTeam: cols[12]?.trim() || '',
+        tevvStatus: cols[13]?.trim() || 'Not Started',
+        lastReviewDate: cols[14]?.trim() || '',
+        nextReviewDate: cols[15]?.trim() || '',
+        assessmentStatus: cols[16]?.trim() || 'Not Started',
+        docLink: cols[17]?.trim() || '',
+        incidentLogLink: cols[18]?.trim() || '',
+        notes: cols[19]?.trim() || ''
+      };
+      parsedSystems.push(sys);
+    }
+
+    if (parsedSystems.length === 0) throw new Error('No valid system rows found');
+
+    inventorySystems = parsedSystems;
+    saveInventoryState();
+    renderInventoryTable();
+    showToast(`Successfully imported ${parsedSystems.length} systems from CSV`);
+  }
+
+  // Inventory Print PDF Generator
+  function triggerPrintInventoryPdf() {
+    const container = document.getElementById('print-inventory-report');
+    if (!container) return;
+
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    const html = `
+      <div class="pr-header">
+        <div>
+          <div class="pr-org">SAMABRAINS ASSURANCE &amp; GOVERNANCE</div>
+          <h1 class="pr-title">AI System Inventory &amp; Registry Report</h1>
+          <div class="pr-subtitle">Operationalizing NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN 1.6)</div>
+        </div>
+        <div>
+          <span class="pr-badge-go">GOVERN 1.6 COMPLIANT</span>
+        </div>
+      </div>
+
+      <div class="pr-meta-box">
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Total AI Systems</span>
+            <span class="pr-value" style="font-weight: 700;">${inventorySystems.length}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">High &amp; Critical Risk</span>
+            <span class="pr-value" style="font-weight: 700;">${inventorySystems.filter(s => s.riskLevel === 'Critical' || s.riskLevel === 'High').length}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">In Production</span>
+            <span class="pr-value">${inventorySystems.filter(s => (s.deploymentStatus || '').includes('Production')).length}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Report Generation Date</span>
+            <span class="pr-value">${new Date().toISOString().slice(0, 10)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">Organizational AI Systems Registry</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 16%;">System Name</th>
+              <th style="width: 15%;">Department</th>
+              <th>Business Purpose &amp; AI Tasks</th>
+              <th style="width: 9%;">Risk Tier</th>
+              <th style="width: 11%;">Status</th>
+              <th style="width: 10%;">TEVV</th>
+              <th style="width: 10%;">Next Review</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${inventorySystems.map(s => `
+              <tr>
+                <td><strong>${escapeHtml(s.id)}</strong></td>
+                <td><strong>${escapeHtml(s.name)}</strong></td>
+                <td>${escapeHtml(s.department)}</td>
+                <td>
+                  <div>${escapeHtml(s.purpose)}</div>
+                  <div style="font-size: 7pt; color: #475569; margin-top: 1pt;"><strong>Task:</strong> ${escapeHtml(s.taskType)}</div>
+                </td>
+                <td><span class="${getLevelBadgeClass(s.riskLevel)}">${escapeHtml(s.riskLevel)}</span></td>
+                <td>${escapeHtml(s.deploymentStatus)}</td>
+                <td>${escapeHtml(s.tevvStatus)}</td>
+                <td style="font-family: monospace;">${escapeHtml(s.nextReviewDate || '—')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="pr-footer">
+          Official AI System Inventory Registry · Generated by SamaBrains NIST AI Governance Hub · NIST AI RMF 1.0 (GOVERN 1.6)
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    showToast('Opening Executive Inventory Print / PDF dialog...');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
+  }
+
+  document.getElementById('btn-print-inventory-pdf')?.addEventListener('click', triggerPrintInventoryPdf);
+
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {
     item.addEventListener('click', () => {
@@ -1732,7 +2335,10 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
   btnPrintPdf.addEventListener('click', triggerPrintPdf);
   btnPrintPdfBottom?.addEventListener('click', triggerPrintPdf);
 
-  // Initial Load (Check localStorage first, otherwise load FinAssist Preset)
+  // Initial Load
+  loadInventoryState();
+  renderInventoryTable();
+
   const savedData = localStorage.getItem('aiia_assessment_data');
   if (savedData) {
     try {

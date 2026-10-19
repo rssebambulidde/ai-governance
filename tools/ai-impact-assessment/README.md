@@ -1,6 +1,6 @@
-# AI Impact Assessment Studio
+# NIST AI RMF Governance Hub
 
-> **Interactive, audit-ready AI Impact Assessment (AIIA) web application.**  
+> **Interactive, audit-ready AI Governance web application suite.**  
 > Dedicated exclusively to operationalizing the **NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN · MAP · MEASURE · MANAGE)**.  
 > **Live Web Application:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)
 
@@ -8,12 +8,21 @@
 
 ## Capabilities
 
+### 1. AI System Inventory & Registry (GOVERN 1.6)
+* **Executive Registry Grid:** Real-time searchable and filterable registry tracking model classes, task types, risk tiers, third-party foundation models, data classifications, and lifecycle states.
+* **Governance KPI Cards:** Live metrics for total registered systems, critical/high-risk count, production deployments, and assurance audit health.
+* **Add & Edit System Modal:** Full attribute modal tracking key AI actors, review dates, and links to documentation context reports and incident logs.
+* **Two-Way CSV Synchronization:** Direct export and import compatible with repository standard [`docs/01-govern/AI-System-Inventory.csv`](../../docs/01-govern/AI-System-Inventory.csv).
+* **One-Click AIIA Launch:** Instantly transition any system into the Impact Assessment Studio with pre-bound metadata.
+* **Executive Registry PDF:** Pure white A4 printable registry report for board review and audit submissions.
+
+### 2. AI Impact Assessment Studio (GOVERN 4.2 · MAP 3.1 · MANAGE 1.1)
 * **10-Part Assessment Wizard:** Guides users through all sections of the NIST AI RMF Impact Assessment lifecycle.
 * **Interactive Risk Calculator:** Real-time Likelihood (1–5) × Impact (1–5) calculation with dynamic risk badges (Low, Medium, High, Critical) and risk scorecard heat counter.
 * **Preset Switcher:** Instant *"Load FinAssist AI Example"* for demonstration and benchmarking, or *"New Blank"* for net-new assessments.
 * **Auto-Save:** Real-time persistence using browser `localStorage`.
-* **Export Engine:**
-  * **Executive PDF:** Formatted for print/PDF export (`@media print` styling with corporate cover headers, page-break controls, and formal signature blocks).
+* **Multi-Format Export Engine:**
+  * **Executive PDF:** Clean corporate white-paper print/PDF exporter (`@media print` styling with formal signature blocks).
   * **Markdown Report:** One-click download of audit-ready `.md` matching repository standards.
   * **JSON State:** Full state export and import for collaborative drafting.
 

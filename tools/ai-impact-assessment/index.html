@@ -17,48 +17,75 @@
       <div class="brand-badge">
         <span class="brand-logo">SB</span>
         <div class="brand-info">
-          <span class="brand-title">SamaBrains <span class="gradient-text">NIST AI RMF Studio</span></span>
-          <span class="brand-sub">NIST AI Risk Management Framework 1.0 (NIST AI RMF) Operationalization Engine</span>
+          <span class="brand-title">SamaBrains <span class="gradient-text">NIST AI Governance Hub</span></span>
+          <span class="brand-sub">NIST AI Risk Management Framework 1.0 (NIST AI RMF) Operational Suite</span>
         </div>
       </div>
     </div>
 
+    <!-- Top-Level Hub Navigation Switcher -->
     <div class="header-center">
-      <div class="status-pill" id="system-badge-pill">
-        <span class="pulse-dot"></span>
-        <span id="badge-system-id">SYS-FIN-001</span>
-        <span class="badge-separator">·</span>
-        <span id="badge-system-name">FinAssist AI</span>
-        <span class="badge-recommendation go" id="badge-rec-status">GO</span>
+      <div class="hub-nav-group" role="tablist">
+        <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true">
+          <span class="hub-nav-icon">📋</span>
+          <span class="hub-nav-title">AI System Inventory</span>
+          <span class="hub-nav-tag">GOVERN 1.6</span>
+        </button>
+        <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false">
+          <span class="hub-nav-icon">⚖️</span>
+          <span class="hub-nav-title">Impact Assessment</span>
+          <span class="hub-nav-tag">GOVERN 4.2 · MAP · MANAGE</span>
+        </button>
       </div>
     </div>
 
+    <!-- Right Header Actions (dynamic per tab) -->
     <div class="header-right">
-      <button type="button" class="btn btn-secondary btn-sm" id="btn-load-preset" title="Load full FinAssist AI assessment example">
-        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-        Load Example
-      </button>
-
-      <button type="button" class="btn btn-secondary btn-sm" id="btn-blank-form" title="Clear and start a blank assessment">
-        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
-        New Blank
-      </button>
-
-      <div class="btn-group">
-        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json" title="Export assessment JSON backup">JSON</button>
-        <button type="button" class="btn btn-secondary btn-sm" id="btn-import-json-trigger" title="Import assessment JSON">Import</button>
-        <input type="file" id="json-file-input" accept=".json" style="display: none;">
+      <!-- Inventory view actions -->
+      <div class="view-actions-inventory" id="actions-inventory">
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-open-register-modal">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Register System
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-inventory-csv" title="Export Inventory CSV matching docs/01-govern/AI-System-Inventory.csv">
+          Export CSV
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-import-inventory-csv-trigger" title="Import Inventory CSV">
+          Import CSV
+        </button>
+        <input type="file" id="inventory-csv-input" accept=".csv" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-print-inventory-pdf" title="Export executive printable inventory report">
+          Registry PDF
+        </button>
       </div>
 
-      <button type="button" class="btn btn-secondary btn-sm" id="btn-export-md" title="Download audit-ready Markdown document">
-        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-        Export .MD
-      </button>
-
-      <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-pdf" title="Export high-design print-ready Executive PDF">
-        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-        Export PDF
-      </button>
+      <!-- Assessment view actions -->
+      <div class="view-actions-assessment" id="actions-assessment" style="display: none;">
+        <div class="status-pill" id="system-badge-pill">
+          <span class="pulse-dot"></span>
+          <span id="badge-system-id">SYS-FIN-001</span>
+          <span class="badge-separator">·</span>
+          <span id="badge-system-name">FinAssist AI</span>
+          <span class="badge-recommendation go" id="badge-rec-status">GO</span>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-load-preset" title="Load full FinAssist AI assessment example">
+          Load Example
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-blank-form" title="Clear and start a blank assessment">
+          New Blank
+        </button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-export-json" title="Export assessment JSON backup">JSON</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-import-json-trigger" title="Import assessment JSON">Import</button>
+          <input type="file" id="json-file-input" accept=".json" style="display: none;">
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-md" title="Download audit-ready Markdown document">
+          Export .MD
+        </button>
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-pdf" title="Export high-design print-ready Executive PDF">
+          Export PDF
+        </button>
+      </div>
 
       <button type="button" class="theme-toggle" id="theme-toggle-btn" title="Toggle Light / Dark mode" aria-label="Toggle theme">
         <span class="theme-icon sun">☀️</span>
@@ -67,8 +94,135 @@
     </div>
   </header>
 
-  <!-- Main Container with Sidebar Navigation + Content Area -->
-  <div class="app-layout">
+  <!-- VIEW 1: AI SYSTEM INVENTORY (GOVERN 1.6) -->
+  <div id="view-inventory" class="portal-view active">
+    <div class="inventory-container">
+      <!-- Hero / Header -->
+      <div class="inventory-hero">
+        <div>
+          <div class="section-tag">NIST AI RMF GOVERN 1.6</div>
+          <h1 class="inventory-title">AI System Inventory &amp; Registry</h1>
+          <p class="inventory-desc">
+            Centralized organizational registry tracking model types, risk tiers, third-party components, hosting models, data classifications, TEVV verification, and review cadences.
+          </p>
+        </div>
+        <div class="inventory-hero-actions">
+          <button type="button" class="btn btn-primary glow-btn" id="btn-hero-register-modal">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            + Register New AI System
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Executive Metrics -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Total AI Systems</span>
+            <span class="kpi-icon">📊</span>
+          </div>
+          <div class="kpi-value" id="kpi-total-systems">6</div>
+          <div class="kpi-sub">Registered across all departments</div>
+        </div>
+
+        <div class="kpi-card crit-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Critical &amp; High Risk</span>
+            <span class="kpi-icon">🛡️</span>
+          </div>
+          <div class="kpi-value" id="kpi-high-risk-systems">4</div>
+          <div class="kpi-sub">Mandatory AIIA &amp; quarterly review</div>
+        </div>
+
+        <div class="kpi-card prod-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">In Production</span>
+            <span class="kpi-icon">🚀</span>
+          </div>
+          <div class="kpi-value" id="kpi-prod-systems">4</div>
+          <div class="kpi-sub">Active live deployment state</div>
+        </div>
+
+        <div class="kpi-card review-kpi">
+          <div class="kpi-header">
+            <span class="kpi-label">Assurance Signed Off</span>
+            <span class="kpi-icon">✅</span>
+          </div>
+          <div class="kpi-value" id="kpi-assessed-systems">4 / 6</div>
+          <div class="kpi-sub">AIIA approval compliance rate</div>
+        </div>
+      </div>
+
+      <!-- Filter & Search Toolbar -->
+      <div class="inventory-toolbar card">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="inventory-search" placeholder="Search systems by ID, name, department, task type, or owner...">
+        </div>
+        <div class="filter-controls">
+          <select id="filter-dept" class="filter-select">
+            <option value="ALL">All Departments</option>
+          </select>
+          <select id="filter-risk" class="filter-select">
+            <option value="ALL">All Risk Tiers</option>
+            <option value="Critical">Critical (🔴)</option>
+            <option value="High">High (🟠)</option>
+            <option value="Medium">Medium (🟡)</option>
+            <option value="Low">Low (🟢)</option>
+          </select>
+          <select id="filter-status" class="filter-select">
+            <option value="ALL">All Lifecycles</option>
+            <option value="Production">Production</option>
+            <option value="Testing / TEVV">Testing / TEVV</option>
+            <option value="Planning / Pre-Development">Planning / Pre-Dev</option>
+            <option value="Decommissioned">Decommissioned</option>
+          </select>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-filters">Reset</button>
+        </div>
+      </div>
+
+      <!-- Registry Table Card -->
+      <div class="card table-card">
+        <div class="card-header-flex">
+          <div>
+            <h3>Enterprise AI System Inventory Registry</h3>
+            <p class="text-muted" id="inventory-count-text">Showing 6 systems</p>
+          </div>
+          <div class="table-actions">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-sync-csv-repo">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export AI-System-Inventory.csv
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="inventory-table" id="table-inventory">
+            <thead>
+              <tr>
+                <th style="width: 10%;">System ID</th>
+                <th style="width: 18%;">System Name &amp; Dept</th>
+                <th style="width: 18%;">Purpose &amp; AI Tasks</th>
+                <th style="width: 11%;">Risk Tier</th>
+                <th style="width: 12%;">Lifecycle Status</th>
+                <th style="width: 11%;">TEVV Status</th>
+                <th style="width: 10%;">Next Review</th>
+                <th style="width: 10%; text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
+  <div id="view-assessment" class="portal-view" style="display: none;">
+    <!-- Main Container with Sidebar Navigation + Content Area -->
+    <div class="app-layout">
     <!-- Sidebar Stepper -->
     <aside class="sidebar-nav">
       <div class="nav-header">
@@ -995,14 +1149,177 @@
       </form>
     </main>
   </div>
+  </div><!-- End of #view-assessment -->
 
-  <!-- Dedicated Executive Print Report (Generated live on Export PDF) -->
+  <!-- Modal: Register / Edit AI System -->
+  <div id="modal-register-system" class="modal-backdrop" style="display: none;">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <div>
+          <div class="section-tag">NIST AI RMF GOVERN 1.6</div>
+          <h2 id="modal-system-title">Register New AI System</h2>
+        </div>
+        <button type="button" class="btn-modal-close" id="btn-close-modal" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="form-system-registry" class="modal-body">
+        <input type="hidden" id="reg-edit-id" value="">
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-system-id">System ID *</label>
+            <input type="text" id="reg-system-id" required placeholder="e.g. AI-007">
+            <span class="field-hint">Unique identifier per AI-System-Inventory.csv</span>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-system-name">AI System Name *</label>
+            <input type="text" id="reg-system-name" required placeholder="e.g. DocuExtract OCR">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-department">Department / Business Unit *</label>
+            <input type="text" id="reg-department" required placeholder="e.g. Retail Banking & Operations">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-task-type">AI Task Type(s) *</label>
+            <input type="text" id="reg-task-type" required placeholder="e.g. NLU + RAG + Intent Classification">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-purpose">Business Purpose &amp; Intended Use *</label>
+          <textarea id="reg-purpose" rows="2" required placeholder="Describe the operational problem solved and intended business function..."></textarea>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label for="reg-risk-level">Inherent Risk Level *</label>
+            <select id="reg-risk-level" required>
+              <option value="Low">Low (🟢)</option>
+              <option value="Medium">Medium (🟡)</option>
+              <option value="High" selected>High (🟠)</option>
+              <option value="Critical">Critical (🔴)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-deployment-status">Deployment Lifecycle Status *</label>
+            <select id="reg-deployment-status" required>
+              <option value="Planning / Pre-Development">Planning / Pre-Development</option>
+              <option value="Development">Development</option>
+              <option value="Testing / TEVV">Testing / TEVV</option>
+              <option value="Piloting">Piloting</option>
+              <option value="Production" selected>Production</option>
+              <option value="Decommissioned">Decommissioned</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-tevv-status">TEVV Status *</label>
+            <select id="reg-tevv-status" required>
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Passed" selected>Passed</option>
+              <option value="Failed">Failed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-data-types">Data Types Used *</label>
+            <input type="text" id="reg-data-types" required placeholder="e.g. Customer queries, session context, non-PII">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-third-party">Third-Party Components &amp; Foundation Models</label>
+            <input type="text" id="reg-third-party" placeholder="e.g. Cloudflare Workers AI, Vectorize">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-accountable-owner">Accountable Executive Owner *</label>
+            <input type="text" id="reg-accountable-owner" required placeholder="e.g. Dr. Elena Vance (Chief AI Officer)">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-project-lead">AI Project Lead *</label>
+            <input type="text" id="reg-project-lead" required placeholder="e.g. Marcus Sterling (Lead AI Engineer)">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-dev-team">Developer / Engineering Team</label>
+            <input type="text" id="reg-dev-team" placeholder="e.g. AI/ML Engineering Team">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-operator-team">Operator Team</label>
+            <input type="text" id="reg-operator-team" placeholder="e.g. Customer Service Operations">
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label for="reg-last-review">Last Review Date</label>
+            <input type="date" id="reg-last-review" value="2026-08-15">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-next-review">Next Scheduled Review</label>
+            <input type="date" id="reg-next-review" value="2027-02-15">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-assessment-status">Impact Assessment Status</label>
+            <select id="reg-assessment-status">
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Signed Off" selected>Signed Off</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="reg-doc-link">Documentation / Context Report Link</label>
+            <input type="text" id="reg-doc-link" value="docs/02-map/MAP-AI-System-Context-Report.md">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-incident-link">Incident Log Link</label>
+            <input type="text" id="reg-incident-link" value="docs/04-manage/AI-Incident-Log.md">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-notes">Operational Notes &amp; Governance Decisions</label>
+          <textarea id="reg-notes" rows="2" placeholder="Audit observations, conditions, or decommission triggers..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary glow-btn" id="btn-save-system">Save AI System</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dedicated Executive Print Reports (Generated live on Print) -->
   <div id="print-report" class="print-report"></div>
+  <div id="print-inventory-report" class="print-report"></div>
 
   <!-- Notification Toast -->
-  <div id="toast" class="toast">Assessment saved to local storage</div>
+  <div id="toast" class="toast">Portal state saved</div>
 
   <!-- Scripts -->
+  <script src="inventory-data.js"></script>
   <script src="finassist-data.js"></script>
   <script src="app.js"></script>
 </body>
