@@ -11,58 +11,115 @@
   <link rel="stylesheet" href="styles.css?v=20261019-3">
 </head>
 <body>
-  <!-- Header Bar -->
-  <header class="app-header">
-    <div class="header-left">
-      <div class="brand-badge">
-        <span class="brand-logo">SB</span>
-        <div class="brand-info">
-          <span class="brand-title">SamaBrains <span class="gradient-text">NIST AI Governance Hub</span></span>
-          <span class="brand-sub">NIST AI Risk Management Framework 1.0 (NIST AI RMF) Operational Suite</span>
+  <div class="hub-shell" id="hub-shell">
+    <!-- LEFT SIDEBAR: 7 MODULES NAVIGATION -->
+    <aside class="hub-sidebar" id="hub-sidebar">
+      <!-- Sidebar Brand Header -->
+      <div class="sidebar-brand">
+        <div class="brand-badge">
+          <span class="brand-logo">SB</span>
+          <div class="brand-info">
+            <span class="brand-title">SamaBrains <span class="gradient-text">AI Hub</span></span>
+            <span class="brand-sub">NIST AI RMF 1.0 Suite</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Top-Level Hub Navigation Switcher -->
-    <div class="header-center">
-      <div class="hub-nav-group" role="tablist">
+      <!-- Section Label -->
+      <div class="sidebar-section-label">AI RMF 1.0 Functions</div>
+
+      <!-- Modules Navigation (Vertical Tabs) -->
+      <nav class="sidebar-modules-nav" role="tablist" id="sidebar-modules-nav">
         <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true" onclick="window.switchHubView && window.switchHubView('inventory')">
           <span class="hub-nav-icon">📋</span>
-          <span class="hub-nav-title">AI System Inventory</span>
-          <span class="hub-nav-tag">GOVERN 1.6</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">AI System Inventory</span>
+            <span class="hub-nav-tag">GOVERN 1.6</span>
+          </div>
         </button>
+
         <button type="button" class="hub-nav-btn" id="tab-nav-roles" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('roles')">
           <span class="hub-nav-icon">👥</span>
-          <span class="hub-nav-title">Roles &amp; RACI</span>
-          <span class="hub-nav-tag">GOVERN 2</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">Roles &amp; RACI</span>
+            <span class="hub-nav-tag">GOVERN 2</span>
+          </div>
         </button>
+
         <button type="button" class="hub-nav-btn" id="tab-nav-policy" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('policy')">
           <span class="hub-nav-icon">📜</span>
-          <span class="hub-nav-title">Policy &amp; Gates</span>
-          <span class="hub-nav-tag">GOVERN 1 &amp; 6</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">Policy &amp; Gates</span>
+            <span class="hub-nav-tag">GOVERN 1 &amp; 6</span>
+          </div>
         </button>
+
         <button type="button" class="hub-nav-btn" id="tab-nav-map" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('map')">
           <span class="hub-nav-icon">🗺️</span>
-          <span class="hub-nav-title">Context &amp; Harms</span>
-          <span class="hub-nav-tag">MAP 1–5</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">Context &amp; Harms</span>
+            <span class="hub-nav-tag">MAP 1–5</span>
+          </div>
         </button>
+
         <button type="button" class="hub-nav-btn" id="tab-nav-measure" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('measure')">
           <span class="hub-nav-icon">📊</span>
-          <span class="hub-nav-title">TEVV &amp; Metrics</span>
-          <span class="hub-nav-tag">MEASURE 1–4</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">TEVV &amp; Metrics</span>
+            <span class="hub-nav-tag">MEASURE 1–4</span>
+          </div>
         </button>
+
         <button type="button" class="hub-nav-btn" id="tab-nav-manage" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('manage')">
           <span class="hub-nav-icon">🛡️</span>
-          <span class="hub-nav-title">Risk &amp; Incidents</span>
-          <span class="hub-nav-tag">MANAGE 1–4</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">Risk &amp; Incidents</span>
+            <span class="hub-nav-tag">MANAGE 1–4</span>
+          </div>
         </button>
+
         <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('assessment')">
           <span class="hub-nav-icon">⚖️</span>
-          <span class="hub-nav-title">Impact Assessment</span>
-          <span class="hub-nav-tag">GOVERN 4.2 · MAP · MANAGE</span>
+          <div class="hub-nav-text">
+            <span class="hub-nav-title">Impact Assessment</span>
+            <span class="hub-nav-tag">AIIA Studio</span>
+          </div>
         </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-status-card">
+          <div class="sidebar-status-indicator">
+            <span class="pulse-dot"></span>
+            <span style="font-size: 0.78rem; font-weight: 700;">Governance Active</span>
+          </div>
+          <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
+            NIST AI 100-1 · 2026 Q4
+          </div>
+        </div>
       </div>
-    </div>
+    </aside>
+
+    <!-- Backdrop for mobile drawer -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="hub-main-wrapper">
+      <!-- Top Header Bar with Mobile Toggle, Breadcrumbs, and Action Buttons -->
+      <header class="app-header">
+        <div class="header-left">
+          <button type="button" class="sidebar-mobile-toggle" id="sidebar-mobile-toggle" aria-label="Toggle Navigation Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="header-breadcrumbs">
+            <span class="breadcrumb-root">SamaBrains Hub</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current" id="header-breadcrumb-current">AI System Inventory (GOVERN 1.6)</span>
+          </div>
+        </div>
 
     <!-- Right Header Actions (dynamic per tab) -->
     <div class="header-right">
@@ -178,8 +235,10 @@
         <span class="theme-icon sun">☀️</span>
         <span class="theme-icon moon">🌙</span>
       </button>
-    </div>
   </header>
+
+  <!-- VIEWS CONTAINER -->
+  <main class="hub-views-container">
 
   <!-- VIEW 1: AI SYSTEM INVENTORY (GOVERN 1.6) -->
   <div id="view-inventory" class="portal-view active">
@@ -2565,6 +2624,9 @@
     </main>
   </div>
   </div><!-- End of #view-assessment -->
+      </main><!-- End of .hub-views-container -->
+    </div><!-- End of .hub-main-wrapper -->
+  </div><!-- End of #hub-shell -->
 
   <!-- Modal: Register / Edit AI System -->
   <div id="modal-register-system" class="modal-backdrop" style="display: none;">

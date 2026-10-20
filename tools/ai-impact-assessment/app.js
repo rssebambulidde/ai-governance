@@ -90,6 +90,27 @@ function initAntigravityGovernanceApp() {
       updateProgress();
     }
 
+    const breadcrumbNames = {
+      inventory: 'AI System Inventory (GOVERN 1.6)',
+      roles: 'Roles & RACI Matrix (GOVERN 2)',
+      policy: 'Policy & Release Gates (GOVERN 1 & 6)',
+      map: 'Context & Harms Studio (MAP 1–5)',
+      measure: 'TEVV & Metrics Studio (MEASURE 1–4)',
+      manage: 'Risk & Incidents Studio (MANAGE 1–4)',
+      assessment: 'Impact Assessment Studio (AIIA)'
+    };
+    const breadcrumbEl = document.getElementById('header-breadcrumb-current');
+    if (breadcrumbEl && breadcrumbNames[target]) {
+      breadcrumbEl.textContent = breadcrumbNames[target];
+    }
+
+    const sidebar = document.getElementById('hub-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar?.classList.contains('sidebar-open')) {
+      sidebar.classList.remove('sidebar-open');
+      backdrop?.classList.remove('active');
+    }
+
     if (updateHash && window.location.hash !== `#${target}`) {
       try {
         window.history.replaceState(null, '', `#${target}`);
@@ -111,6 +132,21 @@ function initAntigravityGovernanceApp() {
   document.getElementById('tab-nav-measure')?.addEventListener('click', () => switchHubView('measure'));
   document.getElementById('tab-nav-manage')?.addEventListener('click', () => switchHubView('manage'));
   document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
+
+  // Mobile sidebar drawer handlers
+  const mobileToggle = document.getElementById('sidebar-mobile-toggle');
+  const sidebarEl = document.getElementById('hub-sidebar');
+  const backdropEl = document.getElementById('sidebar-backdrop');
+
+  mobileToggle?.addEventListener('click', () => {
+    sidebarEl?.classList.toggle('sidebar-open');
+    backdropEl?.classList.toggle('active');
+  });
+
+  backdropEl?.addEventListener('click', () => {
+    sidebarEl?.classList.remove('sidebar-open');
+    backdropEl?.classList.remove('active');
+  });
 
   // Inventory Data State
   let inventorySystems = [];
