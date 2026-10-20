@@ -51,6 +51,11 @@
           <span class="hub-nav-title">TEVV &amp; Metrics</span>
           <span class="hub-nav-tag">MEASURE 1–4</span>
         </button>
+        <button type="button" class="hub-nav-btn" id="tab-nav-manage" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('manage')">
+          <span class="hub-nav-icon">🛡️</span>
+          <span class="hub-nav-title">Risk &amp; Incidents</span>
+          <span class="hub-nav-tag">MANAGE 1–4</span>
+        </button>
         <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('assessment')">
           <span class="hub-nav-icon">⚖️</span>
           <span class="hub-nav-title">Impact Assessment</span>
@@ -122,6 +127,22 @@
         </button>
         <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-measure-pdf" title="Export Executive TEVV Validation Dossier PDF">
           TEVV Dossier PDF
+        </button>
+      </div>
+
+      <!-- MANAGE view actions -->
+      <div class="view-actions-manage" id="actions-manage" style="display: none;">
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-open-incident-modal" title="Log a new AI incident">
+          + Log Incident
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-manage-incidents" title="Export AI Incident Log Markdown matching docs/04-manage/AI-Incident-Log.md">
+          Incident Log MD
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-manage-improvements-csv" title="Export Continuous Improvements CSV matching docs/04-manage/MANAGE-Continuous-Improvement-Log.csv">
+          Improvements CSV
+        </button>
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-manage-pdf" title="Export Executive Incident &amp; Risk Response Dossier PDF">
+          Incident Dossier PDF
         </button>
       </div>
 
@@ -1457,6 +1478,162 @@
     </div><!-- End of .inventory-container -->
   </div><!-- End of #view-measure -->
 
+  <!-- VIEW: NIST AI RMF MANAGE STUDIO (MANAGE 1.1 - 4.3) -->
+  <div id="view-manage" class="portal-view" style="display: none;">
+    <div class="inventory-container">
+      
+      <!-- Studio Header & High-Level KPIs -->
+      <div class="inventory-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <h1 style="margin: 0;">AI Risk &amp; Incident Management (MANAGE 1–4)</h1>
+            <span class="badge badge-primary">NIST AI 100-1 MANAGE Studio</span>
+            <span class="badge badge-success">Production Live Controls</span>
+          </div>
+          <p class="text-muted" style="margin: 0; max-width: 960px;">
+            Continuous risk treatment, rapid incident containment (&lt;15 min SLA), automated circuit breakers, 
+            playbook-driven response, and post-incident continuous improvement tracking across all registered AI assets.
+          </p>
+        </div>
+      </div>
+
+      <!-- MANAGE KPIs Bar -->
+      <div class="inventory-stats" id="manage-stats-bar">
+        <!-- Rendered dynamically by app.js: total incidents, SLA compliance, response plans, improvements -->
+      </div>
+
+      <!-- MANAGE Sub-Tabs Navigation -->
+      <div class="inventory-tabs" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; overflow-x: auto;">
+        <button type="button" class="btn btn-secondary active-subtab" id="manage-tab-incidents" data-subview="incidents">
+          🚨 Incident Triage &amp; Register (MANAGE 4.1)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-playbooks" data-subview="playbooks">
+          📘 Response Playbooks A–G (MANAGE 4.2)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-responses" data-subview="responses">
+          🛡️ 13 Risk Response Plans (MANAGE 1–2)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-improvements" data-subview="improvements">
+          📈 Continuous Improvement Log (MANAGE 3–4)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-override" data-subview="override">
+          ⚡ Emergency Controls &amp; Override (MANAGE 2.3)
+        </button>
+      </div>
+
+      <!-- SUBVIEW 1: Incident Triage & Register -->
+      <div id="subview-manage-incidents" class="manage-subview">
+        <div class="inventory-filters">
+          <div class="filter-group">
+            <label for="filter-manage-system">Filter by System:</label>
+            <select id="filter-manage-system" class="form-control">
+              <option value="all">All Systems (6 Registered)</option>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-manage-severity">Severity:</label>
+            <select id="filter-manage-severity" class="form-control">
+              <option value="all">All Severities (P1–P4)</option>
+              <option value="P1">P1 - Critical (Immediate Containment)</option>
+              <option value="P2">P2 - High</option>
+              <option value="P3">P3 - Medium</option>
+              <option value="P4">P4 - Low</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-manage-status">Status:</label>
+            <select id="filter-manage-status" class="form-control">
+              <option value="all">All Statuses</option>
+              <option value="Closed">Closed / Remediation Complete</option>
+              <option value="Active">Active / Contained</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex: 1;">
+            <label for="search-manage-incidents">Search Incidents:</label>
+            <input type="text" id="search-manage-incidents" placeholder="Search by ID, keyword, root cause..." class="form-control">
+          </div>
+          <div class="filter-group" style="align-self: flex-end;">
+            <button type="button" class="btn btn-primary" id="btn-open-log-incident">
+              + Log New AI Incident
+            </button>
+          </div>
+        </div>
+
+        <div id="manage-incidents-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- SUBVIEW 2: Response Playbooks A-G -->
+      <div id="subview-manage-playbooks" class="manage-subview" style="display: none;">
+        <div style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;" id="playbook-pill-selector">
+          <!-- Playbook pills populated dynamically -->
+        </div>
+        <div id="manage-playbook-detail">
+          <!-- Playbook details rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- SUBVIEW 3: 13 Risk Response Plans -->
+      <div id="subview-manage-responses" class="manage-subview" style="display: none;">
+        <div class="inventory-filters">
+          <div class="filter-group">
+            <label for="filter-response-strategy">Response Strategy:</label>
+            <select id="filter-response-strategy" class="form-control">
+              <option value="all">All Strategies (Mitigate, Avoid, Transfer, Accept)</option>
+              <option value="Mitigate">Mitigate (Technical Controls)</option>
+              <option value="Avoid">Avoid (Process Exclusion)</option>
+              <option value="Transfer">Transfer (SLA / Contractual)</option>
+              <option value="Accept">Accept (Residual Low Risk)</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-response-category">Trustworthy Characteristic:</label>
+            <select id="filter-response-category" class="form-control">
+              <option value="all">All Characteristics</option>
+              <option value="Safe">Safe &amp; Robust</option>
+              <option value="Secure">Secure &amp; Resilient</option>
+              <option value="Accountable">Accountable &amp; Transparent</option>
+              <option value="Fair">Fair with Disparity Managed</option>
+              <option value="Privacy">Privacy-Preserving</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex: 1;">
+            <label for="search-responses">Search Response Plans:</label>
+            <input type="text" id="search-responses" placeholder="Search by Risk ID, fallback trigger, control..." class="form-control">
+          </div>
+        </div>
+        <div id="manage-responses-container">
+          <!-- Response Plans Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- SUBVIEW 4: Continuous Improvement Log -->
+      <div id="subview-manage-improvements" class="manage-subview" style="display: none;">
+        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <p class="text-muted" style="margin: 0;">
+            Audit trail of continuous organizational and algorithmic improvements driven by real-world telemetry, red-teaming, and incident debriefs (MANAGE 3.1, 4.3).
+          </p>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-export-improvements-csv">
+            📥 Download Log CSV
+          </button>
+        </div>
+        <div id="manage-improvements-container">
+          <!-- Improvements Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- SUBVIEW 5: Emergency Controls & Override -->
+      <div id="subview-manage-override" class="manage-subview" style="display: none;">
+        <div id="manage-override-container">
+          <!-- Emergency Controls & Circuit Breakers Rendered dynamically -->
+        </div>
+      </div>
+
+    </div><!-- End of .inventory-container -->
+  </div><!-- End of #view-manage -->
+
   <!-- VIEW 4: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
   <div id="view-assessment" class="portal-view" style="display: none;">
     <!-- Main Container with Sidebar Navigation + Content Area -->
@@ -2549,6 +2726,106 @@
     </div>
   </div>
 
+  <!-- Modal: Log New AI Incident (MANAGE 4.1) -->
+  <div id="modal-log-incident" class="modal-backdrop" style="display: none;">
+    <div class="modal-dialog" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3>Log New AI Incident (MANAGE 4.1 · Containment SLA &lt; 15 min)</h3>
+        <button type="button" class="modal-close" id="btn-close-incident-modal">&times;</button>
+      </div>
+      <form id="form-log-incident">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="inc-id">Incident ID</label>
+            <input type="text" id="inc-id" required readonly style="background: var(--bg-input);">
+          </div>
+          <div class="form-group">
+            <label for="inc-system">Affected AI System</label>
+            <select id="inc-system" required>
+              <option value="SYS-FIN-001">SYS-FIN-001: FinAssist Retail Banking Assistant</option>
+              <option value="SYS-FIN-002">SYS-FIN-002: FinScreen AML &amp; Fraud Detection</option>
+              <option value="SYS-HR-003">SYS-HR-003: TalentMatch Resume Screener</option>
+              <option value="SYS-OPS-004">SYS-OPS-004: SmartOps IT Incident Classifier</option>
+              <option value="SYS-OPS-005">SYS-OPS-005: DocuExtract Invoice Automation</option>
+              <option value="SYS-MKT-006">SYS-MKT-006: MarketPulse Ad Personalization</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="inc-title">Incident Title / Summary</label>
+            <input type="text" id="inc-title" placeholder="e.g. Hallucinatory promotion rate generated in chat" required>
+          </div>
+          <div class="form-group">
+            <label for="inc-severity">Severity &amp; SLA Level</label>
+            <select id="inc-severity" required>
+              <option value="P1">P1 - Critical (&lt;15m Containment, Immediate Escalation)</option>
+              <option value="P2">P2 - High (&lt;15m Containment, &lt;2h Assessment)</option>
+              <option value="P3">P3 - Medium (&lt;30m Containment, &lt;24h Assessment)</option>
+              <option value="P4">P4 - Low (&lt;1h Containment, Routine Patch)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="inc-source">Detection Source</label>
+            <select id="inc-source" required>
+              <option value="Internal Monitoring / Automated Guardrail">Internal Monitoring / Automated Guardrail</option>
+              <option value="Red Team / TEVV Adversarial Test">Red Team / TEVV Adversarial Test</option>
+              <option value="Customer / End-User Report">Customer / End-User Report</option>
+              <option value="Compliance / Regulatory Inquiry">Compliance / Regulatory Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inc-playbook">Applicable Playbook</label>
+            <select id="inc-playbook" required>
+              <option value="Playbook A">Playbook A: Generative AI Hallucination</option>
+              <option value="Playbook B">Playbook B: Sensitive Data &amp; PII Exposure</option>
+              <option value="Playbook C">Playbook C: Adversarial Injection &amp; Jailbreak</option>
+              <option value="Playbook D">Playbook D: Customer Distress Detection Failure</option>
+              <option value="Playbook E">Playbook E: Infrastructure Outage &amp; High Latency</option>
+              <option value="Playbook F">Playbook F: Regulatory Inquiry or Audit Finding</option>
+              <option value="Playbook G">Playbook G: Demographic Disparity &amp; Bias</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="inc-detected">Detected Timestamp</label>
+            <input type="datetime-local" id="inc-detected" required>
+          </div>
+          <div class="form-group">
+            <label for="inc-contained">Contained Timestamp</label>
+            <input type="datetime-local" id="inc-contained" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inc-rootcause">Root Cause Analysis</label>
+          <textarea id="inc-rootcause" rows="2" placeholder="Underlying vulnerability, model limitation, or drift factor..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="inc-containment">Immediate Containment Action (SLA &lt;15 min)</label>
+          <input type="text" id="inc-containment" placeholder="e.g. Activated fallback template; quarantined affected session" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inc-remediation">Long-Term Corrective Action / TEVV Gate</label>
+          <textarea id="inc-remediation" rows="2" placeholder="Prompt hardening, semantic cache invalidation, guardrail threshold update..." required></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-incident-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary glow-btn" id="btn-save-incident">Register Incident &amp; Trigger SLA</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Dedicated Executive Print Reports (Generated live on Print) -->
   <div id="print-report" class="print-report"></div>
   <div id="print-inventory-report" class="print-report"></div>
@@ -2556,6 +2833,7 @@
   <div id="print-policy-report" class="print-report"></div>
   <div id="print-map-report" class="print-report"></div>
   <div id="print-measure-report" class="print-report"></div>
+  <div id="print-manage-report" class="print-report"></div>
 
   <!-- Notification Toast -->
   <div id="toast" class="toast">Portal state saved</div>
@@ -2566,6 +2844,7 @@
   <script src="policy-data.js?v=20261020-1"></script>
   <script src="map-data.js?v=20261020-1"></script>
   <script src="measure-data.js?v=20261020-1"></script>
+  <script src="manage-data.js?v=20261020-1"></script>
   <script src="finassist-data.js?v=20261020-1"></script>
   <script src="app.js?v=20261020-1"></script>
 </body>

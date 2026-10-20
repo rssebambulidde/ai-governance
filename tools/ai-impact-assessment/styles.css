@@ -1770,7 +1770,11 @@ h1, h2, h3, h4, .brand-title {
 /* Hide print report from normal screen view */
 #print-report,
 #print-inventory-report,
-#print-roles-report {
+#print-roles-report,
+#print-policy-report,
+#print-map-report,
+#print-measure-report,
+#print-manage-report {
   display: none !important;
 }
 
@@ -1824,7 +1828,8 @@ h1, h2, h3, h4, .brand-title {
   #print-roles-report,
   #print-policy-report,
   #print-map-report,
-  #print-measure-report {
+  #print-measure-report,
+  #print-manage-report {
     display: block !important;
     visibility: visible !important;
     position: static !important;
@@ -1841,7 +1846,8 @@ h1, h2, h3, h4, .brand-title {
   #print-roles-report *,
   #print-policy-report *,
   #print-map-report *,
-  #print-measure-report * {
+  #print-measure-report *,
+  #print-manage-report * {
     box-sizing: border-box !important;
   }
 

@@ -77,7 +77,17 @@ The web hub operationalizes governance workflows into six interactive modules:
 * **TEVV Lifecycle Roadmap & GATE-03 Sign-Off:** Pre-deployment Weeks 1–20 testing milestone schedule and formal GATE-03 verification certificate.
 * **Executive TEVV Dossier PDF:** Corporate print-optimized audit dossier for independent verification, committee sign-off, and regulatory examination.
 
-### Module 6: Impact Assessment Studio (GOVERN 4.2 · MAP · MANAGE)
+### Module 6: Risk & Incident Management Studio (MANAGE 1–4 · NIST AI 100-1)
+* Operationalization of [`AI-Incident-Log.md`](docs/04-manage/AI-Incident-Log.md), [`MANAGE-Incident-Response-Playbook.md`](docs/04-manage/MANAGE-Incident-Response-Playbook.md), [`MANAGE-Risk-Response-Plan.md`](docs/04-manage/MANAGE-Risk-Response-Plan.md), and [`MANAGE-Continuous-Improvement-Log.csv`](docs/04-manage/MANAGE-Continuous-Improvement-Log.csv).
+* **Incident Triage & Logging Register (MANAGE 4.1):** Live tracking of production AI incidents (`INC-2026-001` through `INC-2026-006`) with severity classification (P1 Critical through P4 Low), detection source analysis, containment SLAs, and interactive modal to log new incidents with auto-stamped audit trails.
+* **15-Minute Containment SLA Enforcement:** Deterministic compliance tracking ensuring critical generative AI failures are quarantined or routed to static templates within 15 minutes.
+* **7 Incident Response Playbooks (Playbooks A–G · MANAGE 4.2):** Full operational playbooks covering Hallucination, PII Exposure, Adversarial Jailbreak, Customer Distress Failure, Infrastructure Outage, Regulatory Inquiry, and Demographic Disparity with 4-phase interactive checklists (Containment <15m, Impact <2h, Root Cause <24h, Restoration).
+* **13 Mapped Risk Response Plans (MANAGE 1.1–2.4):** Comprehensive catalog mapping technical controls, fallback triggers, and human-in-the-loop protocols for all 13 enterprise harm scenarios (`R-01` to `R-13`) categorized across Avoidance, Mitigation, Transfer, and Acceptance.
+* **Continuous Improvement Audit Log (MANAGE 3.1 · 4.3):** Closed-loop logging of empirical retrainings, prompt hardening, and TEVV verification suites derived from operational incidents and red-team audits.
+* **Emergency Circuit Breakers & Override Dashboard (MANAGE 2.3):** Live controls to enforce safe-mode fallbacks, mandate human-in-the-loop approvals, adjust guardrail sensitivity, or trigger emergency decommissioning per Policy G-POL-04.
+* **Multi-Format Exports & Executive Incident Dossier:** Export AI Incident Log to audit-ready Markdown, Continuous Improvements to CSV, and live generation of executive printable incident dossier PDF.
+
+### Module 7: Impact Assessment Studio (GOVERN 4.2 · MAP · MANAGE)
 * 10-part assessment wizard covering business context, trustworthy alignment, legal thresholds, harms, mitigations, and stakeholder consultations.
 * Interactive Likelihood (1–5) $\times$ Impact (1–5) calculation with dynamic heat badges and risk scorecards.
 * One-click preset to load the FinAssist AI banking case study or start a blank assessment.

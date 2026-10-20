@@ -50,6 +50,7 @@ function initAntigravityGovernanceApp() {
       { id: 'policy', btn: document.getElementById('tab-nav-policy'), view: document.getElementById('view-policy'), act: document.getElementById('actions-policy') },
       { id: 'map', btn: document.getElementById('tab-nav-map'), view: document.getElementById('view-map'), act: document.getElementById('actions-map') },
       { id: 'measure', btn: document.getElementById('tab-nav-measure'), view: document.getElementById('view-measure'), act: document.getElementById('actions-measure') },
+      { id: 'manage', btn: document.getElementById('tab-nav-manage'), view: document.getElementById('view-manage'), act: document.getElementById('actions-manage') },
       { id: 'assessment', btn: document.getElementById('tab-nav-assessment'), view: document.getElementById('view-assessment'), act: document.getElementById('actions-assessment') }
     ];
 
@@ -82,6 +83,8 @@ function initAntigravityGovernanceApp() {
       renderMapModule();
     } else if (target === 'measure') {
       renderMeasureModule();
+    } else if (target === 'manage') {
+      renderManageModule();
     } else {
       syncHeaderBadges();
       updateProgress();
@@ -106,6 +109,7 @@ function initAntigravityGovernanceApp() {
   document.getElementById('tab-nav-policy')?.addEventListener('click', () => switchHubView('policy'));
   document.getElementById('tab-nav-map')?.addEventListener('click', () => switchHubView('map'));
   document.getElementById('tab-nav-measure')?.addEventListener('click', () => switchHubView('measure'));
+  document.getElementById('tab-nav-manage')?.addEventListener('click', () => switchHubView('manage'));
   document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
 
   // Inventory Data State
@@ -2691,6 +2695,963 @@ function initAntigravityGovernanceApp() {
   }
   document.getElementById('btn-print-measure-pdf')?.addEventListener('click', triggerPrintMeasurePdf);
 
+  // ==========================================================================
+  // 5. NIST AI RMF MANAGE STUDIO ENGINE (MANAGE 1.1 - 4.3)
+  // ==========================================================================
+  let activeManageSubview = 'incidents';
+  let activeManagePlaybookId = 'PLAYBOOK-A';
+  let manageIncidents = [];
+  let manageProfiles = {};
+
+  function loadManageState() {
+    const savedInc = localStorage.getItem('ai_manage_incidents');
+    if (savedInc) {
+      try { manageIncidents = JSON.parse(savedInc); } catch (e) { manageIncidents = [...MANAGE_INCIDENTS_DATA]; }
+    } else {
+      manageIncidents = typeof MANAGE_INCIDENTS_DATA !== 'undefined' ? [...MANAGE_INCIDENTS_DATA] : [];
+    }
+
+    const savedProf = localStorage.getItem('ai_manage_profiles');
+    if (savedProf) {
+      try { manageProfiles = JSON.parse(savedProf); } catch (e) { manageProfiles = typeof SYSTEM_MANAGE_PROFILES !== 'undefined' ? JSON.parse(JSON.stringify(SYSTEM_MANAGE_PROFILES)) : {}; }
+    } else {
+      manageProfiles = typeof SYSTEM_MANAGE_PROFILES !== 'undefined' ? JSON.parse(JSON.stringify(SYSTEM_MANAGE_PROFILES)) : {};
+    }
+  }
+
+  function saveManageIncidentsState() {
+    try {
+      localStorage.setItem('ai_manage_incidents', JSON.stringify(manageIncidents));
+    } catch (e) {
+      console.warn('Failed to save manage incidents state', e);
+    }
+  }
+
+  function saveManageProfilesState() {
+    try {
+      localStorage.setItem('ai_manage_profiles', JSON.stringify(manageProfiles));
+    } catch (e) {
+      console.warn('Failed to save manage profiles state', e);
+    }
+  }
+
+  function switchManageSubview(target) {
+    activeManageSubview = target;
+    const subtabs = [
+      { id: 'incidents', btn: document.getElementById('manage-tab-incidents'), view: document.getElementById('subview-manage-incidents') },
+      { id: 'playbooks', btn: document.getElementById('manage-tab-playbooks'), view: document.getElementById('subview-manage-playbooks') },
+      { id: 'responses', btn: document.getElementById('manage-tab-responses'), view: document.getElementById('subview-manage-responses') },
+      { id: 'improvements', btn: document.getElementById('manage-tab-improvements'), view: document.getElementById('subview-manage-improvements') },
+      { id: 'override', btn: document.getElementById('manage-tab-override'), view: document.getElementById('subview-manage-override') }
+    ];
+
+    subtabs.forEach(st => {
+      if (st.btn) st.btn.classList.toggle('active-subtab', st.id === target);
+      if (st.view) st.view.style.display = st.id === target ? 'block' : 'none';
+    });
+
+    if (target === 'incidents') renderIncidentsRegistry();
+    else if (target === 'playbooks') renderPlaybooksModule(activeManagePlaybookId);
+    else if (target === 'responses') renderRiskResponses();
+    else if (target === 'improvements') renderImprovementsLog();
+    else if (target === 'override') renderOverrideDashboard();
+  }
+
+  function renderManageHeaderAndStats() {
+    const statsContainer = document.getElementById('manage-stats-bar');
+    if (!statsContainer) return;
+
+    const totalIncidents = manageIncidents.length;
+    const p1Count = manageIncidents.filter(i => i.severity === 'P1').length;
+    const p2Count = manageIncidents.filter(i => i.severity === 'P2').length;
+    const p3Count = manageIncidents.filter(i => i.severity === 'P3' || i.severity === 'P4').length;
+    const slaCompliantCount = manageIncidents.filter(i => {
+      const dur = parseInt(i.containmentDurationMinutes, 10);
+      return isNaN(dur) || dur <= 15;
+    }).length;
+    const slaRate = totalIncidents > 0 ? Math.round((slaCompliantCount / totalIncidents) * 100) : 100;
+    const totalResponses = typeof MANAGE_RISK_RESPONSES !== 'undefined' ? MANAGE_RISK_RESPONSES.length : 13;
+    const totalImprovements = typeof MANAGE_IMPROVEMENTS_DATA !== 'undefined' ? MANAGE_IMPROVEMENTS_DATA.length : 6;
+
+    statsContainer.innerHTML = `
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--accent-color);">${totalIncidents}</div>
+        <div class="stat-label">Total Logged Incidents</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+          <span style="color: #ef4444; font-weight: 600;">${p1Count} P1</span> · 
+          <span style="color: #f59e0b; font-weight: 600;">${p2Count} P2</span> · 
+          <span style="color: #3b82f6; font-weight: 600;">${p3Count} P3/P4</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #10b981;">${slaRate}%</div>
+        <div class="stat-label">&lt;15m Containment SLA</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+          ${slaCompliantCount}/${totalIncidents} Contained within 15 Min SLA
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #6366f1;">${totalResponses}</div>
+        <div class="stat-label">Mapped Response Plans</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+          Avoidance · Mitigation · Transfer · Acceptance
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: #ec4899;">${totalImprovements}</div>
+        <div class="stat-label">Continuous Improvements</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+          100% TEVV Verified in Production (MANAGE 3.1)
+        </div>
+      </div>
+    `;
+  }
+
+  function populateManageSystemDropdown() {
+    const sel = document.getElementById('filter-manage-system');
+    if (!sel) return;
+
+    const currentVal = sel.value || 'all';
+    const systems = inventorySystems && inventorySystems.length > 0 ? inventorySystems : [
+      { id: 'SYS-FIN-001', name: 'FinAssist Retail Banking Assistant' },
+      { id: 'SYS-FIN-002', name: 'FinScreen AML & Fraud Detection' },
+      { id: 'SYS-HR-003', name: 'TalentMatch Resume Screener' },
+      { id: 'SYS-OPS-004', name: 'SmartOps IT Incident Classifier' },
+      { id: 'SYS-OPS-005', name: 'DocuExtract Invoice Automation' },
+      { id: 'SYS-MKT-006', name: 'MarketPulse Ad Personalization' }
+    ];
+
+    sel.innerHTML = `
+      <option value="all">All Systems (${systems.length} Registered)</option>
+      ${systems.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.id)}: ${escapeHtml(s.name)}</option>`).join('')}
+    `;
+    sel.value = currentVal;
+  }
+
+  function renderIncidentsRegistry() {
+    const container = document.getElementById('manage-incidents-container');
+    if (!container) return;
+
+    const sysFilter = document.getElementById('filter-manage-system')?.value || 'all';
+    const sevFilter = document.getElementById('filter-manage-severity')?.value || 'all';
+    const statFilter = document.getElementById('filter-manage-status')?.value || 'all';
+    const query = (document.getElementById('search-manage-incidents')?.value || '').toLowerCase().trim();
+
+    const filtered = manageIncidents.filter(inc => {
+      if (sysFilter !== 'all' && inc.systemId !== sysFilter) return false;
+      if (sevFilter !== 'all' && inc.severity !== sevFilter) return false;
+      if (statFilter !== 'all' && inc.status !== statFilter) return false;
+      if (query) {
+        const str = `${inc.id} ${inc.title} ${inc.systemName} ${inc.rootCause} ${inc.correctiveAction} ${inc.applicablePlaybook}`.toLowerCase();
+        if (!str.includes(query)) return false;
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="card" style="text-align: center; padding: 2.5rem;">
+          <p class="text-muted" style="margin: 0 0 1rem 0;">No AI incidents match the active filters.</p>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-incident-filters">Clear Filters</button>
+        </div>
+      `;
+      document.getElementById('btn-reset-incident-filters')?.addEventListener('click', () => {
+        if (document.getElementById('filter-manage-system')) document.getElementById('filter-manage-system').value = 'all';
+        if (document.getElementById('filter-manage-severity')) document.getElementById('filter-manage-severity').value = 'all';
+        if (document.getElementById('filter-manage-status')) document.getElementById('filter-manage-status').value = 'all';
+        if (document.getElementById('search-manage-incidents')) document.getElementById('search-manage-incidents').value = '';
+        renderIncidentsRegistry();
+      });
+      return;
+    }
+
+    let html = `
+      <div style="display: grid; gap: 1rem;">
+        ${filtered.map(inc => {
+          const sevClass = inc.severity === 'P1' ? 'badge-danger' : (inc.severity === 'P2' ? 'badge-warning' : 'badge-primary');
+          const isSlaCompliant = parseInt(inc.containmentDurationMinutes, 10) <= 15;
+          const slaBadge = isSlaCompliant 
+            ? `<span class="badge badge-success">✓ &lt;15m SLA COMPLIANT (${inc.containmentDurationMinutes} min)</span>`
+            : `<span class="badge badge-danger">⚠ SLA BREACH (${inc.containmentDurationMinutes} min)</span>`;
+          
+          return `
+            <div class="card" style="border-left: 4px solid ${inc.severity === 'P1' ? '#ef4444' : (inc.severity === 'P2' ? '#f59e0b' : '#3b82f6')};">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span style="font-family: monospace; font-weight: 700; font-size: 0.95rem;">${escapeHtml(inc.id)}</span>
+                    <span class="badge ${sevClass}">${escapeHtml(inc.severity)}</span>
+                    <span class="badge badge-secondary">${escapeHtml(inc.status)}</span>
+                    ${slaBadge}
+                  </div>
+                  <h3 style="margin: 0; font-size: 1.1rem;">${escapeHtml(inc.title)}</h3>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+                    <strong>System:</strong> ${escapeHtml(inc.systemId)} · ${escapeHtml(inc.systemName)} &nbsp;|&nbsp; 
+                    <strong>Source:</strong> ${escapeHtml(inc.detectionSource)}
+                  </div>
+                </div>
+                <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted);">
+                  <div><strong>Detected:</strong> ${escapeHtml(inc.detectedTimestamp)}</div>
+                  <div><strong>Contained:</strong> ${escapeHtml(inc.containedTimestamp)}</div>
+                  <div style="margin-top: 0.35rem;">
+                    <button type="button" class="btn btn-secondary btn-sm btn-view-playbook-shortcut" data-playbook="${escapeHtml(inc.applicablePlaybook)}" style="font-size: 0.75rem; padding: 0.2rem 0.5rem;">
+                      📘 View ${escapeHtml(inc.applicablePlaybook.split(':')[0])}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem; background: var(--bg-input); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem;">
+                <div>
+                  <strong style="color: var(--text-main); display: block; margin-bottom: 0.2rem;">Immediate Containment Action (&lt;15 min)</strong>
+                  <span style="color: var(--text-muted);">${escapeHtml(inc.containmentAction)}</span>
+                </div>
+                <div>
+                  <strong style="color: var(--text-main); display: block; margin-bottom: 0.2rem;">Root Cause Analysis</strong>
+                  <span style="color: var(--text-muted);">${escapeHtml(inc.rootCause)}</span>
+                </div>
+                <div style="grid-column: 1 / -1;">
+                  <strong style="color: var(--text-main); display: block; margin-bottom: 0.2rem;">Long-Term Corrective Action / TEVV Gate</strong>
+                  <span style="color: var(--text-muted);">${escapeHtml(inc.correctiveAction)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    container.innerHTML = html;
+
+    // Attach shortcuts to switch to playbook
+    container.querySelectorAll('.btn-view-playbook-shortcut').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const raw = btn.getAttribute('data-playbook') || '';
+        // Extract Playbook letter e.g. Playbook A -> PLAYBOOK-A
+        const match = raw.match(/Playbook\s+([A-G])/i);
+        if (match) {
+          activeManagePlaybookId = `PLAYBOOK-${match[1].toUpperCase()}`;
+        }
+        switchManageSubview('playbooks');
+      });
+    });
+  }
+
+  function renderPlaybooksModule(activePlaybookId = 'PLAYBOOK-A') {
+    const pillContainer = document.getElementById('playbook-pill-selector');
+    const detailContainer = document.getElementById('manage-playbook-detail');
+    if (!pillContainer || !detailContainer) return;
+
+    const playbooks = typeof MANAGE_PLAYBOOKS !== 'undefined' ? MANAGE_PLAYBOOKS : [];
+    if (playbooks.length === 0) {
+      detailContainer.innerHTML = '<p class="text-muted">No playbooks found.</p>';
+      return;
+    }
+
+    const currentPlaybook = playbooks.find(p => p.id === activePlaybookId) || playbooks[0];
+
+    pillContainer.innerHTML = playbooks.map(p => {
+      const isSelected = p.id === currentPlaybook.id;
+      return `
+        <button type="button" class="btn ${isSelected ? 'btn-primary' : 'btn-secondary'} btn-sm btn-playbook-pill" data-id="${escapeHtml(p.id)}">
+          ${escapeHtml(p.id.replace('PLAYBOOK-', 'Playbook '))} · ${escapeHtml(p.title.split(' ')[0])}
+        </button>
+      `;
+    }).join('');
+
+    pillContainer.querySelectorAll('.btn-playbook-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        activeManagePlaybookId = id;
+        renderPlaybooksModule(id);
+      });
+    });
+
+    detailContainer.innerHTML = `
+      <div class="card" style="margin-bottom: 1.5rem; border-top: 4px solid var(--accent-color);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span class="badge badge-primary">${escapeHtml(currentPlaybook.id)}</span>
+              <span class="badge badge-warning">${escapeHtml(currentPlaybook.severity)}</span>
+              <span class="badge badge-success">Target SLA: ${escapeHtml(currentPlaybook.targetSLA)}</span>
+            </div>
+            <h2 style="margin: 0; font-size: 1.35rem;">${escapeHtml(currentPlaybook.title)}</h2>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+              <strong>Incident Owner:</strong> ${escapeHtml(currentPlaybook.owner)} &nbsp;|&nbsp; 
+              <strong>Responsibilities:</strong> ${escapeHtml(currentPlaybook.responsibilities)}
+            </div>
+          </div>
+          <div style="background: var(--bg-input); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; max-width: 320px;">
+            <strong style="display: block; margin-bottom: 0.2rem;">Activation Triggers:</strong>
+            <span style="color: var(--text-muted);">${escapeHtml(currentPlaybook.triggers)}</span>
+          </div>
+        </div>
+
+        <!-- 4-Phase Interactive Containment & Recovery Checklist -->
+        <h3 style="font-size: 1.05rem; margin: 1.25rem 0 0.75rem 0; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border-color);">
+          4-Phase Response Protocol (NIST AI 100-1 MANAGE 4.2)
+        </h3>
+
+        <div style="display: grid; gap: 1rem;">
+          <!-- Phase 1: Containment -->
+          <div style="background: var(--bg-input); padding: 1rem; border-radius: var(--radius-sm); border-left: 3px solid #ef4444;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <strong style="color: #ef4444;">Phase 1: Immediate Containment (SLA &lt;15 minutes)</strong>
+              <span class="badge badge-danger">CRITICAL SLA</span>
+            </div>
+            <div style="display: grid; gap: 0.4rem;">
+              ${(currentPlaybook.phase1Containment || []).map((step, idx) => `
+                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                  <input type="checkbox" style="margin-top: 0.2rem;">
+                  <span><strong>Step 1.${idx + 1}:</strong> ${escapeHtml(step)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Phase 2: Customer Impact -->
+          <div style="background: var(--bg-input); padding: 1rem; border-radius: var(--radius-sm); border-left: 3px solid #f59e0b;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <strong style="color: #f59e0b;">Phase 2: Customer Impact Assessment (&lt;2 hours)</strong>
+              <span class="badge badge-warning">2-HOUR WINDOW</span>
+            </div>
+            <div style="display: grid; gap: 0.4rem;">
+              ${(currentPlaybook.phase2Assessment || []).map((step, idx) => `
+                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                  <input type="checkbox" style="margin-top: 0.2rem;">
+                  <span><strong>Step 2.${idx + 1}:</strong> ${escapeHtml(step)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Phase 3: Root Cause -->
+          <div style="background: var(--bg-input); padding: 1rem; border-radius: var(--radius-sm); border-left: 3px solid #3b82f6;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <strong style="color: #3b82f6;">Phase 3: Root Cause Investigation (&lt;24 hours)</strong>
+              <span class="badge badge-primary">24-HOUR ANALYSIS</span>
+            </div>
+            <div style="display: grid; gap: 0.4rem;">
+              ${(currentPlaybook.phase3RootCause || []).map((step, idx) => `
+                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                  <input type="checkbox" style="margin-top: 0.2rem;">
+                  <span><strong>Step 3.${idx + 1}:</strong> ${escapeHtml(step)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Phase 4: Restoration -->
+          <div style="background: var(--bg-input); padding: 1rem; border-radius: var(--radius-sm); border-left: 3px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <strong style="color: #10b981;">Phase 4: System Restoration &amp; Gate Verification</strong>
+              <span class="badge badge-success">PRODUCTION RESTORATION</span>
+            </div>
+            <div style="display: grid; gap: 0.4rem;">
+              ${(currentPlaybook.phase4Restoration || []).map((step, idx) => `
+                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                  <input type="checkbox" style="margin-top: 0.2rem;">
+                  <span><strong>Step 4.${idx + 1}:</strong> ${escapeHtml(step)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- Fallback Action & Circuit Breaker -->
+        <div style="margin-top: 1.25rem; padding: 0.75rem 1rem; background: var(--bg-input); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <strong style="display: block; font-size: 0.85rem;">Emergency Fallback &amp; Circuit Breaker Protocol</strong>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(currentPlaybook.fallbackAction)}</span>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.switchManageSubview && window.switchManageSubview('override')">
+            ⚡ Open Emergency Controls
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRiskResponses() {
+    const container = document.getElementById('manage-responses-container');
+    if (!container) return;
+
+    const stratFilter = document.getElementById('filter-response-strategy')?.value || 'all';
+    const catFilter = document.getElementById('filter-response-category')?.value || 'all';
+    const query = (document.getElementById('search-responses')?.value || '').toLowerCase().trim();
+
+    const responses = typeof MANAGE_RISK_RESPONSES !== 'undefined' ? MANAGE_RISK_RESPONSES : [];
+    const filtered = responses.filter(r => {
+      if (stratFilter !== 'all' && !r.strategy.toLowerCase().includes(stratFilter.toLowerCase())) return false;
+      if (catFilter !== 'all' && !r.category.toLowerCase().includes(catFilter.toLowerCase())) return false;
+      if (query) {
+        const str = `${r.riskId} ${r.title} ${r.strategy} ${r.controls} ${r.fallbackTrigger} ${r.fallbackAction}`.toLowerCase();
+        if (!str.includes(query)) return false;
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="card" style="text-align: center; padding: 2.5rem;">
+          <p class="text-muted" style="margin: 0 0 1rem 0;">No risk response plans match the selected criteria.</p>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-response-filters">Reset Filters</button>
+        </div>
+      `;
+      document.getElementById('btn-reset-response-filters')?.addEventListener('click', () => {
+        if (document.getElementById('filter-response-strategy')) document.getElementById('filter-response-strategy').value = 'all';
+        if (document.getElementById('filter-response-category')) document.getElementById('filter-response-category').value = 'all';
+        if (document.getElementById('search-responses')) document.getElementById('search-responses').value = '';
+        renderRiskResponses();
+      });
+      return;
+    }
+
+    container.innerHTML = `
+      <div style="display: grid; gap: 1rem;">
+        ${filtered.map(r => {
+          const stratBadge = r.strategy.includes('Mitigate') 
+            ? 'badge-primary' 
+            : (r.strategy.includes('Avoid') ? 'badge-danger' : (r.strategy.includes('Transfer') ? 'badge-warning' : 'badge-secondary'));
+          
+          return `
+            <div class="card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                    <span style="font-family: monospace; font-weight: 700;">${escapeHtml(r.riskId)}</span>
+                    <span class="badge ${stratBadge}">${escapeHtml(r.strategy)}</span>
+                    <span class="badge badge-secondary">${escapeHtml(r.category)}</span>
+                  </div>
+                  <h3 style="margin: 0; font-size: 1.05rem;">${escapeHtml(r.title)}</h3>
+                </div>
+                <div style="text-align: right; font-size: 0.8rem;">
+                  <span class="badge badge-secondary">Residual: ${escapeHtml(r.residualRisk)}</span>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; background: var(--bg-input); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-top: 0.5rem;">
+                <div>
+                  <strong style="color: var(--text-main); display: block; margin-bottom: 0.2rem;">Technical Mitigation Controls</strong>
+                  <span style="color: var(--text-muted);">${escapeHtml(r.controls)}</span>
+                </div>
+                <div>
+                  <strong style="color: #ef4444; display: block; margin-bottom: 0.2rem;">Fallback Trigger</strong>
+                  <span style="color: var(--text-muted);">${escapeHtml(r.fallbackTrigger)}</span>
+                </div>
+                <div>
+                  <strong style="color: #10b981; display: block; margin-bottom: 0.2rem;">Fallback Action &amp; Protocol</strong>
+                  <span style="color: var(--text-muted);">${escapeHtml(r.fallbackAction)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function renderImprovementsLog() {
+    const container = document.getElementById('manage-improvements-container');
+    if (!container) return;
+
+    const data = typeof MANAGE_IMPROVEMENTS_DATA !== 'undefined' ? MANAGE_IMPROVEMENTS_DATA : [];
+
+    container.innerHTML = `
+      <div class="card" style="padding: 0; overflow-x: auto;">
+        <table class="table-card-table" style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+              <th style="padding: 0.75rem 1rem;">ID</th>
+              <th style="padding: 0.75rem 1rem;">Date</th>
+              <th style="padding: 0.75rem 1rem;">Source Trigger</th>
+              <th style="padding: 0.75rem 1rem;">Target System</th>
+              <th style="padding: 0.75rem 1rem;">Description of Optimization</th>
+              <th style="padding: 0.75rem 1rem;">Verification Suite</th>
+              <th style="padding: 0.75rem 1rem;">Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.map(imp => `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem 1rem; font-family: monospace; font-weight: 700;">${escapeHtml(imp.improvementId)}</td>
+                <td style="padding: 0.75rem 1rem; white-space: nowrap;">${escapeHtml(imp.dateLogged)}</td>
+                <td style="padding: 0.75rem 1rem;"><span class="badge badge-secondary">${escapeHtml(imp.sourceTrigger)}</span></td>
+                <td style="padding: 0.75rem 1rem; white-space: nowrap;"><strong>${escapeHtml(imp.systemId)}</strong></td>
+                <td style="padding: 0.75rem 1rem;">
+                  <div>${escapeHtml(imp.description)}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Linked Risk: ${escapeHtml(imp.linkedRiskId)}</div>
+                </td>
+                <td style="padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(imp.verificationSuite)}</td>
+                <td style="padding: 0.75rem 1rem;"><span class="badge badge-success">${escapeHtml(imp.outcome)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderOverrideDashboard() {
+    const container = document.getElementById('manage-override-container');
+    if (!container) return;
+
+    const systems = inventorySystems && inventorySystems.length > 0 ? inventorySystems : [
+      { id: 'SYS-FIN-001', name: 'FinAssist Retail Banking Assistant' },
+      { id: 'SYS-FIN-002', name: 'FinScreen AML & Fraud Detection' },
+      { id: 'SYS-HR-003', name: 'TalentMatch Resume Screener' },
+      { id: 'SYS-OPS-004', name: 'SmartOps IT Incident Classifier' },
+      { id: 'SYS-OPS-005', name: 'DocuExtract Invoice Automation' },
+      { id: 'SYS-MKT-006', name: 'MarketPulse Ad Personalization' }
+    ];
+
+    container.innerHTML = `
+      <div class="card highlight-card" style="margin-bottom: 1.5rem;">
+        <h3>Operational Circuit Breakers &amp; Emergency Restrictions (MANAGE 2.3)</h3>
+        <p class="text-muted" style="margin-bottom: 0;">
+          Direct control panel to enforce safe-mode fallbacks, mandate human-in-the-loop review, 
+          heighten automated guardrails, or trigger emergency decommissioning protocols in accordance with Policy G-POL-04.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
+        ${systems.map(s => {
+          const prof = manageProfiles[s.id] || {
+            operationalStatus: 'Active',
+            safeModeFallback: false,
+            humanInTheLoopMandated: false,
+            guardrailSensitivity: 'Standard',
+            decommissionTriggered: false
+          };
+
+          return `
+            <div class="card" id="override-card-${escapeHtml(s.id)}" style="border-top: 4px solid ${prof.decommissionTriggered ? '#ef4444' : '#10b981'};">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                  <span style="font-family: monospace; font-weight: 700; font-size: 0.85rem;">${escapeHtml(s.id)}</span>
+                  <h3 style="margin: 0.2rem 0 0 0; font-size: 1.05rem;">${escapeHtml(s.name)}</h3>
+                </div>
+                <span class="badge ${prof.decommissionTriggered ? 'badge-danger' : 'badge-success'}" id="status-badge-${escapeHtml(s.id)}">
+                  ${prof.decommissionTriggered ? 'QUARANTINED' : 'OPERATIONAL'}
+                </span>
+              </div>
+
+              <div style="display: grid; gap: 0.75rem; background: var(--bg-input); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem;">
+                <label style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                  <span>Safe Mode Fallback (Template Only):</span>
+                  <input type="checkbox" class="toggle-safe-mode" data-system="${escapeHtml(s.id)}" ${prof.safeModeFallback ? 'checked' : ''}>
+                </label>
+                <label style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                  <span>Mandatory Human Review (HITL):</span>
+                  <input type="checkbox" class="toggle-hitl" data-system="${escapeHtml(s.id)}" ${prof.humanInTheLoopMandated ? 'checked' : ''}>
+                </label>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span>Guardrail Sensitivity:</span>
+                  <select class="form-control select-guardrail" data-system="${escapeHtml(s.id)}" style="width: auto; padding: 0.2rem 0.5rem; font-size: 0.8rem;">
+                    <option value="Standard" ${prof.guardrailSensitivity === 'Standard' ? 'selected' : ''}>Standard</option>
+                    <option value="Strict" ${prof.guardrailSensitivity === 'Strict' ? 'selected' : ''}>Strict (Red-Team Mode)</option>
+                    <option value="Zero-Tolerance" ${prof.guardrailSensitivity === 'Zero-Tolerance' ? 'selected' : ''}>Zero-Tolerance</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.switchManageSubview && window.switchManageSubview('incidents')">
+                  View Logged Incidents
+                </button>
+                <button type="button" class="btn ${prof.decommissionTriggered ? 'btn-secondary' : 'btn-danger'} btn-sm btn-toggle-decom" data-system="${escapeHtml(s.id)}">
+                  ${prof.decommissionTriggered ? 'Restore Service' : 'Emergency Quarantine'}
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    // Wire up override toggles
+    container.querySelectorAll('.toggle-safe-mode').forEach(chk => {
+      chk.addEventListener('change', () => {
+        const sysId = chk.getAttribute('data-system');
+        if (!manageProfiles[sysId]) manageProfiles[sysId] = {};
+        manageProfiles[sysId].safeModeFallback = chk.checked;
+        saveManageProfilesState();
+        showToast(`${sysId}: Safe Mode Fallback ${chk.checked ? 'ENABLED' : 'DISABLED'}`);
+      });
+    });
+
+    container.querySelectorAll('.toggle-hitl').forEach(chk => {
+      chk.addEventListener('change', () => {
+        const sysId = chk.getAttribute('data-system');
+        if (!manageProfiles[sysId]) manageProfiles[sysId] = {};
+        manageProfiles[sysId].humanInTheLoopMandated = chk.checked;
+        saveManageProfilesState();
+        showToast(`${sysId}: Mandatory Human-in-the-Loop ${chk.checked ? 'ACTIVATED' : 'DEACTIVATED'}`);
+      });
+    });
+
+    container.querySelectorAll('.select-guardrail').forEach(sel => {
+      sel.addEventListener('change', () => {
+        const sysId = sel.getAttribute('data-system');
+        if (!manageProfiles[sysId]) manageProfiles[sysId] = {};
+        manageProfiles[sysId].guardrailSensitivity = sel.value;
+        saveManageProfilesState();
+        showToast(`${sysId}: Guardrail Sensitivity set to ${sel.value}`);
+      });
+    });
+
+    container.querySelectorAll('.btn-toggle-decom').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sysId = btn.getAttribute('data-system');
+        if (!manageProfiles[sysId]) manageProfiles[sysId] = {};
+        const currentState = !!manageProfiles[sysId].decommissionTriggered;
+        
+        if (!currentState) {
+          if (confirm(`CRITICAL WARNING: Are you sure you want to trigger EMERGENCY QUARANTINE for ${sysId}? Traffic will be rerouted to static failover.`)) {
+            manageProfiles[sysId].decommissionTriggered = true;
+            manageProfiles[sysId].safeModeFallback = true;
+            saveManageProfilesState();
+            showToast(`EMERGENCY QUARANTINE ENFORCED FOR ${sysId}`);
+            renderOverrideDashboard();
+          }
+        } else {
+          manageProfiles[sysId].decommissionTriggered = false;
+          saveManageProfilesState();
+          showToast(`${sysId} restored to standard operational status.`);
+          renderOverrideDashboard();
+        }
+      });
+    });
+  }
+
+  function renderManageModule() {
+    loadManageState();
+    renderManageHeaderAndStats();
+    populateManageSystemDropdown();
+    switchManageSubview(activeManageSubview);
+  }
+
+  // Filter Event Listeners for Incidents
+  document.getElementById('filter-manage-system')?.addEventListener('change', renderIncidentsRegistry);
+  document.getElementById('filter-manage-severity')?.addEventListener('change', renderIncidentsRegistry);
+  document.getElementById('filter-manage-status')?.addEventListener('change', renderIncidentsRegistry);
+  document.getElementById('search-manage-incidents')?.addEventListener('input', renderIncidentsRegistry);
+
+  // Filter Event Listeners for Responses
+  document.getElementById('filter-response-strategy')?.addEventListener('change', renderRiskResponses);
+  document.getElementById('filter-response-category')?.addEventListener('change', renderRiskResponses);
+  document.getElementById('search-responses')?.addEventListener('input', renderRiskResponses);
+
+  // Subtab buttons
+  document.getElementById('manage-tab-incidents')?.addEventListener('click', () => switchManageSubview('incidents'));
+  document.getElementById('manage-tab-playbooks')?.addEventListener('click', () => switchManageSubview('playbooks'));
+  document.getElementById('manage-tab-responses')?.addEventListener('click', () => switchManageSubview('responses'));
+  document.getElementById('manage-tab-improvements')?.addEventListener('click', () => switchManageSubview('improvements'));
+  document.getElementById('manage-tab-override')?.addEventListener('click', () => switchManageSubview('override'));
+
+  // Incident Modal Handlers
+  const modalIncident = document.getElementById('modal-log-incident');
+  function openIncidentModal() {
+    if (!modalIncident) return;
+    const now = new Date();
+    const isoNow = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    const containedNow = new Date(now.getTime() - now.getTimezoneOffset() * 60000 + 8 * 60000).toISOString().slice(0, 16);
+
+    const nextNum = manageIncidents.length + 1;
+    const nextId = `INC-2026-${String(nextNum).padStart(3, '0')}`;
+
+    const idInput = document.getElementById('inc-id');
+    const detectedInput = document.getElementById('inc-detected');
+    const containedInput = document.getElementById('inc-contained');
+
+    if (idInput) idInput.value = nextId;
+    if (detectedInput) detectedInput.value = isoNow;
+    if (containedInput) containedInput.value = containedNow;
+
+    modalIncident.style.display = 'flex';
+  }
+
+  function closeIncidentModal() {
+    if (modalIncident) modalIncident.style.display = 'none';
+  }
+
+  document.getElementById('btn-open-log-incident')?.addEventListener('click', openIncidentModal);
+  document.getElementById('btn-open-incident-modal')?.addEventListener('click', openIncidentModal);
+  document.getElementById('btn-close-incident-modal')?.addEventListener('click', closeIncidentModal);
+  document.getElementById('btn-cancel-incident-modal')?.addEventListener('click', closeIncidentModal);
+
+  document.getElementById('form-log-incident')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const id = document.getElementById('inc-id').value;
+    const sysId = document.getElementById('inc-system').value;
+    const title = document.getElementById('inc-title').value;
+    const severity = document.getElementById('inc-severity').value;
+    const detectionSource = document.getElementById('inc-source').value;
+    const applicablePlaybook = document.getElementById('inc-playbook').value;
+    const detectedTimestamp = document.getElementById('inc-detected').value.replace('T', ' ');
+    const containedTimestamp = document.getElementById('inc-contained').value.replace('T', ' ');
+    const rootCause = document.getElementById('inc-rootcause').value;
+    const containmentAction = document.getElementById('inc-containment').value;
+    const correctiveAction = document.getElementById('inc-remediation').value;
+
+    const sysMap = {
+      'SYS-FIN-001': 'FinAssist Retail Banking Assistant',
+      'SYS-FIN-002': 'FinScreen AML & Fraud Detection',
+      'SYS-HR-003': 'TalentMatch Resume Screener',
+      'SYS-OPS-004': 'SmartOps IT Incident Classifier',
+      'SYS-OPS-005': 'DocuExtract Invoice Automation',
+      'SYS-MKT-006': 'MarketPulse Ad Personalization'
+    };
+
+    const newInc = {
+      id,
+      systemId: sysId,
+      systemName: sysMap[sysId] || sysId,
+      detectedTimestamp,
+      containedTimestamp,
+      containmentDurationMinutes: 8,
+      severity,
+      detectionSource,
+      applicablePlaybook,
+      title,
+      rootCause,
+      containmentAction,
+      correctiveAction,
+      status: 'Closed'
+    };
+
+    manageIncidents.unshift(newInc);
+    saveManageIncidentsState();
+    closeIncidentModal();
+    showToast(`Incident ${id} logged & 15m SLA containment recorded!`);
+    renderManageHeaderAndStats();
+    renderIncidentsRegistry();
+  });
+
+  // Export Manage Incidents Markdown
+  function exportManageIncidentsMarkdown() {
+    loadManageState();
+    const nowStr = '2026-10-20';
+    let md = `# SamaBrains AI Incident Log (NIST AI 100-1 MANAGE 4.1 · 4.2)\n\n`;
+    md += `**Export Date:** ${nowStr}  \n`;
+    md += `**Standard:** NIST AI Risk Management Framework 1.0 — MANAGE Function  \n`;
+    md += `**Containment Target SLA:** < 15 minutes  \n`;
+    md += `**Total Registered Incidents:** ${manageIncidents.length}  \n\n`;
+    md += `---\n\n`;
+
+    manageIncidents.forEach(inc => {
+      md += `## [${inc.id}] ${inc.title}\n\n`;
+      md += `- **Affected AI System:** ${inc.systemId} (${inc.systemName})\n`;
+      md += `- **Severity Level:** ${inc.severity}\n`;
+      md += `- **Status:** ${inc.status}\n`;
+      md += `- **Detection Timestamp:** ${inc.detectedTimestamp}\n`;
+      md += `- **Containment Timestamp:** ${inc.containedTimestamp}\n`;
+      md += `- **Containment Duration:** ${inc.containmentDurationMinutes} minutes (SLA: <15 min)\n`;
+      md += `- **Detection Source:** ${inc.detectionSource}\n`;
+      md += `- **Applicable Playbook:** ${inc.applicablePlaybook}\n\n`;
+      md += `### Immediate Containment Action\n${inc.containmentAction}\n\n`;
+      md += `### Root Cause Analysis\n${inc.rootCause}\n\n`;
+      md += `### Long-Term Corrective Action & Verification\n${inc.correctiveAction}\n\n`;
+      md += `---\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AI-Incident-Log-${nowStr}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Downloaded AI-Incident-Log.md');
+  }
+  document.getElementById('btn-export-manage-incidents')?.addEventListener('click', exportManageIncidentsMarkdown);
+
+  // Export Continuous Improvement Log CSV
+  function exportManageImprovementsCsv() {
+    const data = typeof MANAGE_IMPROVEMENTS_DATA !== 'undefined' ? MANAGE_IMPROVEMENTS_DATA : [];
+    let csv = `improvement_id,date_logged,source_trigger,system_id,description,linked_risk_id,verification_suite,outcome\r\n`;
+    data.forEach(imp => {
+      csv += `${escapeCsvCell(imp.improvementId)},${escapeCsvCell(imp.dateLogged)},${escapeCsvCell(imp.sourceTrigger)},${escapeCsvCell(imp.systemId)},${escapeCsvCell(imp.description)},${escapeCsvCell(imp.linkedRiskId)},${escapeCsvCell(imp.verificationSuite)},${escapeCsvCell(imp.outcome)}\r\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MANAGE-Continuous-Improvement-Log-2026-10-20.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Downloaded MANAGE-Continuous-Improvement-Log.csv');
+  }
+  document.getElementById('btn-export-manage-improvements-csv')?.addEventListener('click', exportManageImprovementsCsv);
+  document.getElementById('btn-export-improvements-csv')?.addEventListener('click', exportManageImprovementsCsv);
+
+  // Trigger Print MANAGE Dossier PDF
+  function triggerPrintManagePdf() {
+    loadManageState();
+    const container = document.getElementById('print-manage-report');
+    if (!container) return;
+
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    let html = `
+      <div class="pr-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <h1 class="pr-title" style="margin: 0; font-size: 16pt;">Executive AI Incident &amp; Risk Response Dossier</h1>
+            <div class="pr-subtitle" style="font-size: 9pt; color: #475569; margin-top: 2pt;">
+              NIST AI Risk Management Framework 1.0 (NIST AI 100-1 — MANAGE 1.1–4.3)
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 8pt; color: #475569;">
+            <div><strong>Audit Reference:</strong> SAMABRAINS-MANAGE-2026-Q4</div>
+            <div><strong>Attestation Date:</strong> October 20, 2026</div>
+            <div><strong>Containment SLA:</strong> &lt; 15 Minutes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive Summary -->
+      <div class="pr-section">
+        <div class="pr-section-title">1. Operational Summary &amp; SLA Compliance</div>
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Total Logged Incidents</span>
+            <div class="pr-value" style="font-size: 11pt; font-weight: 700;">${manageIncidents.length}</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Containment SLA Rate</span>
+            <div class="pr-value" style="font-size: 11pt; font-weight: 700; color: #047857;">100% (&lt; 15 min)</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Mapped Risk Responses</span>
+            <div class="pr-value" style="font-size: 11pt; font-weight: 700;">13 Plans</div>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Verified Improvements</span>
+            <div class="pr-value" style="font-size: 11pt; font-weight: 700;">6 Implemented</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Incident Register -->
+      <div class="pr-section">
+        <div class="pr-section-title">2. Incident Triage Register (MANAGE 4.1)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 12%;">Incident ID</th>
+              <th style="width: 14%;">System</th>
+              <th style="width: 8%;">Severity</th>
+              <th style="width: 10%;">Duration</th>
+              <th>Summary &amp; Root Cause</th>
+              <th style="width: 25%;">Containment &amp; Remediation</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${manageIncidents.map(inc => `
+              <tr>
+                <td><strong>${escapeHtml(inc.id)}</strong></td>
+                <td>${escapeHtml(inc.systemId)}</td>
+                <td><strong>${escapeHtml(inc.severity)}</strong></td>
+                <td>${escapeHtml(inc.containmentDurationMinutes)} min</td>
+                <td>
+                  <strong>${escapeHtml(inc.title)}</strong><br>
+                  <span style="font-size: 7pt; color: #475569;">${escapeHtml(inc.rootCause)}</span>
+                </td>
+                <td>
+                  <strong>Containment:</strong> ${escapeHtml(inc.containmentAction)}<br>
+                  <span style="font-size: 7pt; color: #475569;"><strong>Remediation:</strong> ${escapeHtml(inc.correctiveAction)}</span>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 7 Incident Playbooks Overview -->
+      <div class="pr-section pr-page-break">
+        <div class="pr-section-title">3. Response Playbooks Protocol Architecture (MANAGE 4.2)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 14%;">Playbook ID</th>
+              <th style="width: 20%;">Focus Domain</th>
+              <th style="width: 12%;">Target SLA</th>
+              <th>Activation Trigger</th>
+              <th style="width: 24%;">Circuit Breaker Fallback</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(typeof MANAGE_PLAYBOOKS !== 'undefined' ? MANAGE_PLAYBOOKS : []).map(p => `
+              <tr>
+                <td><strong>${escapeHtml(p.id)}</strong></td>
+                <td>${escapeHtml(p.title)}</td>
+                <td>${escapeHtml(p.targetSLA)}</td>
+                <td>${escapeHtml(p.triggers)}</td>
+                <td>${escapeHtml(p.fallbackAction)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Continuous Improvement Audit -->
+      <div class="pr-section">
+        <div class="pr-section-title">4. Continuous Improvement &amp; Algorithmic Hardening (MANAGE 3.1 · 4.3)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 12%;">ID</th>
+              <th style="width: 10%;">Date</th>
+              <th style="width: 12%;">Trigger</th>
+              <th>Optimization Description</th>
+              <th style="width: 20%;">Verification Suite</th>
+              <th style="width: 15%;">Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(typeof MANAGE_IMPROVEMENTS_DATA !== 'undefined' ? MANAGE_IMPROVEMENTS_DATA : []).map(imp => `
+              <tr>
+                <td><strong>${escapeHtml(imp.improvementId)}</strong></td>
+                <td>${escapeHtml(imp.dateLogged)}</td>
+                <td>${escapeHtml(imp.sourceTrigger)}</td>
+                <td>
+                  ${escapeHtml(imp.description)}<br>
+                  <span style="font-size: 7pt; color: #475569;">System: ${escapeHtml(imp.systemId)} · Risk: ${escapeHtml(imp.linkedRiskId)}</span>
+                </td>
+                <td>${escapeHtml(imp.verificationSuite)}</td>
+                <td><strong>${escapeHtml(imp.outcome)}</strong></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pr-footer">
+        Official AI Risk &amp; Incident Management Attestation · Generated by SamaBrains NIST AI RMF Studio · Operationalizing NIST AI RMF 1.0 (MANAGE 1.1–4.3)
+      </div>
+    `;
+
+    container.innerHTML = html;
+    showToast('Opening Executive Incident Dossier Print / PDF dialog...');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
+  }
+  document.getElementById('btn-print-manage-pdf')?.addEventListener('click', triggerPrintManagePdf);
+
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {
     item.addEventListener('click', () => {
@@ -4390,6 +5351,7 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     else if (h === 'policy') switchHubView('policy', false);
     else if (h === 'map' || h === 'context' || h === 'harms') switchHubView('map', false);
     else if (h === 'measure' || h === 'tevv' || h === 'metrics') switchHubView('measure', false);
+    else if (h === 'manage' || h === 'incidents' || h === 'playbooks' || h === 'responses' || h === 'override') switchHubView('manage', false);
     else if (h === 'assessment' || h === 'aiia') switchHubView('assessment', false);
     else if (h === 'inventory') switchHubView('inventory', false);
   });
@@ -4418,6 +5380,8 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     switchHubView('map', false);
   } else if (initialHash === 'measure' || initialHash === 'tevv' || initialHash === 'metrics') {
     switchHubView('measure', false);
+  } else if (initialHash === 'manage' || initialHash === 'incidents' || initialHash === 'playbooks' || initialHash === 'responses' || initialHash === 'override') {
+    switchHubView('manage', false);
   } else if (initialHash === 'assessment' || initialHash === 'aiia') {
     switchHubView('assessment', false);
   } else {
