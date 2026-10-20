@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261019-3">
+  <link rel="stylesheet" href="styles.css?v=20261020-1">
 </head>
 <body>
   <div class="hub-shell" id="hub-shell">
@@ -26,55 +26,55 @@
       </div>
 
       <!-- Section Label -->
-      <div class="sidebar-section-label">AI RMF 1.0 Functions</div>
+      <div class="sidebar-section-label">Governance Directory</div>
 
       <!-- Modules Navigation (Vertical Tabs) -->
       <nav class="sidebar-modules-nav" role="tablist" id="sidebar-modules-nav">
         <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true" onclick="window.switchHubView && window.switchHubView('inventory')">
           <span class="hub-nav-icon">📋</span>
           <div class="hub-nav-text">
-            <span class="hub-nav-title">AI System Inventory</span>
-            <span class="hub-nav-tag">GOVERN 1.6</span>
+            <span class="hub-nav-title">AI Asset Inventory</span>
+            <span class="hub-nav-tag">Asset Registry &amp; Tiers</span>
           </div>
         </button>
 
         <button type="button" class="hub-nav-btn" id="tab-nav-roles" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('roles')">
           <span class="hub-nav-icon">👥</span>
           <div class="hub-nav-text">
-            <span class="hub-nav-title">Roles &amp; RACI</span>
-            <span class="hub-nav-tag">GOVERN 2</span>
+            <span class="hub-nav-title">Accountability &amp; Veto</span>
+            <span class="hub-nav-tag">Leadership &amp; RACI</span>
           </div>
         </button>
 
         <button type="button" class="hub-nav-btn" id="tab-nav-policy" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('policy')">
           <span class="hub-nav-icon">📜</span>
           <div class="hub-nav-text">
-            <span class="hub-nav-title">Policy &amp; Gates</span>
-            <span class="hub-nav-tag">GOVERN 1 &amp; 6</span>
+            <span class="hub-nav-title">Release Gates &amp; Policy</span>
+            <span class="hub-nav-tag">Go / No-Go Rules</span>
           </div>
         </button>
 
         <button type="button" class="hub-nav-btn" id="tab-nav-map" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('map')">
           <span class="hub-nav-icon">🗺️</span>
           <div class="hub-nav-text">
-            <span class="hub-nav-title">Context &amp; Harms</span>
-            <span class="hub-nav-tag">MAP 1–5</span>
+            <span class="hub-nav-title">Harm &amp; Risk Profiles</span>
+            <span class="hub-nav-tag">13 Scenarios &amp; Safeguards</span>
           </div>
         </button>
 
         <button type="button" class="hub-nav-btn" id="tab-nav-measure" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('measure')">
           <span class="hub-nav-icon">📊</span>
           <div class="hub-nav-text">
-            <span class="hub-nav-title">TEVV &amp; Metrics</span>
-            <span class="hub-nav-tag">MEASURE 1–4</span>
+            <span class="hub-nav-title">Quality &amp; Safety Checks</span>
+            <span class="hub-nav-tag">Verification &amp; Fairness</span>
           </div>
         </button>
 
         <button type="button" class="hub-nav-btn" id="tab-nav-manage" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('manage')">
           <span class="hub-nav-icon">🛡️</span>
           <div class="hub-nav-text">
-            <span class="hub-nav-title">Risk &amp; Incidents</span>
-            <span class="hub-nav-tag">MANAGE 1–4</span>
+            <span class="hub-nav-title">Incident Playbooks</span>
+            <span class="hub-nav-tag">15-Min Containment</span>
           </div>
         </button>
 
@@ -82,7 +82,7 @@
           <span class="hub-nav-icon">⚖️</span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">Impact Assessment</span>
-            <span class="hub-nav-tag">AIIA Studio</span>
+            <span class="hub-nav-tag">Board Attestation</span>
           </div>
         </button>
       </nav>
@@ -246,17 +246,32 @@
       <!-- Hero / Header -->
       <div class="inventory-hero">
         <div>
-          <div class="section-tag">NIST AI RMF GOVERN 1.6</div>
-          <h1 class="inventory-title">AI System Inventory &amp; Registry</h1>
+          <div class="section-tag">GOVERN · Asset Register</div>
+          <h1 class="inventory-title">AI Asset Inventory</h1>
           <p class="inventory-desc">
-            Centralized organizational registry tracking model types, risk tiers, third-party components, hosting models, data classifications, TEVV verification, and review cadences.
+            A complete register of every AI system the organization uses — what it does, who is responsible, what risk level it carries, and when it is due for review.
           </p>
         </div>
         <div class="inventory-hero-actions">
           <button type="button" class="btn btn-primary glow-btn" id="btn-hero-register-modal">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            + Register New AI System
+            + Add New AI System
           </button>
+        </div>
+      </div>
+
+      <!-- Briefing Box -->
+      <div class="briefing-box">
+        <span class="briefing-box-icon">📋</span>
+        <div class="briefing-box-body">
+          <div class="briefing-box-title">What this section shows</div>
+          <p class="briefing-box-text">Every AI system in use across the organization is listed here — with its risk level, current status, owner, and next scheduled review date. High-risk systems are flagged and require formal sign-off before going live.</p>
+          <div class="briefing-box-tags">
+            <span class="briefing-tag">Risk Classification</span>
+            <span class="briefing-tag">Ownership</span>
+            <span class="briefing-tag">Review Schedules</span>
+            <span class="briefing-tag">NIST GOVERN 1.6</span>
+          </div>
         </div>
       </div>
 
@@ -331,7 +346,7 @@
       <div class="card table-card">
         <div class="card-header-flex">
           <div>
-            <h3>Enterprise AI System Inventory Registry</h3>
+            <h3>AI System Register</h3>
             <p class="text-muted" id="inventory-count-text">Showing 6 systems</p>
           </div>
           <div class="table-actions">
@@ -351,7 +366,7 @@
                 <th style="width: 18%;">Purpose &amp; AI Tasks</th>
                 <th style="width: 11%;">Risk Tier</th>
                 <th style="width: 12%;">Lifecycle Status</th>
-                <th style="width: 11%;">TEVV Status</th>
+                <th style="width: 11%;">Verified</th>
                 <th style="width: 10%;">Next Review</th>
                 <th style="width: 10%; text-align: center;">Actions</th>
               </tr>
@@ -371,10 +386,10 @@
       <!-- Hero -->
       <div class="inventory-hero">
         <div>
-          <div class="section-tag">NIST AI RMF GOVERN 2 &amp; 3.2</div>
-          <h1 class="inventory-title">AI Roles &amp; Responsibilities Matrix</h1>
+          <div class="section-tag">GOVERN · Accountability</div>
+          <h1 class="inventory-title">Accountability &amp; Veto</h1>
           <p class="inventory-desc">
-            Operational governance RACI matrix, role hierarchy, veto authorities, human-AI oversight configuration register, and mandatory personnel training tracker.
+            Who is responsible for each AI system, who has the authority to stop a deployment, and how human oversight is maintained throughout the AI lifecycle.
           </p>
         </div>
         <div class="inventory-hero-actions">
@@ -383,6 +398,21 @@
             <span class="raci-badge r">R</span> Responsible
             <span class="raci-badge c">C</span> Consulted
             <span class="raci-badge i">I</span> Informed
+          </div>
+        </div>
+      </div>
+
+      <!-- Briefing Box -->
+      <div class="briefing-box">
+        <span class="briefing-box-icon">👥</span>
+        <div class="briefing-box-body">
+          <div class="briefing-box-title">What this section shows</div>
+          <p class="briefing-box-text">Shows who is responsible for every AI-related decision — and who has the right to block a system from going live. Seven roles carry formal veto power. This ensures no AI system can be deployed without proper sign-off from Legal, Risk, Ethics, and senior leadership.</p>
+          <div class="briefing-box-tags">
+            <span class="briefing-tag">Veto Authority</span>
+            <span class="briefing-tag">Decision Ownership</span>
+            <span class="briefing-tag">Human Oversight</span>
+            <span class="briefing-tag">NIST GOVERN 2</span>
           </div>
         </div>
       </div>
@@ -422,23 +452,23 @@
             <span class="kpi-icon">🔍</span>
           </div>
           <div class="kpi-value" id="kpi-oversight-count">6</div>
-          <div class="kpi-sub">GOVERN 3.2 Configurations registered</div>
+          <div class="kpi-sub">Human oversight configurations registered</div>
         </div>
       </div>
 
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar">
         <button type="button" class="sub-tab-btn active" id="btn-sub-raci" onclick="window.switchRolesSubview && window.switchRolesSubview('raci')">
-          <span class="sub-tab-icon">📋</span> RACI Activity Matrix
+          <span class="sub-tab-icon">📋</span> Responsibility Matrix
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-catalog" onclick="window.switchRolesSubview && window.switchRolesSubview('catalog')">
           <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-haii" onclick="window.switchRolesSubview && window.switchRolesSubview('haii')">
-          <span class="sub-tab-icon">🕹️</span> Human-AI Oversight (GOVERN 3.2)
+          <span class="sub-tab-icon">🕹️</span> Human Oversight Controls
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-training" onclick="window.switchRolesSubview && window.switchRolesSubview('training')">
-          <span class="sub-tab-icon">🎓</span> Training Tracker (GOVERN 2.2)
+          <span class="sub-tab-icon">🎓</span> Staff Training Tracker
         </button>
       </div>
 
@@ -568,15 +598,30 @@
       <!-- Hero -->
       <div class="inventory-hero">
         <div>
-          <div class="section-tag">NIST AI RMF GOVERN 1 &amp; 6</div>
-          <h1 class="inventory-title">AI Governance Policy &amp; Deployment Gatekeeper</h1>
+          <div class="section-tag">GOVERN · Release Gates</div>
+          <h1 class="inventory-title">Release Gates &amp; Policy</h1>
           <p class="inventory-desc">
-            Operationalizing organizational AI principles, mandatory 4-tier deployment gates, lifecycle documentation standards, third-party foundation model vetting, and formal exception tracking.
+            Four mandatory checkpoints that every AI system must pass before it is allowed to go live. Also covers the organization's core AI principles, required documentation, and how exceptions are managed.
           </p>
         </div>
         <div class="inventory-hero-actions">
           <div class="raci-legend-pill">
             <span class="pulse-dot"></span> Active Policy: <strong>v1.0 (2026)</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Briefing Box -->
+      <div class="briefing-box">
+        <span class="briefing-box-icon">📜</span>
+        <div class="briefing-box-body">
+          <div class="briefing-box-title">What this section shows</div>
+          <p class="briefing-box-text">Before any AI system can go live, it must clear four formal gates — covering data handling, safety testing, ethical review, and legal sign-off. This section shows the status of those gates for each system, the supporting documentation required, and any active policy exceptions.</p>
+          <div class="briefing-box-tags">
+            <span class="briefing-tag">Go / No-Go Decisions</span>
+            <span class="briefing-tag">Mandatory Checks</span>
+            <span class="briefing-tag">Policy Exceptions</span>
+            <span class="briefing-tag">NIST GOVERN 1 &amp; 6</span>
           </div>
         </div>
       </div>
@@ -639,19 +684,19 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar">
         <button type="button" class="sub-tab-btn active" id="btn-sub-gates" onclick="window.switchPolicySubview && window.switchPolicySubview('gates')">
-          <span class="sub-tab-icon">🚪</span> Mandatory Deployment Gates (GOVERN 1.3)
+          <span class="sub-tab-icon">🚪</span> Deployment Gates
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-principles" onclick="window.switchPolicySubview && window.switchPolicySubview('principles')">
-          <span class="sub-tab-icon">⚖️</span> Trustworthy Principles Audit (GOVERN 1.2)
+          <span class="sub-tab-icon">⚖️</span> AI Principles &amp; Values
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-artifacts" onclick="window.switchPolicySubview && window.switchPolicySubview('artifacts')">
-          <span class="sub-tab-icon">🗂️</span> Lifecycle Artifact Tracker (GOVERN 1.4)
+          <span class="sub-tab-icon">🗂️</span> Required Documents
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-thirdparty" onclick="window.switchPolicySubview && window.switchPolicySubview('thirdparty')">
-          <span class="sub-tab-icon">🌐</span> Third-Party Model Screener (GOVERN 6)
+          <span class="sub-tab-icon">🌐</span> External AI Suppliers
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-exceptions" onclick="window.switchPolicySubview && window.switchPolicySubview('exceptions')">
-          <span class="sub-tab-icon">📋</span> Exceptions &amp; Waivers (GOVERN 1.1)
+          <span class="sub-tab-icon">📋</span> Exceptions &amp; Waivers
         </button>
       </div>
 
@@ -665,8 +710,8 @@
         <div class="card table-card" style="margin-top: 1.5rem;">
           <div class="card-header-flex">
             <div>
-              <h3>Mandatory Decommissioning Triggers (GOVERN 1.7)</h3>
-              <p class="text-muted">Standard conditions requiring immediate system suspension, fallback to human operators, or complete retirement.</p>
+              <h3>When a System Must Be Switched Off</h3>
+              <p class="text-muted">Defined conditions that require an AI system to be immediately suspended, handed back to human operators, or fully retired.</p>
             </div>
           </div>
           <div class="table-responsive">
@@ -814,20 +859,35 @@
       <div class="inventory-hero">
         <div class="hero-content">
           <div class="hero-pill">
-            <span class="badge-tag">NIST AI RMF MAP 1–5</span>
-            <span>Context Profiling &amp; Harm Categorization Studio</span>
+            <span class="badge-tag">MAP · Risk &amp; Harm Profiles</span>
+            <span>What could go wrong, and how we protect against it</span>
           </div>
-          <h2>Context Profiling, Harms &amp; Stakeholder Studio</h2>
+          <h2>Harm &amp; Risk Profiles</h2>
           <p class="hero-description">
-            Operationalizing the <strong>MAP Function</strong> across system boundaries, 13 profiled harm scenarios (R-01..R-13), risk-benefit utility balances, and vulnerable group safeguards.
+            13 identified failure scenarios showing what could go wrong with each AI system — the likelihood, the potential harm, and the protections in place. Also covers approved uses, prohibited uses, and safeguards for vulnerable groups.
           </p>
         </div>
       </div>
 
-      <!-- System Selector & Profile Banner Bar -->
+      <!-- Briefing Box -->
+      <div class="briefing-box">
+        <span class="briefing-box-icon">🗺️</span>
+        <div class="briefing-box-body">
+          <div class="briefing-box-title">What this section shows</div>
+          <p class="briefing-box-text">For each AI system, this section maps out 13 specific ways it could cause harm — ranked by likelihood and severity. It also records what the system is allowed and not allowed to do, and what extra care has been taken for groups who may be more affected.</p>
+          <div class="briefing-box-tags">
+            <span class="briefing-tag">Failure Scenarios</span>
+            <span class="briefing-tag">Approved &amp; Prohibited Uses</span>
+            <span class="briefing-tag">Vulnerable Groups</span>
+            <span class="briefing-tag">NIST MAP 1–5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Selector &amp; Profile Banner Bar -->
       <div class="policy-system-selector-bar">
         <div class="selector-left">
-          <label for="map-system-select"><strong>Target AI System:</strong></label>
+          <label for="map-system-select"><strong>Select AI System:</strong></label>
           <select id="map-system-select" class="form-control-sm">
             <!-- Populated dynamically by app.js from inventorySystems -->
           </select>
@@ -860,7 +920,7 @@
           <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">🛡️</div>
           <div class="stat-data">
             <span class="stat-value" id="map-stat-residual-clearance">100%</span>
-            <span class="stat-label">Residual Clearance (0 Unmitigated)</span>
+            <span class="stat-label">All Risks Have Mitigations in Place</span>
           </div>
         </div>
 
@@ -876,19 +936,19 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar">
         <button type="button" class="sub-tab-btn active" id="btn-sub-map-harms" onclick="window.switchMapSubview && window.switchMapSubview('harms')">
-          <span class="sub-tab-icon">⚡</span> 13 Harm Scenarios (MAP 3.2)
+          <span class="sub-tab-icon">⚡</span> 13 Harm Scenarios
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-matrix" onclick="window.switchMapSubview && window.switchMapSubview('matrix')">
-          <span class="sub-tab-icon">⚖️</span> Risk-Benefit Matrix (MAP 3.1 &amp; 3.2)
+          <span class="sub-tab-icon">⚖️</span> Risk vs. Benefit Summary
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-stakeholders" onclick="window.switchMapSubview && window.switchMapSubview('stakeholders')">
-          <span class="sub-tab-icon">👥</span> Stakeholders &amp; Vulnerability (MAP 5)
+          <span class="sub-tab-icon">👥</span> Affected Groups &amp; Protections
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-conops" onclick="window.switchMapSubview && window.switchMapSubview('conops')">
-          <span class="sub-tab-icon">🎯</span> CONOPS &amp; Oversight Envelopes (MAP 1 &amp; 3.5)
+          <span class="sub-tab-icon">🎯</span> Approved &amp; Prohibited Uses
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-dependencies" onclick="window.switchMapSubview && window.switchMapSubview('dependencies')">
-          <span class="sub-tab-icon">🌐</span> Third-Party Dependencies (MAP 4.1)
+          <span class="sub-tab-icon">🌐</span> External Suppliers &amp; Dependencies
         </button>
       </div>
 
@@ -1127,27 +1187,42 @@
       <div class="inventory-hero">
         <div class="hero-content">
           <div class="hero-pill">
-            <span class="badge-tag">NIST AI RMF MEASURE 1–4</span>
-            <span>TEVV, Quantitative Metrics &amp; Bias Evaluation Studio</span>
+            <span class="badge-tag">MEASURE · Quality &amp; Safety</span>
+            <span>Is the AI system working safely and fairly?</span>
           </div>
-          <h2>TEVV, Production Metrics &amp; Bias Testing Studio</h2>
+          <h2>Quality &amp; Safety Checks</h2>
           <p class="hero-description">
-            Operationalizing the <strong>MEASURE Function</strong> across 20 production metrics (M-01..M-20), 11 pre-deployment test suites (TS-01..TS-11), demographic proxy bias audits, and real-time monitoring SLAs.
+            Objective measurement of whether each AI system is performing as intended — covering accuracy, safety, and fairness across 20 defined thresholds. Includes pre-deployment testing and ongoing monitoring.
           </p>
         </div>
       </div>
 
-      <!-- System Selector & Profile Banner Bar -->
+      <!-- Briefing Box -->
+      <div class="briefing-box">
+        <span class="briefing-box-icon">📊</span>
+        <div class="briefing-box-body">
+          <div class="briefing-box-title">What this section shows</div>
+          <p class="briefing-box-text">This section answers the question: "Is the AI system actually working as it should?" It tracks 20 measurable performance and safety thresholds, 11 pre-launch test results, and checks whether the system treats different groups of people fairly.</p>
+          <div class="briefing-box-tags">
+            <span class="briefing-tag">Safety Thresholds</span>
+            <span class="briefing-tag">Pre-Launch Testing</span>
+            <span class="briefing-tag">Fairness Checks</span>
+            <span class="briefing-tag">NIST MEASURE 1–4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Selector &amp; Profile Banner Bar -->
       <div class="policy-system-selector-bar">
         <div class="selector-left">
-          <label for="measure-system-select"><strong>Target AI System:</strong></label>
+          <label for="measure-system-select"><strong>Select AI System:</strong></label>
           <select id="measure-system-select" class="form-control-sm">
             <!-- Populated dynamically by app.js from inventorySystems -->
           </select>
         </div>
         <div class="selector-right">
-          <span class="gate-status-badge approved" id="measure-tevv-badge">TEVV: Passed (11 / 11 Suites)</span>
-          <span class="gate-status-badge approved" id="measure-rag-badge">0 Red-Line Breaches</span>
+          <span class="gate-status-badge approved" id="measure-tevv-badge">All Tests Passed (11 / 11)</span>
+          <span class="gate-status-badge approved" id="measure-rag-badge">0 Safety Limits Breached</span>
         </div>
       </div>
 
@@ -1165,7 +1240,7 @@
           <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">🛡️</div>
           <div class="stat-data">
             <span class="stat-value" id="measure-stat-tier1-metrics">6 / 6</span>
-            <span class="stat-label">Safety-Critical (Tier 1 Met)</span>
+            <span class="stat-label">Safety-Critical Thresholds Met</span>
           </div>
         </div>
 
@@ -1189,19 +1264,19 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar">
         <button type="button" class="sub-tab-btn active" id="btn-sub-measure-metrics" onclick="window.switchMeasureSubview && window.switchMeasureSubview('metrics')">
-          <span class="sub-tab-icon">📋</span> 20 Metrics Tracker (MEASURE 1.1)
+          <span class="sub-tab-icon">📋</span> Performance Metrics
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-suites" onclick="window.switchMeasureSubview && window.switchMeasureSubview('suites')">
-          <span class="sub-tab-icon">🧪</span> 11 TEVV Test Suites (MEASURE 2)
+          <span class="sub-tab-icon">🧪</span> Pre-Launch Test Results
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-bias" onclick="window.switchMeasureSubview && window.switchMeasureSubview('bias')">
-          <span class="sub-tab-icon">⚖️</span> Bias &amp; Fairness Lab (SP 1270)
+          <span class="sub-tab-icon">⚖️</span> Fairness &amp; Bias Checks
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-monitoring" onclick="window.switchMeasureSubview && window.switchMeasureSubview('monitoring')">
-          <span class="sub-tab-icon">📡</span> Monitoring &amp; Alert SLAs (MEASURE 3)
+          <span class="sub-tab-icon">📡</span> Live Monitoring &amp; Alerts
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-calendar" onclick="window.switchMeasureSubview && window.switchMeasureSubview('calendar')">
-          <span class="sub-tab-icon">📅</span> TEVV Lifecycle &amp; Sign-Off (MEASURE 4)
+          <span class="sub-tab-icon">📅</span> Review &amp; Sign-Off Schedule
         </button>
       </div>
 
@@ -1545,14 +1620,28 @@
       <div class="inventory-header">
         <div>
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-            <h1 style="margin: 0;">AI Risk &amp; Incident Management (MANAGE 1–4)</h1>
-            <span class="badge badge-primary">NIST AI 100-1 MANAGE Studio</span>
-            <span class="badge badge-success">Production Live Controls</span>
+            <h1 style="margin: 0;">Incident Playbooks &amp; Response</h1>
+            <span class="badge badge-primary">NIST MANAGE</span>
+            <span class="badge badge-success">Live Controls Active</span>
           </div>
           <p class="text-muted" style="margin: 0; max-width: 960px;">
-            Continuous risk treatment, rapid incident containment (&lt;15 min SLA), automated circuit breakers, 
-            playbook-driven response, and post-incident continuous improvement tracking across all registered AI assets.
+            Step-by-step response plans for when an AI system causes harm or behaves unexpectedly — with a 15-minute target to contain the situation. Also tracks improvements made after each incident.
           </p>
+        </div>
+      </div>
+
+      <!-- Briefing Box -->
+      <div class="briefing-box">
+        <span class="briefing-box-icon">🛡️</span>
+        <div class="briefing-box-body">
+          <div class="briefing-box-title">What this section shows</div>
+          <p class="briefing-box-text">When an AI system causes harm or behaves in an unexpected way, this section provides the playbook for responding — containing the situation within 15 minutes, notifying the right people, and making sure the same thing does not happen again.</p>
+          <div class="briefing-box-tags">
+            <span class="briefing-tag">15-Min Containment Target</span>
+            <span class="briefing-tag">Incident Triage</span>
+            <span class="briefing-tag">Response Playbooks</span>
+            <span class="briefing-tag">NIST MANAGE 1–4</span>
+          </div>
         </div>
       </div>
 
@@ -1564,19 +1653,19 @@
       <!-- MANAGE Sub-Tabs Navigation -->
       <div class="inventory-tabs" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; overflow-x: auto;">
         <button type="button" class="btn btn-secondary active-subtab" id="manage-tab-incidents" data-subview="incidents">
-          🚨 Incident Triage &amp; Register (MANAGE 4.1)
+          🚨 Incident Register
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-playbooks" data-subview="playbooks">
-          📘 Response Playbooks A–G (MANAGE 4.2)
+          📘 Response Playbooks
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-responses" data-subview="responses">
-          🛡️ 13 Risk Response Plans (MANAGE 1–2)
+          🛡️ Risk Response Plans
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-improvements" data-subview="improvements">
-          📈 Continuous Improvement Log (MANAGE 3–4)
+          📈 Lessons &amp; Improvements
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-override" data-subview="override">
-          ⚡ Emergency Controls &amp; Override (MANAGE 2.3)
+          ⚡ Emergency Off Switch
         </button>
       </div>
 
@@ -1695,6 +1784,20 @@
 
   <!-- VIEW 4: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
   <div id="view-assessment" class="portal-view" style="display: none;">
+    <!-- Briefing Box -->
+    <div class="briefing-box" style="margin: 1.5rem 1.5rem 0;">
+      <span class="briefing-box-icon">⚖️</span>
+      <div class="briefing-box-body">
+        <div class="briefing-box-title">What this section shows</div>
+        <p class="briefing-box-text">A structured sign-off process combining evidence from all six governance areas into a single board-level decision. Executives and auditors can review the full risk picture for any AI system and formally attest that it has been assessed against the organization's governance standards.</p>
+        <div class="briefing-box-tags">
+          <span class="briefing-tag">Board Sign-Off</span>
+          <span class="briefing-tag">Risk Summary</span>
+          <span class="briefing-tag">Audit Trail</span>
+          <span class="briefing-tag">NIST GOVERN 4.2</span>
+        </div>
+      </div>
+    </div>
     <!-- Main Container with Sidebar Navigation + Content Area -->
     <div class="app-layout">
     <!-- Sidebar Stepper -->
