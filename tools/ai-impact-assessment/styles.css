@@ -1822,7 +1822,8 @@ h1, h2, h3, h4, .brand-title {
   #print-report,
   #print-inventory-report,
   #print-roles-report,
-  #print-policy-report {
+  #print-policy-report,
+  #print-map-report {
     display: block !important;
     visibility: visible !important;
     position: static !important;
@@ -1837,7 +1838,8 @@ h1, h2, h3, h4, .brand-title {
   #print-report *,
   #print-inventory-report *,
   #print-roles-report *,
-  #print-policy-report * {
+  #print-policy-report *,
+  #print-map-report * {
     box-sizing: border-box !important;
   }
 

@@ -10,7 +10,7 @@ A working AI governance toolkit: policy release gates, a risk register, bias-tes
 
 > **Key Figures:** 20 production metrics with breach thresholds, 13 profiled risks, 28 RACI activities across 18 roles, and a 15-minute incident containment SLA.
 
-* **Live Web Application:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev) (Inventory · Roles · Policy Gates · Impact Assessment)
+* **Live Web Application:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev) (Inventory · Roles · Policy Gates · Context & Harms · Impact Assessment)
 * **Live Regulatory Assistant:** [samabrains.com/ask/](https://samabrains.com/ask/) (Bounded retrieval over official governance standards)
 
 ---
@@ -35,21 +35,21 @@ A working AI governance toolkit: policy release gates, a risk register, bias-tes
 > **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
 > **Architecture:** Pure client-side HTML5/CSS3/JavaScript hosted on Cloudflare Pages (zero backend runtime, local storage persistence, corporate print styling).
 
-The web hub operationalizes governance workflows into four interactive modules:
+The web hub operationalizes governance workflows into five interactive modules:
 
-### Module 1: AI System Inventory
+### Module 1: AI System Inventory (GOVERN 1.6)
 * Central registry tracking model classes, task types, risk tiers, foundation models, data classifications, and lifecycle states.
 * Real-time KPI indicators for total registered systems, critical-risk assets, and active production deployments.
 * Two-way CSV synchronization with [`docs/01-govern/AI-System-Inventory.csv`](docs/01-govern/AI-System-Inventory.csv).
 * One-click transition of any inventory record directly into the Impact Assessment Studio with pre-bound metadata.
 
-### Module 2: Roles and RACI Matrix
+### Module 2: Roles and RACI Matrix (GOVERN 2 & 3.2)
 * Interactive lifecycle matrix mapping 28 activities across 6 phases against 18 enterprise roles.
 * Role catalog documenting reporting lines, responsibilities, and hard veto rights for Ethics, Legal, and Risk officers.
 * Human-AI oversight configuration register documenting human-in-the-loop (HITL), human-on-the-loop (HOTL), and human-in-command (HIC) boundaries per system.
 * Role-based training records tracking compliance across 6 core AI risk domains.
 
-### Module 3: Policy Gatekeeper
+### Module 3: Policy Gatekeeper (GOVERN 1 & 6)
 * Automated Go/No-Go validator checking systems against 4 mandatory release gates:
   1. *GATE-01:* Zero unmitigated critical risks
   2. *GATE-02:* Legal and regulatory compliance sign-off
@@ -59,7 +59,16 @@ The web hub operationalizes governance workflows into four interactive modules:
 * Verification checklist across all 8 Trustworthy AI principles and tracking for 9 mandatory lifecycle documents.
 * Decommissioning triggers, third-party model screening rubric, and policy exceptions register.
 
-### Module 4: Impact Assessment Studio
+### Module 4: Context & Harms Studio (MAP 1–5)
+* Operationalization of [`MAP-Risk-Benefit-Matrix.csv`](docs/02-map/MAP-Risk-Benefit-Matrix.csv), [`MAP-Stakeholder-Analysis.md`](docs/02-map/MAP-Stakeholder-Analysis.md), and [`MAP-AI-System-Context-Report.md`](docs/02-map/MAP-AI-System-Context-Report.md).
+* **13 Profiled Harm Scenarios:** Real-time searchable catalog (`R-01` to `R-13`) detailing trigger conditions, failure cascades, trustworthiness characteristics, controls, owners, and monitoring cadences.
+* **Risk vs. Benefit Scoring Matrix:** Quantitative balance of business inclusion against residual risks with live filtering, CSV export, and Markdown report generation.
+* **Stakeholders & Vulnerability Screener:** Protective safeguards for 6 vulnerable cohorts (elderly, disabled, low-literacy, non-English, distressed, first-time) and 20 registered stakeholders mapped across Power-Interest quadrants.
+* **CONOPS & System Boundaries:** Clear operational envelopes separating Authorized Uses, Foreseeable Misuses (with active guardrails), and Hard-Blocked Prohibitions alongside a 6-layer defense-in-depth human oversight architecture.
+* **Third-Party AI Supply Chain Risk:** Supplier evaluations covering edge inference, vector indexes, foundation model weights, data residency, and zero-retention SLA verification.
+* **Executive PDF Dossier:** Corporate light-theme printable Context & Harm Dossier for executive sign-off and regulatory examination.
+
+### Module 5: Impact Assessment Studio (GOVERN 4.2 · MAP · MANAGE)
 * 10-part assessment wizard covering business context, trustworthy alignment, legal thresholds, harms, mitigations, and stakeholder consultations.
 * Interactive Likelihood (1–5) $\times$ Impact (1–5) calculation with dynamic heat badges and risk scorecards.
 * One-click preset to load the FinAssist AI banking case study or start a blank assessment.

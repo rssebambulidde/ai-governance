@@ -48,6 +48,7 @@ function initAntigravityGovernanceApp() {
       { id: 'inventory', btn: document.getElementById('tab-nav-inventory'), view: document.getElementById('view-inventory'), act: document.getElementById('actions-inventory') },
       { id: 'roles', btn: document.getElementById('tab-nav-roles'), view: document.getElementById('view-roles'), act: document.getElementById('actions-roles') },
       { id: 'policy', btn: document.getElementById('tab-nav-policy'), view: document.getElementById('view-policy'), act: document.getElementById('actions-policy') },
+      { id: 'map', btn: document.getElementById('tab-nav-map'), view: document.getElementById('view-map'), act: document.getElementById('actions-map') },
       { id: 'assessment', btn: document.getElementById('tab-nav-assessment'), view: document.getElementById('view-assessment'), act: document.getElementById('actions-assessment') }
     ];
 
@@ -76,6 +77,8 @@ function initAntigravityGovernanceApp() {
       renderRolesModule();
     } else if (target === 'policy') {
       renderPolicyModule();
+    } else if (target === 'map') {
+      renderMapModule();
     } else {
       syncHeaderBadges();
       updateProgress();
@@ -98,6 +101,7 @@ function initAntigravityGovernanceApp() {
   document.getElementById('tab-nav-inventory')?.addEventListener('click', () => switchHubView('inventory'));
   document.getElementById('tab-nav-roles')?.addEventListener('click', () => switchHubView('roles'));
   document.getElementById('tab-nav-policy')?.addEventListener('click', () => switchHubView('policy'));
+  document.getElementById('tab-nav-map')?.addEventListener('click', () => switchHubView('map'));
   document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
 
   // Inventory Data State
@@ -1521,6 +1525,551 @@ function initAntigravityGovernanceApp() {
   }
 
   document.getElementById('btn-print-policy-pdf')?.addEventListener('click', triggerPrintPolicyPdf);
+
+  // ==========================================================================
+  // MAP STUDIO MODULE (NIST AI RMF MAP 1–5)
+  // Context Profiling, 13 Harm Scenarios, Risk-Benefit Matrix, Stakeholders
+  // ==========================================================================
+  let selectedMapSystemId = 'AI-001';
+  let activeMapSubview = 'harms';
+
+  function switchMapSubview(target) {
+    activeMapSubview = target;
+    const subtabs = [
+      { id: 'harms', btn: document.getElementById('btn-sub-map-harms'), panel: document.getElementById('subview-map-harms') },
+      { id: 'matrix', btn: document.getElementById('btn-sub-map-matrix'), panel: document.getElementById('subview-map-matrix') },
+      { id: 'stakeholders', btn: document.getElementById('btn-sub-map-stakeholders'), panel: document.getElementById('subview-map-stakeholders') },
+      { id: 'conops', btn: document.getElementById('btn-sub-map-conops'), panel: document.getElementById('subview-map-conops') },
+      { id: 'dependencies', btn: document.getElementById('btn-sub-map-dependencies'), panel: document.getElementById('subview-map-dependencies') }
+    ];
+
+    subtabs.forEach(st => {
+      st.btn?.classList.toggle('active', st.id === target);
+      if (st.panel) {
+        st.panel.classList.toggle('active', st.id === target);
+        st.panel.style.display = st.id === target ? 'block' : 'none';
+      }
+    });
+
+    if (target === 'harms') renderHarmScenarios();
+    else if (target === 'matrix') renderRiskBenefitMatrix();
+    else if (target === 'stakeholders') renderStakeholderScreener();
+    else if (target === 'conops') renderConopsModule();
+    else if (target === 'dependencies') renderThirdPartyDependencies();
+  }
+  window.switchMapSubview = switchMapSubview;
+
+  function renderMapModule() {
+    // Populate Map system selector
+    const sel = document.getElementById('map-system-select');
+    if (sel && inventorySystems && inventorySystems.length > 0) {
+      const currentVal = sel.value || selectedMapSystemId;
+      sel.innerHTML = inventorySystems.map(s => {
+        const sid = s.systemId || s.id;
+        const selected = (sid === currentVal || s.id === currentVal) ? 'selected' : '';
+        return `<option value="${s.id}" ${selected}>${sid} — ${s.name} (${s.riskTier} Risk)</option>`;
+      }).join('');
+      selectedMapSystemId = sel.value;
+    }
+
+    renderMapHeaderAndStats();
+
+    if (activeMapSubview === 'harms') renderHarmScenarios();
+    else if (activeMapSubview === 'matrix') renderRiskBenefitMatrix();
+    else if (activeMapSubview === 'stakeholders') renderStakeholderScreener();
+    else if (activeMapSubview === 'conops') renderConopsModule();
+    else if (activeMapSubview === 'dependencies') renderThirdPartyDependencies();
+  }
+
+  function renderMapHeaderAndStats() {
+    const profile = (typeof SYSTEM_MAP_PROFILES !== 'undefined' && SYSTEM_MAP_PROFILES[selectedMapSystemId])
+      ? SYSTEM_MAP_PROFILES[selectedMapSystemId] : null;
+
+    const conopsPill = document.getElementById('map-conops-pill');
+    const threatPill = document.getElementById('map-threat-pill');
+
+    if (conopsPill) {
+      if (profile) {
+        conopsPill.textContent = `CONOPS: ${profile.conopsStatus}`;
+        conopsPill.className = profile.conopsStatus.includes('BLOCKED') ? 'gate-status-badge blocked' : 'gate-status-badge approved';
+      } else {
+        conopsPill.textContent = 'CONOPS: Standard';
+        conopsPill.className = 'gate-status-badge approved';
+      }
+    }
+
+    if (threatPill && profile) {
+      threatPill.textContent = `Top Threat: ${profile.topThreat}`;
+    }
+
+    // KPI Cards
+    const totalHarmsEl = document.getElementById('map-stat-total-harms');
+    const critHarmsEl = document.getElementById('map-stat-critical-harms');
+    const residualEl = document.getElementById('map-stat-residual-clearance');
+    const vulEl = document.getElementById('map-stat-vulnerable-groups');
+
+    if (totalHarmsEl) totalHarmsEl.textContent = profile ? profile.totalHarms : (typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? MAP_RISK_BENEFIT_ITEMS.length : '13');
+    if (critHarmsEl) critHarmsEl.textContent = profile ? (profile.criticalHarms + profile.highHarms) : '7';
+    if (residualEl) residualEl.textContent = profile && profile.residualHigh > 0 ? `${profile.residualHigh} Unmitigated` : '100% Cleared';
+    if (vulEl) vulEl.textContent = typeof MAP_VULNERABLE_GROUPS !== 'undefined' ? MAP_VULNERABLE_GROUPS.length : '6';
+  }
+
+  document.getElementById('map-system-select')?.addEventListener('change', (e) => {
+    selectedMapSystemId = e.target.value;
+    renderMapModule();
+  });
+
+  // Harm Scenarios renderer
+  function renderHarmScenarios() {
+    const container = document.getElementById('map-harms-grid');
+    if (!container) return;
+
+    const search = (document.getElementById('map-harms-search')?.value || '').toLowerCase().trim();
+    const catFilter = document.getElementById('map-filter-category')?.value || '';
+    const ratingFilter = document.getElementById('map-filter-rating')?.value || '';
+
+    let items = typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? [...MAP_RISK_BENEFIT_ITEMS] : [];
+
+    if (search) {
+      items = items.filter(r => 
+        r.id.toLowerCase().includes(search) ||
+        r.description.toLowerCase().includes(search) ||
+        r.category.toLowerCase().includes(search) ||
+        r.controlDescription.toLowerCase().includes(search) ||
+        r.controlOwner.toLowerCase().includes(search)
+      );
+    }
+    if (catFilter) {
+      items = items.filter(r => r.category === catFilter);
+    }
+    if (ratingFilter) {
+      items = items.filter(r => r.riskRating === ratingFilter);
+    }
+
+    if (items.length === 0) {
+      container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">No harm scenarios match your filter criteria.</div>';
+      return;
+    }
+
+    container.innerHTML = items.map(r => {
+      const ratingClass = r.riskRating === 'Critical' ? 'gate-failed' : (r.riskRating === 'High' ? 'gate-pending' : 'gate-passed');
+      const badgePill = r.riskRating === 'Critical' ? 'blocked' : (r.riskRating === 'High' ? 'pending' : 'approved');
+      const resClass = r.residualRisk === 'Low' ? 'approved' : (r.residualRisk === 'Medium' ? 'pending' : 'blocked');
+
+      return `
+        <div class="gate-card ${ratingClass}">
+          <div class="gate-header">
+            <div>
+              <span class="gate-id">${r.id} · ${r.category}</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); margin-left: 0.5rem;">${r.mapSubcategory}</span>
+            </div>
+            <span class="gate-status-pill ${badgePill}">Pre-Risk: ${r.riskRating}</span>
+          </div>
+          <h4>${r.description}</h4>
+          
+          <div style="font-size: 0.8rem; margin: 0.5rem 0; padding: 0.5rem; background: var(--bg-input); border-radius: var(--radius-sm);">
+            <div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; font-weight: 700;">Trigger Condition:</div>
+            <div style="color: var(--text-primary); margin-bottom: 0.35rem;">${r.triggerCondition || 'Real-time user prompt query'}</div>
+            <div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; font-weight: 700;">Failure Cascade:</div>
+            <div style="color: var(--text-primary);">${r.failureCascade || 'Downstream harm to customer finances or trust'}</div>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">NIST Characteristic</span>
+            <span class="gate-detail-value">${r.trustworthiness}</span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Likelihood &amp; Magnitude</span>
+            <span class="gate-detail-value">L: ${r.likelihood} × M: ${r.magnitude}</span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Response Treatment</span>
+            <span class="gate-detail-value"><strong>${r.riskResponse}</strong></span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Mandatory Control</span>
+            <span class="gate-detail-value" style="font-size: 0.76rem; color: var(--text-secondary);">${r.controlDescription}</span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Residual Risk &amp; Owner</span>
+            <span class="gate-detail-value">
+              <span class="doc-status-pill ${resClass}">Post: ${r.residualRisk}</span> · ${r.controlOwner}
+            </span>
+          </div>
+          
+          <div class="gate-detail-row" style="margin-top: 0.35rem; padding-top: 0.35rem; border-top: 1px dashed var(--border-color);">
+            <span class="gate-detail-label">Monitoring Cadence</span>
+            <span class="gate-detail-value" style="font-size: 0.75rem;">${r.monitoringFrequency} (${r.monitoringMethod.split(';')[0]})</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Filters event listeners
+  document.getElementById('map-harms-search')?.addEventListener('input', renderHarmScenarios);
+  document.getElementById('map-filter-category')?.addEventListener('change', renderHarmScenarios);
+  document.getElementById('map-filter-rating')?.addEventListener('change', renderHarmScenarios);
+  document.getElementById('btn-reset-map-filters')?.addEventListener('click', () => {
+    if (document.getElementById('map-harms-search')) document.getElementById('map-harms-search').value = '';
+    if (document.getElementById('map-filter-category')) document.getElementById('map-filter-category').value = '';
+    if (document.getElementById('map-filter-rating')) document.getElementById('map-filter-rating').value = '';
+    renderHarmScenarios();
+  });
+
+  // Risk-Benefit Matrix Renderer
+  function renderRiskBenefitMatrix() {
+    const tbody = document.getElementById('map-matrix-table-body');
+    if (!tbody) return;
+    const items = typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? MAP_RISK_BENEFIT_ITEMS : [];
+
+    tbody.innerHTML = items.map(r => {
+      const preBadge = r.riskRating === 'Critical' ? 'tag-crit' : (r.riskRating === 'High' ? 'tag-high' : 'tag-med');
+      const postBadge = r.residualRisk === 'Low' ? 'tag-low' : (r.residualRisk === 'Medium' ? 'tag-med' : 'tag-crit');
+
+      return `
+        <tr>
+          <td><strong>${r.id}</strong></td>
+          <td><span class="badge-dept">${r.category}</span></td>
+          <td>
+            <strong>${r.description}</strong>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;">${r.mapSubcategory} · Affected: ${r.affectedStakeholders}</div>
+          </td>
+          <td>
+            <span class="stat-tag ${preBadge}">${r.riskRating}</span>
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem;">L: ${r.likelihood}<br>M: ${r.magnitude}</div>
+          </td>
+          <td>
+            <div style="font-size: 0.8rem; margin-bottom: 0.25rem;"><strong>Treatment: ${r.riskResponse}</strong></div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">${r.controlDescription}</div>
+            <div style="font-size: 0.72rem; color: var(--accent-primary); margin-top: 0.25rem;">Owner: ${r.controlOwner} · Linked: ${r.linkedBenefit}</div>
+          </td>
+          <td>
+            <span class="stat-tag ${postBadge}">Residual: ${r.residualRisk}</span>
+          </td>
+          <td>
+            <div style="font-weight: 600; font-size: 0.78rem;">${r.monitoringFrequency}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${r.monitoringMethod}</div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Stakeholders & Vulnerability Screener Renderer
+  function renderStakeholderScreener() {
+    // 1. Vulnerable Groups
+    const vulTbody = document.getElementById('map-vulnerable-table-body');
+    if (vulTbody) {
+      const groups = typeof MAP_VULNERABLE_GROUPS !== 'undefined' ? MAP_VULNERABLE_GROUPS : [];
+      vulTbody.innerHTML = groups.map(g => {
+        const statusBadge = g.verificationStatus === 'Verified' ? 'tag-low' : 'tag-med';
+        return `
+          <tr>
+            <td><strong>${g.group}</strong></td>
+            <td style="font-size: 0.8rem; line-height: 1.4;">${g.vulnerabilityReason}</td>
+            <td style="font-size: 0.8rem; line-height: 1.4; color: #ef4444;">${g.specificRisks}</td>
+            <td style="font-size: 0.8rem; line-height: 1.4; color: var(--text-secondary);">${g.requiredSafeguards}</td>
+            <td><span class="stat-tag ${statusBadge}">${g.verificationStatus}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 2. Stakeholders Register
+    const stkTbody = document.getElementById('map-stakeholders-table-body');
+    if (stkTbody) {
+      const stakeholders = typeof MAP_STAKEHOLDERS_REGISTER !== 'undefined' ? MAP_STAKEHOLDERS_REGISTER : [];
+      stkTbody.innerHTML = stakeholders.map(s => {
+        const pBadge = s.priority === 'Critical' ? 'tag-crit' : (s.priority === 'High' ? 'tag-high' : 'tag-med');
+        return `
+          <tr>
+            <td><strong>${s.id}</strong></td>
+            <td><strong>${s.name}</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">Lead: ${s.owner}</span></td>
+            <td><span class="badge-dept">${s.category}</span></td>
+            <td><span class="stat-tag ${pBadge}">${s.priority}</span></td>
+            <td><span class="status-badge live" style="font-size: 0.75rem;">${s.powerInterest}</span></td>
+            <td style="font-size: 0.8rem; color: var(--text-secondary);">${s.engagement}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+
+  // CONOPS & Oversight Envelopes Renderer
+  function renderConopsModule() {
+    const data = typeof MAP_CONOPS_DATA !== 'undefined' ? MAP_CONOPS_DATA : null;
+    if (!data) return;
+
+    const intendedList = document.getElementById('conops-intended-list');
+    if (intendedList) {
+      intendedList.innerHTML = data.intendedUses.map(u => `
+        <li style="margin-bottom: 0.5rem;">
+          <strong>${u.title}:</strong> ${u.description}
+          <span class="stat-tag tag-low" style="margin-left: 0.35rem; font-size: 0.68rem;">${u.riskLevel} Risk</span>
+        </li>
+      `).join('');
+    }
+
+    const misuseList = document.getElementById('conops-misuse-list');
+    if (misuseList) {
+      misuseList.innerHTML = data.foreseeableMisuse.map(m => `
+        <li style="margin-bottom: 0.5rem;">
+          <strong>${m.title}:</strong> ${m.description}
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.2rem;">🛡️ <em>Guardrail:</em> ${m.safeguard}</div>
+        </li>
+      `).join('');
+    }
+
+    const unaccList = document.getElementById('conops-unacceptable-list');
+    if (unaccList) {
+      unaccList.innerHTML = data.unacceptableUses.map(u => `
+        <li style="margin-bottom: 0.5rem;">
+          <strong>${u.title}:</strong> ${u.description}
+          <div style="font-size: 0.74rem; color: #ef4444; font-weight: 700; margin-top: 0.15rem;">⛔ Hard Policy Blocked</div>
+        </li>
+      `).join('');
+    }
+
+    const oversightTbody = document.getElementById('map-oversight-table-body');
+    if (oversightTbody) {
+      oversightTbody.innerHTML = data.oversightLayers.map(l => `
+        <tr>
+          <td><strong>${l.layer}</strong></td>
+          <td style="font-size: 0.82rem; line-height: 1.4;">${l.description}</td>
+          <td style="font-size: 0.8rem; color: var(--accent-primary); font-weight: 600;">${l.cadence}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Third-Party Dependencies Renderer
+  function renderThirdPartyDependencies() {
+    const tbody = document.getElementById('map-dependencies-table-body');
+    if (!tbody) return;
+    const deps = typeof MAP_THIRD_PARTY_DEPENDENCIES !== 'undefined' ? MAP_THIRD_PARTY_DEPENDENCIES : [];
+
+    tbody.innerHTML = deps.map(d => {
+      const riskBadge = d.riskLevel === 'High' ? 'tag-high' : 'tag-med';
+      return `
+        <tr>
+          <td><strong>${d.id}</strong></td>
+          <td><strong>${d.name}</strong><br><span style="font-size: 0.72rem; color: var(--text-muted);">Provider: ${d.provider}</span></td>
+          <td style="font-size: 0.8rem;">${d.type}</td>
+          <td><span class="stat-tag ${riskBadge}">${d.riskLevel}</span></td>
+          <td style="font-size: 0.8rem;">${d.dataResidency}</td>
+          <td style="font-size: 0.8rem;">${d.zeroRetention}</td>
+          <td><span class="stat-tag tag-low">${d.status}</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Exporters: CSV, Markdown, Print PDF
+  function exportMapCsv() {
+    const items = typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? MAP_RISK_BENEFIT_ITEMS : [];
+    if (!items || items.length === 0) return;
+
+    const headers = [
+      'Risk_ID', 'Category', 'Risk_Description', 'MAP_Subcategory', 'Affected_Stakeholders',
+      'Trustworthiness_Characteristic', 'Likelihood', 'Magnitude', 'Risk_Rating', 'Risk_Response',
+      'Control_Description', 'Control_Owner', 'Control_Status', 'Residual_Risk', 'Monitoring_Method',
+      'Monitoring_Frequency', 'Linked_Benefit', 'Notes'
+    ];
+
+    const escapeCsv = (val) => {
+      if (val === null || val === undefined) return '""';
+      const s = String(val).replace(/"/g, '""');
+      return `"${s}"`;
+    };
+
+    const rows = items.map(r => [
+      escapeCsv(r.id),
+      escapeCsv(r.category),
+      escapeCsv(r.description),
+      escapeCsv(r.mapSubcategory),
+      escapeCsv(r.affectedStakeholders),
+      escapeCsv(r.trustworthiness),
+      escapeCsv(r.likelihood),
+      escapeCsv(r.magnitude),
+      escapeCsv(r.riskRating),
+      escapeCsv(r.riskResponse),
+      escapeCsv(r.controlDescription),
+      escapeCsv(r.controlOwner),
+      escapeCsv(r.controlStatus),
+      escapeCsv(r.residualRisk),
+      escapeCsv(r.monitoringMethod),
+      escapeCsv(r.monitoringFrequency),
+      escapeCsv(r.linkedBenefit),
+      escapeCsv(r.notes)
+    ].join(','));
+
+    const csvContent = [headers.join(','), ...rows].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MAP-Risk-Benefit-Matrix-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Exported MAP-Risk-Benefit-Matrix.csv');
+  }
+  window.exportMapCsv = exportMapCsv;
+  document.getElementById('btn-export-map-csv')?.addEventListener('click', exportMapCsv);
+
+  function exportMapMarkdown() {
+    const items = typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? MAP_RISK_BENEFIT_ITEMS : [];
+    const meta = typeof MAP_METADATA !== 'undefined' ? MAP_METADATA : {};
+    const profile = (typeof SYSTEM_MAP_PROFILES !== 'undefined' && SYSTEM_MAP_PROFILES[selectedMapSystemId])
+      ? SYSTEM_MAP_PROFILES[selectedMapSystemId] : null;
+
+    let md = `# NIST AI RMF Context & Risk Report: ${profile ? profile.name : selectedMapSystemId}\n\n`;
+    md += `**Framework:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1 — MAP Function)\n`;
+    md += `**System ID:** ${selectedMapSystemId}\n`;
+    md += `**Date:** ${new Date().toISOString().slice(0, 10)}\n`;
+    md += `**Owner:** ${meta.owner || 'AI Ethics & Risk Architecture Team'}\n\n`;
+    md += `> **Status:** ${profile ? profile.conopsStatus : 'Approved'}\n\n`;
+    md += `---\n\n## 1. 13 Profiled Harm Scenarios (MAP 3.2)\n\n`;
+
+    items.forEach(r => {
+      md += `### ${r.id}: ${r.description}\n`;
+      md += `- **Category:** ${r.category} (${r.mapSubcategory})\n`;
+      md += `- **Trustworthiness:** ${r.trustworthiness}\n`;
+      md += `- **Pre-Mitigation Rating:** ${r.riskRating} (Likelihood: ${r.likelihood}, Magnitude: ${r.magnitude})\n`;
+      md += `- **Treatment Response:** ${r.riskResponse}\n`;
+      md += `- **Control:** ${r.controlDescription}\n`;
+      md += `- **Owner:** ${r.controlOwner} | **Residual Risk:** ${r.residualRisk}\n`;
+      md += `- **Monitoring:** ${r.monitoringMethod} (${r.monitoringFrequency})\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MAP-Context-Report-${selectedMapSystemId}-${new Date().toISOString().slice(0, 10)}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Exported MAP Context Report for ${selectedMapSystemId}`);
+  }
+  document.getElementById('btn-export-map-md')?.addEventListener('click', exportMapMarkdown);
+
+  function triggerPrintMapPdf() {
+    const container = document.getElementById('print-map-report');
+    if (!container) return;
+
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    const meta = typeof MAP_METADATA !== 'undefined' ? MAP_METADATA : {};
+    const items = typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? MAP_RISK_BENEFIT_ITEMS : [];
+    const profile = (typeof SYSTEM_MAP_PROFILES !== 'undefined' && SYSTEM_MAP_PROFILES[selectedMapSystemId])
+      ? SYSTEM_MAP_PROFILES[selectedMapSystemId] : null;
+
+    const html = `
+      <div class="pr-header">
+        <div>
+          <div class="pr-org">SAMABRAINS ASSURANCE &amp; RISK PRACTICE</div>
+          <h1 class="pr-title">Executive AI Context &amp; Harm Dossier (MAP 1–5)</h1>
+          <div class="pr-subtitle">Operationalizing NIST AI Risk Management Framework 1.0 (NIST AI 100-1)</div>
+        </div>
+        <div>
+          <span class="pr-badge-go">CONTEXT PROFILED</span>
+        </div>
+      </div>
+
+      <div class="pr-meta-box">
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Target System</span>
+            <span class="pr-value" style="font-weight: 700;">${selectedMapSystemId} · ${profile ? profile.name : ''}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">CONOPS Status</span>
+            <span class="pr-value" style="font-weight: 700;">${profile ? profile.conopsStatus : 'Approved Envelopes'}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Evaluation Date</span>
+            <span class="pr-value">${new Date().toISOString().slice(0, 10)}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Residual Clearance</span>
+            <span class="pr-value">100% (0 Unmitigated Critical)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">Section 1 — 13 Profiled Harm Scenarios &amp; Controls (MAP 3.2)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 12%;">Category</th>
+              <th style="width: 25%;">Harm Description</th>
+              <th style="width: 10%;">Pre-Risk</th>
+              <th>Mandatory Controls &amp; Monitoring</th>
+              <th style="width: 10%;">Residual</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map(r => `
+              <tr>
+                <td><strong>${r.id}</strong></td>
+                <td>${r.category}</td>
+                <td><strong>${r.description}</strong><br><span style="font-size: 6.5pt; color: #64748b;">${r.mapSubcategory}</span></td>
+                <td><span class="${r.riskRating === 'Critical' ? 'pr-risk-crit' : (r.riskRating === 'High' ? 'pr-risk-high' : 'pr-risk-med')}">${r.riskRating}</span></td>
+                <td style="font-size: 7pt;">${r.controlDescription}<br><strong>Owner:</strong> ${r.controlOwner} · <em>${r.monitoringFrequency}</em></td>
+                <td><span class="${r.residualRisk === 'Low' ? 'pr-risk-low' : 'pr-risk-med'}">${r.residualRisk}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pr-section pr-page-break">
+        <div class="pr-section-title">Section 2 — Disproportionately Affected &amp; Vulnerable Groups (MAP 5.2)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Vulnerable Cohort</th>
+              <th style="width: 25%;">Vulnerability Basis</th>
+              <th style="width: 25%;">Specific Risks from AI</th>
+              <th>Required Protective Safeguards</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(typeof MAP_VULNERABLE_GROUPS !== 'undefined' ? MAP_VULNERABLE_GROUPS : []).map(g => `
+              <tr>
+                <td><strong>${g.group}</strong></td>
+                <td style="font-size: 7pt;">${g.vulnerabilityReason}</td>
+                <td style="font-size: 7pt; color: #b91c1c;">${g.specificRisks}</td>
+                <td style="font-size: 7pt;">${g.requiredSafeguards}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="pr-footer">
+          Official NIST AI RMF MAP Context Dossier · SamaBrains AI Governance Hub · NIST AI 100-1 (MAP 1–5)
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    showToast('Opening Executive MAP Context Dossier Print / PDF dialog...');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
+  }
+  document.getElementById('btn-print-map-pdf')?.addEventListener('click', triggerPrintMapPdf);
 
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {
@@ -3219,6 +3768,7 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     const h = (window.location.hash || '').replace('#', '').toLowerCase();
     if (h === 'roles') switchHubView('roles', false);
     else if (h === 'policy') switchHubView('policy', false);
+    else if (h === 'map' || h === 'context' || h === 'harms') switchHubView('map', false);
     else if (h === 'assessment' || h === 'aiia') switchHubView('assessment', false);
     else if (h === 'inventory') switchHubView('inventory', false);
   });
@@ -3243,6 +3793,8 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     switchHubView('roles', false);
   } else if (initialHash === 'policy') {
     switchHubView('policy', false);
+  } else if (initialHash === 'map' || initialHash === 'context' || initialHash === 'harms') {
+    switchHubView('map', false);
   } else if (initialHash === 'assessment' || initialHash === 'aiia') {
     switchHubView('assessment', false);
   } else {
