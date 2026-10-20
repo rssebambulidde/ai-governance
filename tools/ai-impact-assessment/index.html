@@ -427,18 +427,27 @@
       </div>
 
       <!-- Module Sub-Tabs Switcher -->
-      <div class="sub-tab-bar">
+      <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-raci" onclick="window.switchRolesSubview && window.switchRolesSubview('raci')">
-          <span class="sub-tab-icon">📋</span> RACI Activity Matrix
+          <span class="sub-tab-icon">📋</span> RACI Matrix (GOVERN 2.1)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-catalog" onclick="window.switchRolesSubview && window.switchRolesSubview('catalog')">
-          <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers
+          <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers (GOVERN 2.1)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-haii" onclick="window.switchRolesSubview && window.switchRolesSubview('haii')">
           <span class="sub-tab-icon">🕹️</span> Human-AI Oversight (GOVERN 3.2)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-training" onclick="window.switchRolesSubview && window.switchRolesSubview('training')">
           <span class="sub-tab-icon">🎓</span> Training Tracker (GOVERN 2.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-crossteam" onclick="window.switchRolesSubview && window.switchRolesSubview('crossteam')">
+          <span class="sub-tab-icon">🤝</span> Cross-Team Collaboration (GOVERN 2.3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-leadership" onclick="window.switchRolesSubview && window.switchRolesSubview('leadership')">
+          <span class="sub-tab-icon">🏆</span> Leadership Decisions (GOVERN 3.1)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-culture" onclick="window.switchRolesSubview && window.switchRolesSubview('culture')">
+          <span class="sub-tab-icon">💡</span> Responsible AI Culture (GOVERN 4.1)
         </button>
       </div>
 
@@ -560,6 +569,89 @@
       </div>
 
     </div>
+
+      <!-- SUB-VIEW 5: CROSS-TEAM COLLABORATION (GOVERN 2.3) -->
+      <div id="subview-crossteam" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Cross-Functional AI Risk Collaboration Practices (GOVERN 2.3)</h3>
+              <p class="text-muted">Structured forums, working groups, and cross-team practices that embed AI risk management across the organisation.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table" id="table-crossteam">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">ID</th>
+                  <th style="width: 22%;">Practice Name</th>
+                  <th style="width: 10%;">Ref</th>
+                  <th style="width: 12%;">Frequency</th>
+                  <th style="width: 22%;">Participants</th>
+                  <th>Purpose &amp; Output</th>
+                </tr>
+              </thead>
+              <tbody id="crossteam-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 6: LEADERSHIP ALIGNMENT (GOVERN 3.1) -->
+      <div id="subview-leadership" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Organisational Leadership Decision Alignment (GOVERN 3.1)</h3>
+              <p class="text-muted">Evidence that organisational leadership formally directs and oversees AI risk management decisions.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table" id="table-leadership">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">ID</th>
+                  <th style="width: 28%;">Leadership Commitment</th>
+                  <th style="width: 10%;">Ref</th>
+                  <th style="width: 12%;">Cadence</th>
+                  <th>Evidence &amp; Owner</th>
+                  <th style="width: 10%;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="leadership-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 7: RESPONSIBLE AI CULTURE (GOVERN 4.1) -->
+      <div id="subview-culture" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Responsible AI Culture Initiatives (GOVERN 4.1)</h3>
+              <p class="text-muted">Organisational programmes that build awareness, accountability, and ethical commitment to responsible AI across all staff.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table" id="table-culture">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">ID</th>
+                  <th style="width: 22%;">Initiative</th>
+                  <th style="width: 10%;">Ref</th>
+                  <th style="width: 18%;">Scope</th>
+                  <th>Description &amp; Measurable Outcome</th>
+                  <th style="width: 12%;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="culture-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div><!-- End of #view-roles -->
 
   <!-- VIEW 3: AI GOVERNANCE POLICY & GATING MODULE (GOVERN 1 & GOVERN 6) -->
@@ -637,21 +729,33 @@
       </div>
 
       <!-- Module Sub-Tabs Switcher -->
-      <div class="sub-tab-bar">
+      <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-gates" onclick="window.switchPolicySubview && window.switchPolicySubview('gates')">
-          <span class="sub-tab-icon">🚪</span> Mandatory Deployment Gates (GOVERN 1.3)
+          <span class="sub-tab-icon">🚪</span> Deployment Gates (GOVERN 1.3)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-principles" onclick="window.switchPolicySubview && window.switchPolicySubview('principles')">
-          <span class="sub-tab-icon">⚖️</span> Trustworthy Principles Audit (GOVERN 1.2)
+          <span class="sub-tab-icon">⚖️</span> Trustworthy Principles (GOVERN 1.2)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-artifacts" onclick="window.switchPolicySubview && window.switchPolicySubview('artifacts')">
-          <span class="sub-tab-icon">🗂️</span> Lifecycle Artifact Tracker (GOVERN 1.4)
+          <span class="sub-tab-icon">🗂️</span> Lifecycle Artifacts (GOVERN 1.4)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-thirdparty" onclick="window.switchPolicySubview && window.switchPolicySubview('thirdparty')">
-          <span class="sub-tab-icon">🌐</span> Third-Party Model Screener (GOVERN 6)
+          <span class="sub-tab-icon">🌐</span> Third-Party Screener (GOVERN 5.1 &amp; 6)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-exceptions" onclick="window.switchPolicySubview && window.switchPolicySubview('exceptions')">
           <span class="sub-tab-icon">📋</span> Exceptions &amp; Waivers (GOVERN 1.1)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-risktolerance" onclick="window.switchPolicySubview && window.switchPolicySubview('risktolerance')">
+          <span class="sub-tab-icon">🎚️</span> Risk Tolerance Framework (GOVERN 1.5)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-tpmonitoring" onclick="window.switchPolicySubview && window.switchPolicySubview('tpmonitoring')">
+          <span class="sub-tab-icon">🔭</span> Vendor Risk Monitoring (GOVERN 5.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-govreview" onclick="window.switchPolicySubview && window.switchPolicySubview('govreview')">
+          <span class="sub-tab-icon">🔄</span> Assessment Review (GOVERN 6.1)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-govimprove" onclick="window.switchPolicySubview && window.switchPolicySubview('govimprove')">
+          <span class="sub-tab-icon">📈</span> Process Improvement (GOVERN 6.2)
         </button>
       </div>
 
@@ -804,6 +908,42 @@
         </div>
       </div>
 
+      <!-- SUBVIEW 6: RISK TOLERANCE FRAMEWORK (GOVERN 1.5) -->
+      <div id="subview-risktolerance" class="subview-panel" style="display: none;">
+        <div class="card table-card" style="margin-bottom:1.5rem;">
+          <div class="card-header-flex"><div><h3>Organisational AI Risk Tolerance Levels (GOVERN 1.5)</h3><p class="text-muted">The 4-tier risk tolerance scale defining what level of AI risk is acceptable, how it is reviewed, and what response is mandatory at each level.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-risktolerance-levels"><thead><tr><th>Risk Tier</th><th>Trigger Threshold</th><th>Required Response</th><th>Review Cadence</th><th>Examples</th></tr></thead><tbody id="risktolerance-levels-tbody"></tbody></table></div>
+        </div>
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Risk Acceptance Criteria (GOVERN 1.5)</h3><p class="text-muted">Binding acceptance criteria that must be satisfied before any risk is formally accepted.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-risktolerance-criteria"><thead><tr><th style="width:10%;">ID</th><th>Acceptance Criterion</th><th style="width:16%;">RMF Ref</th></tr></thead><tbody id="risktolerance-criteria-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 7: THIRD-PARTY VENDOR RISK MONITORING (GOVERN 5.2) -->
+      <div id="subview-tpmonitoring" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Third-Party AI Vendor Risk Monitoring (GOVERN 5.2)</h3><p class="text-muted">Ongoing monitoring of contracted third-party AI vendors for compliance, performance, and contractual obligations.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-tpmonitoring"><thead><tr><th style="width:10%;">ID</th><th style="width:24%;">Vendor &amp; Component</th><th style="width:10%;">Risk</th><th>Contractual Clause &amp; Monitoring</th><th style="width:12%;">Last Audit</th><th style="width:12%;">Status</th><th style="width:8%;">Findings</th></tr></thead><tbody id="tpmonitoring-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 8: ASSESSMENT REVIEW CADENCE (GOVERN 6.1) -->
+      <div id="subview-govreview" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI Impact Assessment Review Cadence (GOVERN 6.1)</h3><p class="text-muted">Scheduled reviews ensuring all AI system risk assessments remain current and are updated as system context or risk environment changes.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-govreview"><thead><tr><th style="width:10%;">ID</th><th style="width:20%;">AI System</th><th style="width:10%;">Risk Tier</th><th style="width:12%;">Review Cycle</th><th style="width:12%;">Last Review</th><th style="width:12%;">Next Review</th><th>Key Findings &amp; Status</th></tr></thead><tbody id="govreview-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 9: GOVERNANCE PROCESS IMPROVEMENT (GOVERN 6.2) -->
+      <div id="subview-govimprove" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI Governance Process Improvement Log (GOVERN 6.2)</h3><p class="text-muted">Continuous improvements made to AI risk management processes and practices, driven by incident learnings, audits, and regulatory feedback.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-govimprove"><thead><tr><th style="width:10%;">ID</th><th style="width:28%;">Improvement</th><th style="width:10%;">Ref</th><th style="width:10%;">Quarter</th><th>Trigger &amp; Outcome</th><th style="width:10%;">Status</th></tr></thead><tbody id="govimprove-tbody"></tbody></table></div>
+        </div>
+      </div>
+
     </div><!-- End of .inventory-container -->
   </div><!-- End of #view-policy -->
 
@@ -874,21 +1014,36 @@
       </div>
 
       <!-- Module Sub-Tabs Switcher -->
-      <div class="sub-tab-bar">
+      <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-map-harms" onclick="window.switchMapSubview && window.switchMapSubview('harms')">
-          <span class="sub-tab-icon">⚡</span> 13 Harm Scenarios (MAP 3.2)
+          <span class="sub-tab-icon">⚡</span> Harm Scenarios (MAP 3.2)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-matrix" onclick="window.switchMapSubview && window.switchMapSubview('matrix')">
-          <span class="sub-tab-icon">⚖️</span> Risk-Benefit Matrix (MAP 3.1 &amp; 3.2)
+          <span class="sub-tab-icon">⚖️</span> Risk-Benefit Matrix (MAP 3.1)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-stakeholders" onclick="window.switchMapSubview && window.switchMapSubview('stakeholders')">
-          <span class="sub-tab-icon">👥</span> Stakeholders &amp; Vulnerability (MAP 5)
+          <span class="sub-tab-icon">👥</span> Stakeholders &amp; Vulnerability (MAP 5.1–5.2)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-conops" onclick="window.switchMapSubview && window.switchMapSubview('conops')">
-          <span class="sub-tab-icon">🎯</span> CONOPS &amp; Oversight Envelopes (MAP 1 &amp; 3.5)
+          <span class="sub-tab-icon">🎯</span> CONOPS &amp; Oversight (MAP 1.1 &amp; 3.5)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-dependencies" onclick="window.switchMapSubview && window.switchMapSubview('dependencies')">
           <span class="sub-tab-icon">🌐</span> Third-Party Dependencies (MAP 4.1)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-map-taskclass" onclick="window.switchMapSubview && window.switchMapSubview('taskclass')">
+          <span class="sub-tab-icon">🏷️</span> AI Task Classification (MAP 1.3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-map-science" onclick="window.switchMapSubview && window.switchMapSubview('science')">
+          <span class="sub-tab-icon">🔬</span> Scientific Risk Principles (MAP 2.1)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-map-lineage" onclick="window.switchMapSubview && window.switchMapSubview('lineage')">
+          <span class="sub-tab-icon">🗄️</span> Data Lineage (MAP 2.3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-map-expertreview" onclick="window.switchMapSubview && window.switchMapSubview('expertreview')">
+          <span class="sub-tab-icon">🧑‍💼</span> Expert Review (MAP 4.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-map-transparency" onclick="window.switchMapSubview && window.switchMapSubview('transparency')">
+          <span class="sub-tab-icon">📢</span> External Transparency (MAP 5.3)
         </button>
       </div>
 
@@ -1116,6 +1271,46 @@
         </div>
       </div>
 
+      <!-- SUBVIEW 6: AI TASK CLASSIFICATION (MAP 1.3) -->
+      <div id="subview-map-taskclass" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI Task Classification (MAP 1.3)</h3><p class="text-muted">Classification of AI tasks and use types to contextualise the level of scrutiny, oversight, and TEVV required.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-map-taskclass"><thead><tr><th style="width:10%;">ID</th><th style="width:22%;">Task Type</th><th style="width:10%;">Ref</th><th>Description &amp; Risk Profile</th><th style="width:20%;">Example Systems</th></tr></thead><tbody id="map-taskclass-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 7: SCIENTIFIC RISK PRINCIPLES (MAP 2.1) -->
+      <div id="subview-map-science" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Scientific Principles for AI Risk Identification (MAP 2.1)</h3><p class="text-muted">Scientific standards, statistical rigour, and research methods applied to AI risk identification and evaluation activities.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-map-science"><thead><tr><th style="width:10%;">ID</th><th style="width:24%;">Principle</th><th style="width:10%;">Ref</th><th>Implementation &amp; Evidence</th><th style="width:12%;">Owner</th></tr></thead><tbody id="map-science-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 8: DATA LINEAGE (MAP 2.3) -->
+      <div id="subview-map-lineage" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI System Data Lineage Register (MAP 2.3)</h3><p class="text-muted">Documentation of data sources, volumes, classifications, quality checks, and lineage for training and inference data across registered AI systems.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-map-lineage"><thead><tr><th style="width:10%;">ID</th><th style="width:18%;">System</th><th style="width:22%;">Training Data Sources</th><th style="width:12%;">Classification</th><th style="width:8%;">PII</th><th>Quality Checks &amp; Refresh</th></tr></thead><tbody id="map-lineage-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 9: EXPERT REVIEW (MAP 4.2) -->
+      <div id="subview-map-expertreview" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Independent Expert AI Risk Review Register (MAP 4.2)</h3><p class="text-muted">Internal and external expert reviews of AI risks including red team assessments, fairness audits, and regulatory compliance reviews.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-map-expertreview"><thead><tr><th style="width:10%;">ID</th><th style="width:22%;">Review Type</th><th style="width:10%;">Ref</th><th style="width:16%;">System</th><th style="width:18%;">Reviewer</th><th>Findings &amp; Sign-off</th><th style="width:10%;">Date</th></tr></thead><tbody id="map-expertreview-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 10: EXTERNAL TRANSPARENCY (MAP 5.3) -->
+      <div id="subview-map-transparency" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>External Transparency &amp; Disclosure Register (MAP 5.3)</h3><p class="text-muted">All external-facing transparency obligations including AI interaction notices, model cards, adverse action explanations, and public reporting.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-map-transparency"><thead><tr><th style="width:10%;">ID</th><th style="width:20%;">Disclosure Type</th><th style="width:10%;">Ref</th><th style="width:18%;">Channel</th><th>Content &amp; Format</th><th style="width:12%;">Status</th></tr></thead><tbody id="map-transparency-tbody"></tbody></table></div>
+        </div>
+      </div>
+
     </div><!-- End of .inventory-container -->
   </div><!-- End of #view-map -->
 
@@ -1187,21 +1382,54 @@
       </div>
 
       <!-- Module Sub-Tabs Switcher -->
-      <div class="sub-tab-bar">
+      <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-measure-metrics" onclick="window.switchMeasureSubview && window.switchMeasureSubview('metrics')">
-          <span class="sub-tab-icon">📋</span> 20 Metrics Tracker (MEASURE 1.1)
+          <span class="sub-tab-icon">📋</span> Metrics Tracker (MEASURE 1.1)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-suites" onclick="window.switchMeasureSubview && window.switchMeasureSubview('suites')">
-          <span class="sub-tab-icon">🧪</span> 11 TEVV Test Suites (MEASURE 2)
+          <span class="sub-tab-icon">🧪</span> TEVV Test Suites (MEASURE 2.1)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-bias" onclick="window.switchMeasureSubview && window.switchMeasureSubview('bias')">
-          <span class="sub-tab-icon">⚖️</span> Bias &amp; Fairness Lab (SP 1270)
+          <span class="sub-tab-icon">⚖️</span> Bias &amp; Fairness Lab (MEASURE 2.5)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-monitoring" onclick="window.switchMeasureSubview && window.switchMeasureSubview('monitoring')">
-          <span class="sub-tab-icon">📡</span> Monitoring &amp; Alert SLAs (MEASURE 3)
+          <span class="sub-tab-icon">📡</span> Monitoring &amp; Alerts (MEASURE 3.1)
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-calendar" onclick="window.switchMeasureSubview && window.switchMeasureSubview('calendar')">
-          <span class="sub-tab-icon">📅</span> TEVV Lifecycle &amp; Sign-Off (MEASURE 4)
+          <span class="sub-tab-icon">📅</span> TEVV Lifecycle (MEASURE 4.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-expertrev" onclick="window.switchMeasureSubview && window.switchMeasureSubview('expertrev')">
+          <span class="sub-tab-icon">👁️</span> Expert Review (MEASURE 1.3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-arch" onclick="window.switchMeasureSubview && window.switchMeasureSubview('arch')">
+          <span class="sub-tab-icon">🏗️</span> Architecture Docs (MEASURE 2.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-trust" onclick="window.switchMeasureSubview && window.switchMeasureSubview('trust')">
+          <span class="sub-tab-icon">🔐</span> Trustworthiness Eval (MEASURE 2.3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-hf" onclick="window.switchMeasureSubview && window.switchMeasureSubview('hf')">
+          <span class="sub-tab-icon">🧑‍💻</span> Human Factors (MEASURE 2.7)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-tpeval" onclick="window.switchMeasureSubview && window.switchMeasureSubview('tpeval')">
+          <span class="sub-tab-icon">🔗</span> Third-Party Risk (MEASURE 2.8)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-privacy" onclick="window.switchMeasureSubview && window.switchMeasureSubview('privacy')">
+          <span class="sub-tab-icon">🔒</span> Privacy Risk (MEASURE 2.9–2.10)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-env" onclick="window.switchMeasureSubview && window.switchMeasureSubview('env')">
+          <span class="sub-tab-icon">🌱</span> Environmental Impact (MEASURE 2.11)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-comms" onclick="window.switchMeasureSubview && window.switchMeasureSubview('comms')">
+          <span class="sub-tab-icon">📣</span> Metrics Communication (MEASURE 2.12)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-ctrleff" onclick="window.switchMeasureSubview && window.switchMeasureSubview('ctrleff')">
+          <span class="sub-tab-icon">✅</span> Control Effectiveness (MEASURE 2.13)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-metupdate" onclick="window.switchMeasureSubview && window.switchMeasureSubview('metupdate')">
+          <span class="sub-tab-icon">🔁</span> Metric Updates (MEASURE 3.2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-improvmeth" onclick="window.switchMeasureSubview && window.switchMeasureSubview('improvmeth')">
+          <span class="sub-tab-icon">🚀</span> Methodology Improvement (MEASURE 4.1)
         </button>
       </div>
 
@@ -1534,6 +1762,102 @@
         </div>
       </div>
 
+      <!-- SUBVIEW 6: EXPERT REVIEW OF EVALUATION APPROACHES (MEASURE 1.3) -->
+      <div id="subview-measure-expertrev" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Expert Review of Evaluation Approaches (MEASURE 1.3)</h3><p class="text-muted">Internal and external expert reviews of the TEVV framework and metrics catalog to ensure scientific validity and coverage.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-expertrev"><thead><tr><th style="width:10%;">ID</th><th style="width:22%;">Review Type</th><th style="width:10%;">Ref</th><th style="width:20%;">Reviewed By</th><th style="width:12%;">Frequency</th><th>Scope &amp; Outcome</th></tr></thead><tbody id="measure-expertrev-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 7: ARCHITECTURE DOCUMENTATION (MEASURE 2.2) -->
+      <div id="subview-measure-arch" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI System Architecture Documentation for Evaluation (MEASURE 2.2)</h3><p class="text-muted">Technical documentation of AI system architectures to enable rigorous and consistent evaluation.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-arch"><thead><tr><th style="width:10%;">ID</th><th style="width:18%;">System</th><th style="width:18%;">Model Type</th><th style="width:16%;">Infrastructure</th><th>Evaluability Notes</th><th style="width:12%;">Updated</th></tr></thead><tbody id="measure-arch-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 8: TRUSTWORTHINESS CHARACTERISTICS (MEASURE 2.3) -->
+      <div id="subview-measure-trust" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Trustworthiness Characteristics Evaluation (MEASURE 2.3)</h3><p class="text-muted">Systematic evaluation of all 7 NIST AI RMF trustworthiness characteristics with thresholds, methods, and current verdicts.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-trust"><thead><tr><th style="width:10%;">ID</th><th style="width:18%;">Characteristic</th><th style="width:10%;">Ref</th><th style="width:22%;">Evaluation Method</th><th style="width:18%;">Threshold</th><th>Current Status</th><th style="width:8%;">Verdict</th></tr></thead><tbody id="measure-trust-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 9: HUMAN FACTORS (MEASURE 2.7) -->
+      <div id="subview-measure-hf" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Human Factors &amp; Usability Evaluation (MEASURE 2.7)</h3><p class="text-muted">Evaluation of how AI system outputs are understood and used by people, including usability studies, automation bias, and accessibility testing.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-hf"><thead><tr><th style="width:10%;">ID</th><th style="width:22%;">Evaluation Type</th><th style="width:10%;">Ref</th><th style="width:16%;">Scope</th><th style="width:18%;">Metric &amp; Result</th><th>Actions Taken</th><th style="width:10%;">Status</th></tr></thead><tbody id="measure-hf-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 10: THIRD-PARTY RISK EVALUATION (MEASURE 2.8) -->
+      <div id="subview-measure-tpeval" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Third-Party Component Risk Evaluation (MEASURE 2.8)</h3><p class="text-muted">Evaluation of risks introduced by third-party AI components, APIs, and infrastructure in the AI system supply chain.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-tpeval"><thead><tr><th style="width:10%;">ID</th><th style="width:20%;">Component</th><th style="width:10%;">Ref</th><th style="width:20%;">Risk Dimension</th><th>Evaluation &amp; Mitigation</th><th style="width:10%;">Residual Risk</th></tr></thead><tbody id="measure-tpeval-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 11: PRIVACY RISK (MEASURE 2.9 & 2.10) -->
+      <div id="subview-measure-privacy" class="subview-panel" style="display: none;">
+        <div class="card table-card" style="margin-bottom:1.5rem;">
+          <div class="card-header-flex"><div><h3>Privacy Risk Evaluation (MEASURE 2.9)</h3><p class="text-muted">Assessment of privacy risks from AI systems including PII leakage, model inversion attacks, and GDPR compliance.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-priveval"><thead><tr><th style="width:10%;">ID</th><th style="width:18%;">System</th><th style="width:22%;">Privacy Risk</th><th style="width:18%;">Evaluation Method</th><th>Result &amp; PET Applied</th><th style="width:8%;">DPIA</th></tr></thead><tbody id="measure-priveval-tbody"></tbody></table></div>
+        </div>
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Privacy-Enhancing Techniques (PETs) Applied (MEASURE 2.10)</h3><p class="text-muted">Privacy-Enhancing Technologies deployed to reduce privacy risk without sacrificing model utility.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-pets"><thead><tr><th style="width:10%;">ID</th><th style="width:22%;">Technique</th><th style="width:10%;">Ref</th><th style="width:22%;">Applied To</th><th>Implementation &amp; Trade-off</th><th style="width:10%;">Status</th></tr></thead><tbody id="measure-pets-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 12: ENVIRONMENTAL IMPACT (MEASURE 2.11) -->
+      <div id="subview-measure-env" class="subview-panel" style="display: none;">
+        <div class="card highlight-card" style="margin-bottom:1.5rem;">
+          <h3>Environmental Impact Overview (MEASURE 2.11)</h3>
+          <p class="text-muted" id="measure-env-overview"></p>
+        </div>
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Per-System Energy &amp; Carbon Footprint</h3></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-env"><thead><tr><th style="width:20%;">System</th><th style="width:18%;">Energy per Query</th><th style="width:14%;">Monthly Queries</th><th style="width:18%;">Est. Monthly CO₂</th><th>Carbon Offset Scheme</th><th style="width:10%;">Status</th></tr></thead><tbody id="measure-env-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 13: METRICS COMMUNICATION (MEASURE 2.12) -->
+      <div id="subview-measure-comms" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI Risk Metrics Communication Plan (MEASURE 2.12)</h3><p class="text-muted">How AI risk metrics are documented and communicated to different audiences — board, technical teams, regulators, and customers.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-comms"><thead><tr><th style="width:10%;">ID</th><th style="width:18%;">Audience</th><th style="width:10%;">Ref</th><th style="width:24%;">Metrics Shared</th><th style="width:14%;">Format &amp; Cadence</th><th>Owner</th></tr></thead><tbody id="measure-comms-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 14: CONTROL EFFECTIVENESS (MEASURE 2.13) -->
+      <div id="subview-measure-ctrleff" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Risk Control Effectiveness Evaluation (MEASURE 2.13)</h3><p class="text-muted">Periodic evaluation of whether implemented risk controls are actually working — with evidence and verdicts.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-ctrleff"><thead><tr><th style="width:10%;">ID</th><th style="width:20%;">Control</th><th style="width:10%;">Ref</th><th style="width:18%;">Linked Risk</th><th style="width:20%;">Effectiveness Score</th><th>Last Evaluated</th><th style="width:10%;">Verdict</th></tr></thead><tbody id="measure-ctrleff-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 15: METRIC UPDATES & MONITORING (MEASURE 3.2) -->
+      <div id="subview-measure-metupdate" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Risk Metrics Update &amp; Trend Monitoring (MEASURE 3.2)</h3><p class="text-muted">Tracking of key metric trends over time to ensure continuous monitoring and prompt response to changes.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-metupdate"><thead><tr><th style="width:10%;">ID</th><th style="width:10%;">Metric ID</th><th style="width:10%;">Ref</th><th style="width:20%;">Metric Name</th><th style="width:12%;">Current</th><th style="width:12%;">Previous</th><th style="width:14%;">Trend</th><th>Alert Status</th></tr></thead><tbody id="measure-metupdate-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 16: METHODOLOGY IMPROVEMENT (MEASURE 4.1) -->
+      <div id="subview-measure-improvmeth" class="subview-panel" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Measurement Methodology Improvement Log (MEASURE 4.1)</h3><p class="text-muted">Improvements made to evaluation methods, TEVV suites, and metrics catalog driven by operational experience and expert feedback.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-measure-improvmeth"><thead><tr><th style="width:10%;">ID</th><th style="width:26%;">Improvement</th><th style="width:10%;">Ref</th><th style="width:10%;">Quarter</th><th>Trigger &amp; Outcome</th><th style="width:10%;">Status</th></tr></thead><tbody id="measure-improvmeth-tbody"></tbody></table></div>
+        </div>
+      </div>
+
     </div><!-- End of .inventory-container -->
   </div><!-- End of #view-measure -->
 
@@ -1562,21 +1886,45 @@
       </div>
 
       <!-- MANAGE Sub-Tabs Navigation -->
-      <div class="inventory-tabs" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; overflow-x: auto;">
+      <div class="inventory-tabs" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; flex-wrap: wrap;">
         <button type="button" class="btn btn-secondary active-subtab" id="manage-tab-incidents" data-subview="incidents">
-          🚨 Incident Triage &amp; Register (MANAGE 4.1)
+          🚨 Incident Register (MANAGE 4.1)
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-playbooks" data-subview="playbooks">
-          📘 Response Playbooks A–G (MANAGE 4.2)
+          📘 Playbooks A–G (MANAGE 4.2)
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-responses" data-subview="responses">
-          🛡️ 13 Risk Response Plans (MANAGE 1–2)
+          🛡️ Risk Response Plans (MANAGE 1.1)
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-improvements" data-subview="improvements">
-          📈 Continuous Improvement Log (MANAGE 3–4)
+          📈 Improvement Log (MANAGE 3.1)
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-override" data-subview="override">
-          ⚡ Emergency Controls &amp; Override (MANAGE 2.3)
+          ⚡ Emergency Controls (MANAGE 2.3)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-resources" data-subview="resources">
+          💰 Resource Allocation (MANAGE 1.2)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-docreg" data-subview="docreg">
+          📂 Risk Documentation (MANAGE 1.3)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-residual" data-subview="residual">
+          🎯 Risk Acceptance (MANAGE 1.4)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-trustmaint" data-subview="trustmaint">
+          🔐 Trustworthiness Maintenance (MANAGE 2.1)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-decommission" data-subview="decommission">
+          🔌 Decommission Criteria (MANAGE 2.2)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-stakeng" data-subview="stakeng">
+          📡 Stakeholder Engagement (MANAGE 2.4)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-procimprove" data-subview="procimprove">
+          🔁 Process Improvement (MANAGE 3.2)
+        </button>
+        <button type="button" class="btn btn-secondary" id="manage-tab-pia" data-subview="pia">
+          🔍 Post-Incident Analysis (MANAGE 4.3)
         </button>
       </div>
 
@@ -1687,6 +2035,70 @@
       <div id="subview-manage-override" class="manage-subview" style="display: none;">
         <div id="manage-override-container">
           <!-- Emergency Controls & Circuit Breakers Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- SUBVIEW 6: RESOURCE ALLOCATION (MANAGE 1.2) -->
+      <div id="subview-manage-resources" class="manage-subview" style="display: none;">
+        <div class="card highlight-card" style="margin-bottom:1.5rem;" id="manage-resources-overview"></div>
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI Risk Management Resource Allocation (MANAGE 1.2)</h3><p class="text-muted">Dedicated FTE, budget, and tooling allocated to AI risk response activities.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-resources"><thead><tr><th style="width:28%;">Role / Resource</th><th style="width:8%;">FTE</th><th style="width:22%;">Primary Function</th><th>Budget Allocation</th></tr></thead><tbody id="manage-resources-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 7: RISK RESPONSE DOCUMENTATION (MANAGE 1.3) -->
+      <div id="subview-manage-docreg" class="manage-subview" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI Risk Response Documentation Register (MANAGE 1.3)</h3><p class="text-muted">All mandatory risk management documents with locations, formats, and retention periods.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-docreg"><thead><tr><th style="width:10%;">ID</th><th style="width:24%;">Document</th><th style="width:10%;">Ref</th><th style="width:18%;">Location &amp; Format</th><th>Purpose</th><th style="width:10%;">Owner</th><th style="width:12%;">Retention</th></tr></thead><tbody id="manage-docreg-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 8: RESIDUAL RISK ACCEPTANCE (MANAGE 1.4) -->
+      <div id="subview-manage-residual" class="manage-subview" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Residual Risk Acceptance Register (MANAGE 1.4)</h3><p class="text-muted">Formally accepted residual risks where the cost or impact of further mitigation is disproportionate — each with explicit acceptance basis, authority, and review date.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-residual"><thead><tr><th style="width:8%;">ID</th><th style="width:16%;">System</th><th style="width:10%;">Risk ID</th><th style="width:22%;">Risk Description</th><th style="width:8%;">Score</th><th>Acceptance Basis &amp; Authority</th><th style="width:10%;">Review Date</th></tr></thead><tbody id="manage-residual-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 9: TRUSTWORTHINESS MAINTENANCE (MANAGE 2.1) -->
+      <div id="subview-manage-trustmaint" class="manage-subview" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI System Trustworthiness Maintenance Activities (MANAGE 2.1)</h3><p class="text-muted">Ongoing activities that maintain the safety, accuracy, fairness, and reliability of AI systems throughout their operational lifetime.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-trustmaint"><thead><tr><th style="width:10%;">ID</th><th style="width:24%;">Activity</th><th style="width:10%;">Ref</th><th style="width:12%;">Cadence</th><th style="width:18%;">Owner &amp; Output</th><th>Auto-trigger Condition</th></tr></thead><tbody id="manage-trustmaint-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 10: DECOMMISSION CRITERIA (MANAGE 2.2) -->
+      <div id="subview-manage-decommission" class="manage-subview" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>AI System Shutdown &amp; Decommission Criteria (MANAGE 2.2)</h3><p class="text-muted">Pre-defined conditions that mandate suspension or full decommissioning of an AI system, with escalation and replacement plans.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-decommission"><thead><tr><th style="width:10%;">ID</th><th style="width:20%;">Trigger</th><th style="width:10%;">Ref</th><th style="width:18%;">Threshold Condition</th><th>Immediate Action &amp; Timeline</th><th style="width:14%;">Board Notification</th></tr></thead><tbody id="manage-decommission-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 11: STAKEHOLDER ENGAGEMENT IN RESPONSE (MANAGE 2.4) -->
+      <div id="subview-manage-stakeng" class="manage-subview" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Stakeholder Engagement in Risk Response (MANAGE 2.4)</h3><p class="text-muted">Obligations and protocols for engaging affected stakeholders during and after AI risk incidents.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-stakeng"><thead><tr><th style="width:10%;">ID</th><th style="width:18%;">Stakeholder</th><th style="width:10%;">Ref</th><th style="width:16%;">Engagement Type</th><th style="width:14%;">Trigger</th><th>Method &amp; Evidence</th></tr></thead><tbody id="manage-stakeng-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 12: PROCESS IMPROVEMENT FROM LEARNINGS (MANAGE 3.2) -->
+      <div id="subview-manage-procimprove" class="manage-subview" style="display: none;">
+        <div class="card table-card">
+          <div class="card-header-flex"><div><h3>Risk Management Process Improvements from Incident Learnings (MANAGE 3.2)</h3><p class="text-muted">Changes made to risk management policies, playbooks, and processes directly driven by incident post-mortems.</p></div></div>
+          <div class="table-responsive"><table class="inventory-table" id="table-manage-procimprove"><thead><tr><th style="width:10%;">ID</th><th style="width:26%;">Improvement</th><th style="width:10%;">Ref</th><th style="width:16%;">Trigger Incident</th><th>Change Made &amp; Evidence</th><th style="width:12%;">Recurrence?</th></tr></thead><tbody id="manage-procimprove-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 13: POST-INCIDENT ANALYSIS (MANAGE 4.3) -->
+      <div id="subview-manage-pia" class="manage-subview" style="display: none;">
+        <div id="manage-pia-container">
+          <!-- Rendered dynamically -->
         </div>
       </div>
 
@@ -2908,6 +3320,7 @@
   <script src="measure-data.js?v=20261020-1"></script>
   <script src="manage-data.js?v=20261020-1"></script>
   <script src="finassist-data.js?v=20261020-1"></script>
-  <script src="app.js?v=20261020-1"></script>
+  <script src="rmf-extensions-data.js?v=20261021-1"></script>
+  <script src="app.js?v=20261021-1"></script>
 </body>
 </html>

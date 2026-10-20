@@ -1335,6 +1335,12 @@ h1, h2, h3, h4, .brand-title {
   border-color: var(--accent-blue);
   color: var(--accent-blue);
 }
+.btn-secondary.active-subtab,
+.btn-secondary.active {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: #fff;
+}
 
 .glow-btn {
   box-shadow: var(--shadow-glow);

@@ -720,7 +720,10 @@ function initAntigravityGovernanceApp() {
       { id: 'raci', btn: document.getElementById('btn-sub-raci'), view: document.getElementById('subview-raci') },
       { id: 'catalog', btn: document.getElementById('btn-sub-catalog'), view: document.getElementById('subview-catalog') },
       { id: 'haii', btn: document.getElementById('btn-sub-haii'), view: document.getElementById('subview-haii') },
-      { id: 'training', btn: document.getElementById('btn-sub-training'), view: document.getElementById('subview-training') }
+      { id: 'training', btn: document.getElementById('btn-sub-training'), view: document.getElementById('subview-training') },
+      { id: 'crossteam', btn: document.getElementById('btn-sub-crossteam'), view: document.getElementById('subview-crossteam') },
+      { id: 'leadership', btn: document.getElementById('btn-sub-leadership'), view: document.getElementById('subview-leadership') },
+      { id: 'culture', btn: document.getElementById('btn-sub-culture'), view: document.getElementById('subview-culture') }
     ];
 
     subtabs.forEach(s => {
@@ -742,6 +745,9 @@ function initAntigravityGovernanceApp() {
     else if (target === 'catalog') renderRolesCatalog();
     else if (target === 'haii') renderHaiiRegister();
     else if (target === 'training') renderTrainingTracker();
+    else if (target === 'crossteam') renderCrossTeamCollaboration();
+    else if (target === 'leadership') renderLeadershipAlignment();
+    else if (target === 'culture') renderResponsibleAiCulture();
   }
 
   window.switchRolesSubview = switchRolesSubview;
@@ -750,6 +756,9 @@ function initAntigravityGovernanceApp() {
   document.getElementById('btn-sub-catalog')?.addEventListener('click', () => switchRolesSubview('catalog'));
   document.getElementById('btn-sub-haii')?.addEventListener('click', () => switchRolesSubview('haii'));
   document.getElementById('btn-sub-training')?.addEventListener('click', () => switchRolesSubview('training'));
+  document.getElementById('btn-sub-crossteam')?.addEventListener('click', () => switchRolesSubview('crossteam'));
+  document.getElementById('btn-sub-leadership')?.addEventListener('click', () => switchRolesSubview('leadership'));
+  document.getElementById('btn-sub-culture')?.addEventListener('click', () => switchRolesSubview('culture'));
 
   // Role IDs as columns in RACI table
   const RACI_ROLE_COLS = [
@@ -959,11 +968,81 @@ function initAntigravityGovernanceApp() {
     `).join('');
   }
 
+  // Render Cross-Team Collaboration (GOVERN 2.3)
+  function renderCrossTeamCollaboration() {
+    const tbody = document.getElementById('crossteam-table-body');
+    if (!tbody) return;
+    const items = typeof GOVERN_CROSS_TEAM_COLLABORATION !== 'undefined' ? GOVERN_CROSS_TEAM_COLLABORATION : [];
+
+    tbody.innerHTML = items.map(c => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(c.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(c.practice)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(c.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(c.frequency)}</span></td>
+        <td>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+            ${(c.participants || []).map(p => `<span class="badge-role" style="font-size: 0.68rem; padding: 2px 6px;">${escapeHtml(p)}</span>`).join('')}
+          </div>
+        </td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(c.purpose)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 4px;"><strong>Output:</strong> ${escapeHtml(c.output)}</div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Leadership Decision Alignment (GOVERN 3.1)
+  function renderLeadershipAlignment() {
+    const tbody = document.getElementById('leadership-table-body');
+    if (!tbody) return;
+    const items = typeof GOVERN_LEADERSHIP_ALIGNMENT !== 'undefined' ? GOVERN_LEADERSHIP_ALIGNMENT : [];
+
+    tbody.innerHTML = items.map(l => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(l.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(l.commitment)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(l.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(l.cadence)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(l.evidence)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;"><strong>Owner:</strong> ${escapeHtml(l.owner)}</div>
+        </td>
+        <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(l.status)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Responsible AI Culture Initiatives (GOVERN 4.1)
+  function renderResponsibleAiCulture() {
+    const tbody = document.getElementById('culture-table-body');
+    if (!tbody) return;
+    const items = typeof GOVERN_RESPONSIBLE_AI_CULTURE !== 'undefined' ? GOVERN_RESPONSIBLE_AI_CULTURE : [];
+
+    tbody.innerHTML = items.map(cu => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(cu.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(cu.initiative)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(cu.ref)}</code></td>
+        <td style="font-size: 0.78rem; color: var(--text-secondary);">${escapeHtml(cu.scope)}</td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(cu.description)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-green); margin-top: 4px;"><strong>Target:</strong> ${escapeHtml(cu.measurable)}</div>
+        </td>
+        <td><span class="doc-status-pill inprogress" style="font-size: 0.7rem;">${escapeHtml(cu.status)}</span></td>
+      </tr>
+    `).join('');
+  }
+
   function renderRolesModule() {
     renderRaciTable();
     renderRolesCatalog();
     renderHaiiRegister();
     renderTrainingTracker();
+    renderCrossTeamCollaboration();
+    renderLeadershipAlignment();
+    renderResponsibleAiCulture();
   }
 
   // Export RACI CSV
@@ -1102,7 +1181,11 @@ function initAntigravityGovernanceApp() {
       { id: 'principles', btn: document.getElementById('btn-sub-principles'), view: document.getElementById('subview-principles') },
       { id: 'artifacts', btn: document.getElementById('btn-sub-artifacts'), view: document.getElementById('subview-artifacts') },
       { id: 'thirdparty', btn: document.getElementById('btn-sub-thirdparty'), view: document.getElementById('subview-thirdparty') },
-      { id: 'exceptions', btn: document.getElementById('btn-sub-exceptions'), view: document.getElementById('subview-exceptions') }
+      { id: 'exceptions', btn: document.getElementById('btn-sub-exceptions'), view: document.getElementById('subview-exceptions') },
+      { id: 'risktolerance', btn: document.getElementById('btn-sub-risktolerance'), view: document.getElementById('subview-risktolerance') },
+      { id: 'tpmonitoring', btn: document.getElementById('btn-sub-tpmonitoring'), view: document.getElementById('subview-tpmonitoring') },
+      { id: 'govreview', btn: document.getElementById('btn-sub-govreview'), view: document.getElementById('subview-govreview') },
+      { id: 'govimprove', btn: document.getElementById('btn-sub-govimprove'), view: document.getElementById('subview-govimprove') }
     ];
 
     subtabs.forEach(s => {
@@ -1125,6 +1208,10 @@ function initAntigravityGovernanceApp() {
     else if (target === 'artifacts') renderArtifactTracker();
     else if (target === 'thirdparty') renderThirdPartyScreener();
     else if (target === 'exceptions') renderExceptionsRegister();
+    else if (target === 'risktolerance') renderRiskTolerance();
+    else if (target === 'tpmonitoring') renderThirdPartyMonitoring();
+    else if (target === 'govreview') renderAssessmentReview();
+    else if (target === 'govimprove') renderGovernProcessImprovement();
   }
 
   window.switchPolicySubview = switchPolicySubview;
@@ -1134,6 +1221,10 @@ function initAntigravityGovernanceApp() {
   document.getElementById('btn-sub-artifacts')?.addEventListener('click', () => switchPolicySubview('artifacts'));
   document.getElementById('btn-sub-thirdparty')?.addEventListener('click', () => switchPolicySubview('thirdparty'));
   document.getElementById('btn-sub-exceptions')?.addEventListener('click', () => switchPolicySubview('exceptions'));
+  document.getElementById('btn-sub-risktolerance')?.addEventListener('click', () => switchPolicySubview('risktolerance'));
+  document.getElementById('btn-sub-tpmonitoring')?.addEventListener('click', () => switchPolicySubview('tpmonitoring'));
+  document.getElementById('btn-sub-govreview')?.addEventListener('click', () => switchPolicySubview('govreview'));
+  document.getElementById('btn-sub-govimprove')?.addEventListener('click', () => switchPolicySubview('govimprove'));
 
   function populatePolicySystemSelect() {
     const select = document.getElementById('policy-system-select');
@@ -1350,6 +1441,122 @@ function initAntigravityGovernanceApp() {
           <span class="doc-status-pill inprogress" style="font-size: 0.65rem;">Active</span>
         </td>
         <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(ex.approvedBy)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Risk Tolerance Framework (GOVERN 1.5)
+  function renderRiskTolerance() {
+    const levelsTbody = document.getElementById('risktolerance-levels-tbody');
+    const criteriaTbody = document.getElementById('risktolerance-criteria-tbody');
+    const tolData = typeof GOVERN_RISK_TOLERANCE !== 'undefined' ? GOVERN_RISK_TOLERANCE : { levels: [], acceptanceCriteria: [] };
+
+    if (levelsTbody) {
+      levelsTbody.innerHTML = (tolData.levels || []).map(l => {
+        let badgeClass = 'approved';
+        if (l.color === 'red') badgeClass = 'nogo';
+        else if (l.color === 'orange') badgeClass = 'cond';
+        else if (l.color === 'yellow') badgeClass = 'inprogress';
+
+        return `
+          <tr>
+            <td><span class="badge-recommendation ${badgeClass}" style="font-weight: 700;">${escapeHtml(l.tier)}</span></td>
+            <td style="font-family: monospace; font-size: 0.82rem; font-weight: 600;">${escapeHtml(l.threshold)}</td>
+            <td style="font-size: 0.82rem;">${escapeHtml(l.response)}</td>
+            <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(l.review)}</span></td>
+            <td style="font-size: 0.78rem; color: var(--text-secondary);">
+              ${(l.examples || []).map(e => `<div>• ${escapeHtml(e)}</div>`).join('')}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    if (criteriaTbody) {
+      criteriaTbody.innerHTML = (tolData.acceptanceCriteria || []).map(c => `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(c.id)}</td>
+          <td style="font-size: 0.84rem;">${escapeHtml(c.criterion)}</td>
+          <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(c.ref)}</code></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Render Third-Party Vendor Risk Monitoring (GOVERN 5.2)
+  function renderThirdPartyMonitoring() {
+    const tbody = document.getElementById('tpmonitoring-tbody');
+    if (!tbody) return;
+    const vendors = typeof GOVERN_THIRD_PARTY_MONITORING !== 'undefined' ? GOVERN_THIRD_PARTY_MONITORING : [];
+
+    tbody.innerHTML = vendors.map(v => {
+      let riskBadge = v.riskLevel === 'High' ? 'nogo' : (v.riskLevel === 'Medium' ? 'cond' : 'approved');
+      let statusPill = v.complianceStatus === 'Compliant' ? 'approved' : 'inprogress';
+
+      return `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(v.id)}</td>
+          <td style="font-weight: 700;">${escapeHtml(v.vendor)}</td>
+          <td><span class="badge-recommendation ${riskBadge}" style="font-size: 0.7rem;">${escapeHtml(v.riskLevel)}</span></td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(v.contractClause)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;"><strong>Cadence:</strong> ${escapeHtml(v.monitoringFrequency)}</div>
+          </td>
+          <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(v.lastAudit)}</td>
+          <td><span class="doc-status-pill ${statusPill}" style="font-size: 0.7rem;">${escapeHtml(v.complianceStatus)}</span></td>
+          <td style="text-align: center;">
+            <span class="step-badge" style="font-size: 0.75rem; font-weight: 700; ${v.openFindings > 0 ? 'background: rgba(239,68,68,0.15); color: var(--accent-red);' : ''}">
+              ${escapeHtml(v.openFindings)}
+            </span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Render AI Impact Assessment Review Cadence (GOVERN 6.1)
+  function renderAssessmentReview() {
+    const tbody = document.getElementById('govreview-tbody');
+    if (!tbody) return;
+    const reviews = typeof GOVERN_ASSESSMENT_REVIEW !== 'undefined' ? GOVERN_ASSESSMENT_REVIEW : [];
+
+    tbody.innerHTML = reviews.map(r => {
+      let riskBadge = r.riskTier === 'Critical' ? 'nogo' : (r.riskTier === 'High' ? 'cond' : 'primary');
+      return `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(r.id)}</td>
+          <td style="font-weight: 700;">${escapeHtml(r.system)}</td>
+          <td><span class="badge-recommendation ${riskBadge}" style="font-size: 0.7rem;">${escapeHtml(r.riskTier)}</span></td>
+          <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(r.reviewCycle)}</span></td>
+          <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(r.lastReview)}</td>
+          <td style="font-size: 0.8rem; font-family: monospace; font-weight: 600; color: var(--accent-cyan);">${escapeHtml(r.nextReview)}</td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(r.findings)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;"><strong>Reviewers:</strong> ${escapeHtml(r.reviewedBy)}</div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Render Governance Process Improvement Log (GOVERN 6.2)
+  function renderGovernProcessImprovement() {
+    const tbody = document.getElementById('govimprove-tbody');
+    if (!tbody) return;
+    const imps = typeof GOVERN_PROCESS_IMPROVEMENT !== 'undefined' ? GOVERN_PROCESS_IMPROVEMENT : [];
+
+    tbody.innerHTML = imps.map(im => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(im.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(im.improvement)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(im.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(im.quarter)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div><strong>Trigger:</strong> ${escapeHtml(im.trigger)}</div>
+          <div style="color: var(--text-secondary); margin-top: 2px;"><strong>Action:</strong> ${escapeHtml(im.action)}</div>
+          <div style="color: var(--accent-green); font-size: 0.75rem; margin-top: 3px;"><strong>Outcome:</strong> ${escapeHtml(im.outcome)}</div>
+        </td>
+        <td><span class="doc-status-pill ${im.status === 'Completed' ? 'approved' : 'inprogress'}" style="font-size: 0.7rem;">${escapeHtml(im.status)}</span></td>
       </tr>
     `).join('');
   }
@@ -1584,7 +1791,12 @@ function initAntigravityGovernanceApp() {
       { id: 'matrix', btn: document.getElementById('btn-sub-map-matrix'), panel: document.getElementById('subview-map-matrix') },
       { id: 'stakeholders', btn: document.getElementById('btn-sub-map-stakeholders'), panel: document.getElementById('subview-map-stakeholders') },
       { id: 'conops', btn: document.getElementById('btn-sub-map-conops'), panel: document.getElementById('subview-map-conops') },
-      { id: 'dependencies', btn: document.getElementById('btn-sub-map-dependencies'), panel: document.getElementById('subview-map-dependencies') }
+      { id: 'dependencies', btn: document.getElementById('btn-sub-map-dependencies'), panel: document.getElementById('subview-map-dependencies') },
+      { id: 'taskclass', btn: document.getElementById('btn-sub-map-taskclass'), panel: document.getElementById('subview-map-taskclass') },
+      { id: 'science', btn: document.getElementById('btn-sub-map-science'), panel: document.getElementById('subview-map-science') },
+      { id: 'lineage', btn: document.getElementById('btn-sub-map-lineage'), panel: document.getElementById('subview-map-lineage') },
+      { id: 'expertreview', btn: document.getElementById('btn-sub-map-expertreview'), panel: document.getElementById('subview-map-expertreview') },
+      { id: 'transparency', btn: document.getElementById('btn-sub-map-transparency'), panel: document.getElementById('subview-map-transparency') }
     ];
 
     subtabs.forEach(st => {
@@ -1600,8 +1812,24 @@ function initAntigravityGovernanceApp() {
     else if (target === 'stakeholders') renderStakeholderScreener();
     else if (target === 'conops') renderConopsModule();
     else if (target === 'dependencies') renderThirdPartyDependencies();
+    else if (target === 'taskclass') renderMapTaskClassification();
+    else if (target === 'science') renderMapScientificPrinciples();
+    else if (target === 'lineage') renderMapDataLineage();
+    else if (target === 'expertreview') renderMapExpertReview();
+    else if (target === 'transparency') renderMapExternalTransparency();
   }
   window.switchMapSubview = switchMapSubview;
+
+  document.getElementById('btn-sub-map-harms')?.addEventListener('click', () => switchMapSubview('harms'));
+  document.getElementById('btn-sub-map-matrix')?.addEventListener('click', () => switchMapSubview('matrix'));
+  document.getElementById('btn-sub-map-stakeholders')?.addEventListener('click', () => switchMapSubview('stakeholders'));
+  document.getElementById('btn-sub-map-conops')?.addEventListener('click', () => switchMapSubview('conops'));
+  document.getElementById('btn-sub-map-dependencies')?.addEventListener('click', () => switchMapSubview('dependencies'));
+  document.getElementById('btn-sub-map-taskclass')?.addEventListener('click', () => switchMapSubview('taskclass'));
+  document.getElementById('btn-sub-map-science')?.addEventListener('click', () => switchMapSubview('science'));
+  document.getElementById('btn-sub-map-lineage')?.addEventListener('click', () => switchMapSubview('lineage'));
+  document.getElementById('btn-sub-map-expertreview')?.addEventListener('click', () => switchMapSubview('expertreview'));
+  document.getElementById('btn-sub-map-transparency')?.addEventListener('click', () => switchMapSubview('transparency'));
 
   function renderMapModule() {
     // Populate Map system selector
@@ -1623,6 +1851,11 @@ function initAntigravityGovernanceApp() {
     else if (activeMapSubview === 'stakeholders') renderStakeholderScreener();
     else if (activeMapSubview === 'conops') renderConopsModule();
     else if (activeMapSubview === 'dependencies') renderThirdPartyDependencies();
+    else if (activeMapSubview === 'taskclass') renderMapTaskClassification();
+    else if (activeMapSubview === 'science') renderMapScientificPrinciples();
+    else if (activeMapSubview === 'lineage') renderMapDataLineage();
+    else if (activeMapSubview === 'expertreview') renderMapExpertReview();
+    else if (activeMapSubview === 'transparency') renderMapExternalTransparency();
   }
 
   function renderMapHeaderAndStats() {
@@ -1913,6 +2146,128 @@ function initAntigravityGovernanceApp() {
     }).join('');
   }
 
+  // Render AI Task Classification (MAP 1.3)
+  function renderMapTaskClassification() {
+    const tbody = document.getElementById('map-taskclass-tbody');
+    if (!tbody) return;
+    const tasks = typeof MAP_AI_TASK_CLASSIFICATION !== 'undefined' ? MAP_AI_TASK_CLASSIFICATION : [];
+
+    tbody.innerHTML = tasks.map(t => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(t.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(t.taskType)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(t.ref)}</code></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(t.description)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-orange); margin-top: 3px;"><strong>Risk Profile:</strong> ${escapeHtml(t.riskProfile)}</div>
+        </td>
+        <td style="font-size: 0.78rem;">
+          ${(t.exampleSystems || []).map(s => `<span class="badge-role" style="display: inline-block; margin: 2px;">${escapeHtml(s)}</span>`).join('')}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Scientific Principles for Risk Identification (MAP 2.1)
+  function renderMapScientificPrinciples() {
+    const tbody = document.getElementById('map-science-tbody');
+    if (!tbody) return;
+    const principles = typeof MAP_SCIENTIFIC_PRINCIPLES !== 'undefined' ? MAP_SCIENTIFIC_PRINCIPLES : [];
+
+    tbody.innerHTML = principles.map(p => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(p.id)}</td>
+        <td style="font-weight: 700;">
+          <div>${escapeHtml(p.principle)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: normal; margin-top: 2px;">${escapeHtml(p.description)}</div>
+        </td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(p.ref)}</code></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(p.implementation)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-green); margin-top: 3px;"><strong>Evidence:</strong> ${escapeHtml(p.evidence)}</div>
+        </td>
+        <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(p.owner)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Data Lineage Register (MAP 2.3)
+  function renderMapDataLineage() {
+    const tbody = document.getElementById('map-lineage-tbody');
+    if (!tbody) return;
+    const items = typeof MAP_DATA_LINEAGE !== 'undefined' ? MAP_DATA_LINEAGE : [];
+
+    tbody.innerHTML = items.map(d => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(d.id)}</td>
+        <td style="font-weight: 700;">
+          <div>${escapeHtml(d.system)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Owner: ${escapeHtml(d.lineageOwner)}</div>
+        </td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(d.trainingData)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;"><strong>Volume:</strong> ${escapeHtml(d.dataVolume)}</div>
+        </td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(d.dataClassification)}</span></td>
+        <td style="text-align: center;">
+          <span class="badge-recommendation ${d.piiPresent ? 'cond' : 'approved'}" style="font-size: 0.7rem;">
+            ${d.piiPresent ? '⚠️ Yes' : '🛡️ None'}
+          </span>
+        </td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(d.dataQualityChecks)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;"><strong>Refreshed:</strong> ${escapeHtml(d.lastRefresh)} · Retention: ${escapeHtml(d.retentionPeriod)}</div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Expert AI Risk Review Register (MAP 4.2)
+  function renderMapExpertReview() {
+    const tbody = document.getElementById('map-expertreview-tbody');
+    if (!tbody) return;
+    const reviews = typeof MAP_EXPERT_REVIEW !== 'undefined' ? MAP_EXPERT_REVIEW : [];
+
+    tbody.innerHTML = reviews.map(r => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(r.id)}</td>
+        <td style="font-weight: 700;">
+          <div>${escapeHtml(r.reviewType)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: normal; margin-top: 2px;">Scope: ${escapeHtml(r.scope)}</div>
+        </td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(r.ref)}</code></td>
+        <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(r.system)}</td>
+        <td style="font-size: 0.8rem;">${escapeHtml(r.reviewer)}</td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(r.findings)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-green); margin-top: 2px;"><strong>Signed Off:</strong> ${escapeHtml(r.signedOff)}</div>
+        </td>
+        <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(r.date)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Render External Transparency & Disclosure Register (MAP 5.3)
+  function renderMapExternalTransparency() {
+    const tbody = document.getElementById('map-transparency-tbody');
+    if (!tbody) return;
+    const disclosures = typeof MAP_EXTERNAL_TRANSPARENCY !== 'undefined' ? MAP_EXTERNAL_TRANSPARENCY : [];
+
+    tbody.innerHTML = disclosures.map(t => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(t.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(t.disclosure)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(t.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(t.channel)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(t.content)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;"><strong>Format:</strong> ${escapeHtml(t.format)}</div>
+        </td>
+        <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(t.status)}</span></td>
+      </tr>
+    `).join('');
+  }
+
   // Exporters: CSV, Markdown, Print PDF
   function exportMapCsv() {
     const items = typeof MAP_RISK_BENEFIT_ITEMS !== 'undefined' ? MAP_RISK_BENEFIT_ITEMS : [];
@@ -2128,7 +2483,18 @@ function initAntigravityGovernanceApp() {
       { id: 'suites', btn: document.getElementById('btn-sub-measure-suites'), panel: document.getElementById('subview-measure-suites') },
       { id: 'bias', btn: document.getElementById('btn-sub-measure-bias'), panel: document.getElementById('subview-measure-bias') },
       { id: 'monitoring', btn: document.getElementById('btn-sub-measure-monitoring'), panel: document.getElementById('subview-measure-monitoring') },
-      { id: 'calendar', btn: document.getElementById('btn-sub-measure-calendar'), panel: document.getElementById('subview-measure-calendar') }
+      { id: 'calendar', btn: document.getElementById('btn-sub-measure-calendar'), panel: document.getElementById('subview-measure-calendar') },
+      { id: 'expertrev', btn: document.getElementById('btn-sub-measure-expertrev'), panel: document.getElementById('subview-measure-expertrev') },
+      { id: 'arch', btn: document.getElementById('btn-sub-measure-arch'), panel: document.getElementById('subview-measure-arch') },
+      { id: 'trust', btn: document.getElementById('btn-sub-measure-trust'), panel: document.getElementById('subview-measure-trust') },
+      { id: 'hf', btn: document.getElementById('btn-sub-measure-hf'), panel: document.getElementById('subview-measure-hf') },
+      { id: 'tpeval', btn: document.getElementById('btn-sub-measure-tpeval'), panel: document.getElementById('subview-measure-tpeval') },
+      { id: 'privacy', btn: document.getElementById('btn-sub-measure-privacy'), panel: document.getElementById('subview-measure-privacy') },
+      { id: 'env', btn: document.getElementById('btn-sub-measure-env'), panel: document.getElementById('subview-measure-env') },
+      { id: 'comms', btn: document.getElementById('btn-sub-measure-comms'), panel: document.getElementById('subview-measure-comms') },
+      { id: 'ctrleff', btn: document.getElementById('btn-sub-measure-ctrleff'), panel: document.getElementById('subview-measure-ctrleff') },
+      { id: 'metupdate', btn: document.getElementById('btn-sub-measure-metupdate'), panel: document.getElementById('subview-measure-metupdate') },
+      { id: 'improvmeth', btn: document.getElementById('btn-sub-measure-improvmeth'), panel: document.getElementById('subview-measure-improvmeth') }
     ];
 
     subtabs.forEach(st => {
@@ -2143,6 +2509,17 @@ function initAntigravityGovernanceApp() {
     else if (target === 'suites') renderTevvTestSuites();
     else if (target === 'bias') renderBiasLabModule();
     else if (target === 'monitoring') renderMonitoringModule();
+    else if (target === 'expertrev') renderMeasureExpertReview();
+    else if (target === 'arch') renderMeasureArchitecture();
+    else if (target === 'trust') renderMeasureTrustworthiness();
+    else if (target === 'hf') renderMeasureHumanFactors();
+    else if (target === 'tpeval') renderMeasureThirdPartyEval();
+    else if (target === 'privacy') renderMeasurePrivacy();
+    else if (target === 'env') renderMeasureEnvironmental();
+    else if (target === 'comms') renderMeasureComms();
+    else if (target === 'ctrleff') renderMeasureControlEffectiveness();
+    else if (target === 'metupdate') renderMeasureMetricUpdates();
+    else if (target === 'improvmeth') renderMeasureMethodologyImprovement();
   }
   window.switchMeasureSubview = switchMeasureSubview;
 
@@ -2151,6 +2528,17 @@ function initAntigravityGovernanceApp() {
   document.getElementById('btn-sub-measure-bias')?.addEventListener('click', () => switchMeasureSubview('bias'));
   document.getElementById('btn-sub-measure-monitoring')?.addEventListener('click', () => switchMeasureSubview('monitoring'));
   document.getElementById('btn-sub-measure-calendar')?.addEventListener('click', () => switchMeasureSubview('calendar'));
+  document.getElementById('btn-sub-measure-expertrev')?.addEventListener('click', () => switchMeasureSubview('expertrev'));
+  document.getElementById('btn-sub-measure-arch')?.addEventListener('click', () => switchMeasureSubview('arch'));
+  document.getElementById('btn-sub-measure-trust')?.addEventListener('click', () => switchMeasureSubview('trust'));
+  document.getElementById('btn-sub-measure-hf')?.addEventListener('click', () => switchMeasureSubview('hf'));
+  document.getElementById('btn-sub-measure-tpeval')?.addEventListener('click', () => switchMeasureSubview('tpeval'));
+  document.getElementById('btn-sub-measure-privacy')?.addEventListener('click', () => switchMeasureSubview('privacy'));
+  document.getElementById('btn-sub-measure-env')?.addEventListener('click', () => switchMeasureSubview('env'));
+  document.getElementById('btn-sub-measure-comms')?.addEventListener('click', () => switchMeasureSubview('comms'));
+  document.getElementById('btn-sub-measure-ctrleff')?.addEventListener('click', () => switchMeasureSubview('ctrleff'));
+  document.getElementById('btn-sub-measure-metupdate')?.addEventListener('click', () => switchMeasureSubview('metupdate'));
+  document.getElementById('btn-sub-measure-improvmeth')?.addEventListener('click', () => switchMeasureSubview('improvmeth'));
 
   function renderMeasureModule() {
     // Populate Measure system select dropdown
@@ -2171,6 +2559,17 @@ function initAntigravityGovernanceApp() {
     else if (activeMeasureSubview === 'suites') renderTevvTestSuites();
     else if (activeMeasureSubview === 'bias') renderBiasLabModule();
     else if (activeMeasureSubview === 'monitoring') renderMonitoringModule();
+    else if (activeMeasureSubview === 'expertrev') renderMeasureExpertReview();
+    else if (activeMeasureSubview === 'arch') renderMeasureArchitecture();
+    else if (activeMeasureSubview === 'trust') renderMeasureTrustworthiness();
+    else if (activeMeasureSubview === 'hf') renderMeasureHumanFactors();
+    else if (activeMeasureSubview === 'tpeval') renderMeasureThirdPartyEval();
+    else if (activeMeasureSubview === 'privacy') renderMeasurePrivacy();
+    else if (activeMeasureSubview === 'env') renderMeasureEnvironmental();
+    else if (activeMeasureSubview === 'comms') renderMeasureComms();
+    else if (activeMeasureSubview === 'ctrleff') renderMeasureControlEffectiveness();
+    else if (activeMeasureSubview === 'metupdate') renderMeasureMetricUpdates();
+    else if (activeMeasureSubview === 'improvmeth') renderMeasureMethodologyImprovement();
   }
 
   function renderMeasureHeaderAndStats() {
@@ -2495,6 +2894,307 @@ function initAntigravityGovernanceApp() {
     }
   }
 
+  // Render Expert Review of Evaluation Approaches (MEASURE 1.3)
+  function renderMeasureExpertReview() {
+    const tbody = document.getElementById('measure-expertrev-tbody');
+    if (!tbody) return;
+    const reviews = typeof MEASURE_EXPERT_REVIEW_APPROACHES !== 'undefined' ? MEASURE_EXPERT_REVIEW_APPROACHES : [];
+
+    tbody.innerHTML = reviews.map(r => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(r.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(r.reviewType)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(r.ref)}</code></td>
+        <td style="font-size: 0.8rem;">${escapeHtml(r.reviewedBy)}</td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(r.frequency)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(r.scope)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-green); margin-top: 3px;"><strong>Outcome:</strong> ${escapeHtml(r.outcome)}</div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Architecture Documentation for Evaluation (MEASURE 2.2)
+  function renderMeasureArchitecture() {
+    const tbody = document.getElementById('measure-arch-tbody');
+    if (!tbody) return;
+    const archs = typeof MEASURE_ARCHITECTURE_DOCUMENTATION !== 'undefined' ? MEASURE_ARCHITECTURE_DOCUMENTATION : [];
+
+    tbody.innerHTML = archs.map(a => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(a.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(a.system)}</td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(a.modelType)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Context: ${escapeHtml(a.contextWindow)}</div>
+        </td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(a.inferenceInfrastructure)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;">Hooks: ${escapeHtml(a.monitoringHooks)}</div>
+        </td>
+        <td style="font-size: 0.8rem;">${escapeHtml(a.evaluabilityNotes)}</td>
+        <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(a.lastUpdated)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Trustworthiness Characteristics Evaluation (MEASURE 2.3)
+  function renderMeasureTrustworthiness() {
+    const tbody = document.getElementById('measure-trust-tbody');
+    if (!tbody) return;
+    const chars = typeof MEASURE_TRUSTWORTHINESS_EVALUATION !== 'undefined' ? MEASURE_TRUSTWORTHINESS_EVALUATION : [];
+
+    tbody.innerHTML = chars.map(c => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(c.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(c.characteristic)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(c.ref)}</code></td>
+        <td style="font-size: 0.8rem;">${escapeHtml(c.evaluationMethod)}</td>
+        <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(c.threshold)}</td>
+        <td style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">${escapeHtml(c.currentStatus)}</td>
+        <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(c.verdict)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Human Factors & Usability Evaluation (MEASURE 2.7)
+  function renderMeasureHumanFactors() {
+    const tbody = document.getElementById('measure-hf-tbody');
+    if (!tbody) return;
+    const hfs = typeof MEASURE_HUMAN_FACTORS !== 'undefined' ? MEASURE_HUMAN_FACTORS : [];
+
+    tbody.innerHTML = hfs.map(h => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(h.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(h.evaluationType)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(h.ref)}</code></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(h.scope)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Method: ${escapeHtml(h.method)}</div>
+        </td>
+        <td style="font-size: 0.8rem;">
+          <div style="font-weight: 600; color: var(--accent-blue);">${escapeHtml(h.result)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;">Metric: ${escapeHtml(h.metric)}</div>
+        </td>
+        <td style="font-size: 0.8rem;">${escapeHtml(h.findingsActioned)}</td>
+        <td><span class="doc-status-pill ${h.status === 'Complete' ? 'approved' : 'inprogress'}" style="font-size: 0.7rem;">${escapeHtml(h.status)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Third-Party Risk Evaluation (MEASURE 2.8)
+  function renderMeasureThirdPartyEval() {
+    const tbody = document.getElementById('measure-tpeval-tbody');
+    if (!tbody) return;
+    const tpevals = typeof MEASURE_THIRD_PARTY_RISK_EVALUATION !== 'undefined' ? MEASURE_THIRD_PARTY_RISK_EVALUATION : [];
+
+    tbody.innerHTML = tpevals.map(t => {
+      let riskBadge = t.residualRisk.includes('Medium') ? 'cond' : 'approved';
+      return `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(t.id)}</td>
+          <td style="font-weight: 700;">${escapeHtml(t.component)}</td>
+          <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(t.ref)}</code></td>
+          <td style="font-size: 0.8rem;">
+            <div><strong>${escapeHtml(t.riskDimension)}</strong></div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Method: ${escapeHtml(t.evaluationMethod)}</div>
+          </td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(t.currentMitigation)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Assessed: ${escapeHtml(t.lastAssessment)}</div>
+          </td>
+          <td><span class="badge-recommendation ${riskBadge}" style="font-size: 0.7rem;">${escapeHtml(t.residualRisk)}</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Render Privacy Evaluation & PETs (MEASURE 2.9 & 2.10)
+  function renderMeasurePrivacy() {
+    const privTbody = document.getElementById('measure-priveval-tbody');
+    const petsTbody = document.getElementById('measure-pets-tbody');
+
+    if (privTbody) {
+      const privs = typeof MEASURE_PRIVACY_EVALUATION !== 'undefined' ? MEASURE_PRIVACY_EVALUATION : [];
+      privTbody.innerHTML = privs.map(p => `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(p.id)}</td>
+          <td style="font-weight: 700;">${escapeHtml(p.system)}</td>
+          <td style="font-size: 0.8rem;">${escapeHtml(p.privacyRisk)}</td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(p.evaluationMethod)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Threshold: ${escapeHtml(p.threshold)}</div>
+          </td>
+          <td style="font-size: 0.8rem;">
+            <div style="font-weight: 600; color: var(--accent-green);">${escapeHtml(p.result)}</div>
+            <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;">PET: ${escapeHtml(p.petApplied)}</div>
+          </td>
+          <td style="text-align: center;">
+            <span class="doc-status-pill approved" style="font-size: 0.7rem;">${p.dpiaCompleted ? 'DPIA ✅' : 'Pending'}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    if (petsTbody) {
+      const pets = typeof MEASURE_PRIVACY_ENHANCING_TECH !== 'undefined' ? MEASURE_PRIVACY_ENHANCING_TECH : [];
+      petsTbody.innerHTML = pets.map(pt => `
+        <tr>
+          <td class="inv-id-cell">${escapeHtml(pt.id)}</td>
+          <td style="font-weight: 700;">${escapeHtml(pt.technique)}</td>
+          <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(pt.ref)}</code></td>
+          <td style="font-size: 0.8rem;">${escapeHtml(pt.appliedTo)}</td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(pt.implementation)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Trade-off: ${escapeHtml(pt.tradeoff)}</div>
+          </td>
+          <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(pt.status)}</span></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Render Environmental Impact (MEASURE 2.11)
+  function renderMeasureEnvironmental() {
+    const ovEl = document.getElementById('measure-env-overview');
+    const tbody = document.getElementById('measure-env-tbody');
+    const envData = typeof MEASURE_ENVIRONMENTAL_IMPACT !== 'undefined' ? MEASURE_ENVIRONMENTAL_IMPACT : { overview: '', systems: [] };
+
+    if (ovEl) {
+      ovEl.innerHTML = `<strong>NIST Ref:</strong> ${escapeHtml(envData.ref)} — ${escapeHtml(envData.overview)}<br><span style="color: var(--accent-cyan); font-size: 0.82rem; margin-top: 6px; display: inline-block;"><strong>Strategic Target:</strong> ${escapeHtml(envData.improvementTarget || '')}</span>`;
+    }
+
+    if (tbody) {
+      tbody.innerHTML = (envData.systems || []).map(s => `
+        <tr>
+          <td style="font-weight: 700;">${escapeHtml(s.system)}</td>
+          <td style="font-size: 0.82rem; font-family: monospace;">${escapeHtml(s.inferenceEnergyPerQuery)}</td>
+          <td style="font-size: 0.82rem; font-family: monospace;">${escapeHtml(s.monthlyQueries)}</td>
+          <td style="font-size: 0.82rem; font-weight: 600; color: var(--accent-green);">${escapeHtml(s.estimatedMonthlyCO2)}</td>
+          <td style="font-size: 0.8rem;">
+            <div>${escapeHtml(s.carbonOffsetScheme)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Metric Ref: ${escapeHtml(s.energyMetricId)}</div>
+          </td>
+          <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(s.status)}</span></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Render Metrics Communication Plan (MEASURE 2.12)
+  function renderMeasureComms() {
+    const tbody = document.getElementById('measure-comms-tbody');
+    if (!tbody) return;
+    const comms = typeof MEASURE_METRICS_COMMUNICATION !== 'undefined' ? MEASURE_METRICS_COMMUNICATION : [];
+
+    tbody.innerHTML = comms.map(c => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(c.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(c.audience)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(c.ref)}</code></td>
+        <td style="font-size: 0.8rem;">
+          ${(c.metricsShared || []).map(m => `<span class="badge-role" style="display: inline-block; margin: 2px; font-size: 0.7rem;">${escapeHtml(m)}</span>`).join('')}
+        </td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(c.format)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;">Cadence: ${escapeHtml(c.cadence)}</div>
+        </td>
+        <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(c.owner)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Control Effectiveness Evaluation (MEASURE 2.13)
+  function renderMeasureControlEffectiveness() {
+    const tbody = document.getElementById('measure-ctrleff-tbody');
+    if (!tbody) return;
+    const ctrls = typeof MEASURE_CONTROL_EFFECTIVENESS !== 'undefined' ? MEASURE_CONTROL_EFFECTIVENESS : [];
+
+    tbody.innerHTML = ctrls.map(c => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(c.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(c.control)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(c.ref)}</code></td>
+        <td style="font-size: 0.8rem;">${escapeHtml(c.linkedRisk)}</td>
+        <td style="font-size: 0.8rem;">
+          <div style="font-weight: 600; color: var(--accent-green);">${escapeHtml(c.effectivenessScore)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">${escapeHtml(c.evaluationMethod)}</div>
+        </td>
+        <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(c.lastEvaluated)}</td>
+        <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(c.verdict)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Metric Updates & Monitoring Trends (MEASURE 3.2)
+  function renderMeasureMetricUpdates() {
+    const tbody = document.getElementById('measure-metupdate-tbody');
+    if (!tbody) return;
+    const mons = typeof MEASURE_METRICS_MONITORING !== 'undefined' ? MEASURE_METRICS_MONITORING : [];
+
+    tbody.innerHTML = mons.map(m => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(m.id)}</td>
+        <td><code style="color: var(--accent-blue); font-weight: 700;">${escapeHtml(m.metricId)}</code></td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(m.ref)}</code></td>
+        <td style="font-weight: 700;">${escapeHtml(m.name)}</td>
+        <td style="font-size: 0.84rem; font-family: monospace; font-weight: 700; color: var(--accent-cyan);">${escapeHtml(m.currentValue)}</td>
+        <td style="font-size: 0.82rem; font-family: monospace; color: var(--text-muted);">${escapeHtml(m.previousValue)}</td>
+        <td style="font-size: 0.8rem; color: var(--accent-green); font-weight: 600;">${escapeHtml(m.trend)}</td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(m.alertStatus)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Next: ${escapeHtml(m.nextScheduledReview)}</div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Measurement Methodology Improvement Log (MEASURE 4.1 & 4.2)
+  function renderMeasureMethodologyImprovement() {
+    const tbody = document.getElementById('measure-improvmeth-tbody');
+    if (!tbody) return;
+    const imps = typeof MEASURE_METHODOLOGY_IMPROVEMENT !== 'undefined' ? MEASURE_METHODOLOGY_IMPROVEMENT : [];
+    const feedbacks = typeof MEASURE_FRAMEWORK_FEEDBACK !== 'undefined' ? MEASURE_FRAMEWORK_FEEDBACK : [];
+
+    let html = imps.map(im => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(im.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(im.improvement)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(im.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(im.quarter)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div><strong>Trigger:</strong> ${escapeHtml(im.trigger)}</div>
+          <div style="color: var(--text-secondary); margin-top: 2px;"><strong>Action:</strong> ${escapeHtml(im.action)}</div>
+          <div style="color: var(--accent-green); font-size: 0.75rem; margin-top: 3px;"><strong>Outcome:</strong> ${escapeHtml(im.outcome)}</div>
+        </td>
+        <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(im.status)}</span></td>
+      </tr>
+    `).join('');
+
+    if (feedbacks.length > 0) {
+      html += feedbacks.map(fb => `
+        <tr style="background: rgba(59, 130, 246, 0.03);">
+          <td class="inv-id-cell">${escapeHtml(fb.id)}</td>
+          <td style="font-weight: 700;">
+            <div>${escapeHtml(fb.feedbackSource)}</div>
+            <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;">Incorporated into: ${escapeHtml(fb.incorporatedInto)}</div>
+          </td>
+          <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(fb.ref)}</code></td>
+          <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(fb.cycle)}</span></td>
+          <td style="font-size: 0.8rem;">
+            <div><strong>Finding:</strong> ${escapeHtml(fb.finding)}</div>
+            <div style="color: var(--text-secondary); margin-top: 2px;"><strong>Action:</strong> ${escapeHtml(fb.actionTaken)}</div>
+            <div style="color: var(--accent-green); font-size: 0.75rem; margin-top: 3px;"><strong>RMF Impact:</strong> ${escapeHtml(fb.impactOnRMF)}</div>
+          </td>
+          <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">Adopted</span></td>
+        </tr>
+      `).join('');
+    }
+
+    tbody.innerHTML = html;
+  }
+
   // Measure Exports & PDF Generator
   function exportMeasureCsv() {
     const metrics = typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG : [];
@@ -2778,7 +3478,15 @@ function initAntigravityGovernanceApp() {
       { id: 'playbooks', btn: document.getElementById('manage-tab-playbooks'), view: document.getElementById('subview-manage-playbooks') },
       { id: 'responses', btn: document.getElementById('manage-tab-responses'), view: document.getElementById('subview-manage-responses') },
       { id: 'improvements', btn: document.getElementById('manage-tab-improvements'), view: document.getElementById('subview-manage-improvements') },
-      { id: 'override', btn: document.getElementById('manage-tab-override'), view: document.getElementById('subview-manage-override') }
+      { id: 'override', btn: document.getElementById('manage-tab-override'), view: document.getElementById('subview-manage-override') },
+      { id: 'resources', btn: document.getElementById('manage-tab-resources'), view: document.getElementById('subview-manage-resources') },
+      { id: 'docreg', btn: document.getElementById('manage-tab-docreg'), view: document.getElementById('subview-manage-docreg') },
+      { id: 'residual', btn: document.getElementById('manage-tab-residual'), view: document.getElementById('subview-manage-residual') },
+      { id: 'trustmaint', btn: document.getElementById('manage-tab-trustmaint'), view: document.getElementById('subview-manage-trustmaint') },
+      { id: 'decommission', btn: document.getElementById('manage-tab-decommission'), view: document.getElementById('subview-manage-decommission') },
+      { id: 'stakeng', btn: document.getElementById('manage-tab-stakeng'), view: document.getElementById('subview-manage-stakeng') },
+      { id: 'procimprove', btn: document.getElementById('manage-tab-procimprove'), view: document.getElementById('subview-manage-procimprove') },
+      { id: 'pia', btn: document.getElementById('manage-tab-pia'), view: document.getElementById('subview-manage-pia') }
     ];
 
     subtabs.forEach(st => {
@@ -2791,6 +3499,14 @@ function initAntigravityGovernanceApp() {
     else if (target === 'responses') renderRiskResponses();
     else if (target === 'improvements') renderImprovementsLog();
     else if (target === 'override') renderOverrideDashboard();
+    else if (target === 'resources') renderManageResources();
+    else if (target === 'docreg') renderManageDocReg();
+    else if (target === 'residual') renderManageResidual();
+    else if (target === 'trustmaint') renderManageTrustMaint();
+    else if (target === 'decommission') renderManageDecommission();
+    else if (target === 'stakeng') renderManageStakeholderEngagement();
+    else if (target === 'procimprove') renderManageProcessImprovement();
+    else if (target === 'pia') renderManagePostIncidentAnalysis();
   }
 
   function renderManageHeaderAndStats() {
@@ -3385,6 +4101,14 @@ function initAntigravityGovernanceApp() {
   document.getElementById('manage-tab-responses')?.addEventListener('click', () => switchManageSubview('responses'));
   document.getElementById('manage-tab-improvements')?.addEventListener('click', () => switchManageSubview('improvements'));
   document.getElementById('manage-tab-override')?.addEventListener('click', () => switchManageSubview('override'));
+  document.getElementById('manage-tab-resources')?.addEventListener('click', () => switchManageSubview('resources'));
+  document.getElementById('manage-tab-docreg')?.addEventListener('click', () => switchManageSubview('docreg'));
+  document.getElementById('manage-tab-residual')?.addEventListener('click', () => switchManageSubview('residual'));
+  document.getElementById('manage-tab-trustmaint')?.addEventListener('click', () => switchManageSubview('trustmaint'));
+  document.getElementById('manage-tab-decommission')?.addEventListener('click', () => switchManageSubview('decommission'));
+  document.getElementById('manage-tab-stakeng')?.addEventListener('click', () => switchManageSubview('stakeng'));
+  document.getElementById('manage-tab-procimprove')?.addEventListener('click', () => switchManageSubview('procimprove'));
+  document.getElementById('manage-tab-pia')?.addEventListener('click', () => switchManageSubview('pia'));
 
   // Incident Modal Handlers
   const modalIncident = document.getElementById('modal-log-incident');
@@ -3687,6 +4411,264 @@ function initAntigravityGovernanceApp() {
     }, 200);
   }
   document.getElementById('btn-print-manage-pdf')?.addEventListener('click', triggerPrintManagePdf);
+
+  // ==========================================================================
+  // MANAGE EXTENSION RENDER FUNCTIONS (MANAGE 1.2 - 4.3)
+  // ==========================================================================
+
+  // Render Resource Allocation (MANAGE 1.2)
+  function renderManageResources() {
+    const ovEl = document.getElementById('manage-resources-overview');
+    const tbody = document.getElementById('manage-resources-tbody');
+    const res = typeof MANAGE_RESOURCE_ALLOCATION !== 'undefined' ? MANAGE_RESOURCE_ALLOCATION : { roles: [] };
+
+    if (ovEl) {
+      ovEl.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h3 style="margin-bottom: 4px;">NIST Ref: ${escapeHtml(res.ref)} — Executive Resource Attestation</h3>
+            <p class="text-muted" style="margin: 0;">${escapeHtml(res.overview)}</p>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.1rem; font-weight: 800; color: var(--accent-green);">${escapeHtml(res.totalAnnualBudget)}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(res.reviewCycle)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (tbody) {
+      tbody.innerHTML = (res.roles || []).map(r => `
+        <tr>
+          <td style="font-weight: 700;">${escapeHtml(r.role)}</td>
+          <td style="text-align: center;"><span class="step-badge" style="font-size: 0.75rem; font-weight: 700;">${escapeHtml(r.fte)}</span></td>
+          <td style="font-size: 0.8rem;">${escapeHtml(r.primaryFunction)}</td>
+          <td style="font-size: 0.82rem; font-weight: 600; color: var(--accent-cyan); font-family: monospace;">${escapeHtml(r.budget)}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Render Risk Response Documentation Register (MANAGE 1.3)
+  function renderManageDocReg() {
+    const tbody = document.getElementById('manage-docreg-tbody');
+    if (!tbody) return;
+    const docs = typeof MANAGE_RISK_RESPONSE_DOCUMENTATION !== 'undefined' ? MANAGE_RISK_RESPONSE_DOCUMENTATION : [];
+
+    tbody.innerHTML = docs.map(d => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(d.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(d.document)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(d.ref)}</code></td>
+        <td style="font-size: 0.78rem;">
+          <div style="font-family: monospace; color: var(--accent-blue);">${escapeHtml(d.location)}</div>
+          <div style="color: var(--text-muted); font-size: 0.7rem; margin-top: 2px;">Format: ${escapeHtml(d.format)}</div>
+        </td>
+        <td style="font-size: 0.8rem;">${escapeHtml(d.description)}</td>
+        <td style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(d.owner)}</td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(d.retentionPeriod)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Residual Risk Acceptance Register (MANAGE 1.4)
+  function renderManageResidual() {
+    const tbody = document.getElementById('manage-residual-tbody');
+    if (!tbody) return;
+    const residuals = typeof MANAGE_RESIDUAL_RISK_ACCEPTANCE !== 'undefined' ? MANAGE_RESIDUAL_RISK_ACCEPTANCE : [];
+
+    tbody.innerHTML = residuals.map(r => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(r.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(r.system)}</td>
+        <td><code style="color: var(--accent-blue); font-size: 0.78rem; font-weight: 700;">${escapeHtml(r.riskId)}</code></td>
+        <td style="font-size: 0.8rem;">${escapeHtml(r.riskDescription)}</td>
+        <td style="text-align: center;"><span class="badge-recommendation cond" style="font-size: 0.72rem;">${escapeHtml(r.residualRiskScore)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(r.acceptanceBasis)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+            <strong>Accepted by:</strong> ${escapeHtml(r.acceptedBy)} (${escapeHtml(r.acceptanceDate)}) · <em>Trigger: ${escapeHtml(r.reviewTrigger)}</em>
+          </div>
+        </td>
+        <td style="font-size: 0.8rem; font-family: monospace; font-weight: 600; color: var(--accent-cyan);">${escapeHtml(r.nextReviewDate)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Trustworthiness Maintenance Activities (MANAGE 2.1)
+  function renderManageTrustMaint() {
+    const tbody = document.getElementById('manage-trustmaint-tbody');
+    if (!tbody) return;
+    const acts = typeof MANAGE_TRUSTWORTHINESS_MAINTENANCE !== 'undefined' ? MANAGE_TRUSTWORTHINESS_MAINTENANCE : [];
+
+    tbody.innerHTML = acts.map(a => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(a.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(a.activity)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(a.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(a.cadence)}</span></td>
+        <td style="font-size: 0.8rem;">
+          <div><strong>Owner:</strong> ${escapeHtml(a.owner)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;">${escapeHtml(a.output)}</div>
+        </td>
+        <td style="font-size: 0.8rem; color: var(--accent-orange);">
+          <span>⚡ ${escapeHtml(a.automaticTrigger)}</span>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render AI System Decommission Criteria (MANAGE 2.2)
+  function renderManageDecommission() {
+    const tbody = document.getElementById('manage-decommission-tbody');
+    if (!tbody) return;
+    const criteria = typeof MANAGE_DECOMMISSION_CRITERIA !== 'undefined' ? MANAGE_DECOMMISSION_CRITERIA : [];
+
+    tbody.innerHTML = criteria.map(c => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(c.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(c.trigger)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(c.ref)}</code></td>
+        <td style="font-size: 0.8rem; color: var(--accent-red); font-weight: 600;">${escapeHtml(c.threshold)}</td>
+        <td style="font-size: 0.8rem;">
+          <div><strong>Action:</strong> ${escapeHtml(c.immediateAction)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+            Timeline: ${escapeHtml(c.decommissionTimeline)} · Replacement: ${escapeHtml(c.replacementPlan)}
+          </div>
+        </td>
+        <td><span class="doc-status-pill nogo" style="font-size: 0.7rem;">${escapeHtml(c.boardNotification)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Stakeholder Engagement in Risk Response (MANAGE 2.4)
+  function renderManageStakeholderEngagement() {
+    const tbody = document.getElementById('manage-stakeng-tbody');
+    if (!tbody) return;
+    const engagements = typeof MANAGE_STAKEHOLDER_ENGAGEMENT_RESPONSE !== 'undefined' ? MANAGE_STAKEHOLDER_ENGAGEMENT_RESPONSE : [];
+
+    tbody.innerHTML = engagements.map(s => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(s.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(s.stakeholder)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(s.ref)}</code></td>
+        <td><span class="step-badge" style="font-size: 0.72rem;">${escapeHtml(s.engagementType)}</span></td>
+        <td style="font-size: 0.8rem;">${escapeHtml(s.trigger)}</td>
+        <td style="font-size: 0.8rem;">
+          <div>${escapeHtml(s.method)}</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+            <strong>Owner:</strong> ${escapeHtml(s.owner)} · <strong>Evidence:</strong> ${escapeHtml(s.evidenceRequired)}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Process Improvements from Learnings (MANAGE 3.2)
+  function renderManageProcessImprovement() {
+    const tbody = document.getElementById('manage-procimprove-tbody');
+    if (!tbody) return;
+    const items = typeof MANAGE_PROCESS_IMPROVEMENT_FROM_LEARNINGS !== 'undefined' ? MANAGE_PROCESS_IMPROVEMENT_FROM_LEARNINGS : [];
+
+    tbody.innerHTML = items.map(p => `
+      <tr>
+        <td class="inv-id-cell">${escapeHtml(p.id)}</td>
+        <td style="font-weight: 700;">${escapeHtml(p.improvement)}</td>
+        <td><code style="color: var(--accent-cyan); font-size: 0.75rem;">${escapeHtml(p.ref)}</code></td>
+        <td style="font-size: 0.8rem;">${escapeHtml(p.trigger)}</td>
+        <td style="font-size: 0.8rem;">
+          <div><strong>Change:</strong> ${escapeHtml(p.change)}</div>
+          <div style="font-size: 0.72rem; color: var(--accent-blue); margin-top: 2px;">
+            <strong>Updated:</strong> ${escapeHtml(p.playBookUpdated)} · <strong>Evidence:</strong> ${escapeHtml(p.evidenceOfChange)}
+          </div>
+        </td>
+        <td><span class="doc-status-pill approved" style="font-size: 0.7rem;">${escapeHtml(p.preventedRecurrence)}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Post-Incident Analysis Dossiers (MANAGE 4.3)
+  function renderManagePostIncidentAnalysis() {
+    const container = document.getElementById('manage-pia-container');
+    if (!container) return;
+    const pias = typeof MANAGE_POST_INCIDENT_ANALYSIS !== 'undefined' ? MANAGE_POST_INCIDENT_ANALYSIS : [];
+
+    container.innerHTML = `
+      <div style="margin-bottom: 1.5rem;">
+        <h3>Post-Incident Root Cause Analysis Dossiers (MANAGE 4.3)</h3>
+        <p class="text-muted">Rigorous 5-Whys root-cause investigations, contributing factor analyses, and verifiable recurrence prevention guarantees for all major AI incidents.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1.5rem;">
+        ${pias.map(p => `
+          <div class="card" style="border-top: 3px solid var(--accent-cyan); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="badge-role" style="font-size: 0.75rem; font-weight: 700;">${escapeHtml(p.id)}</span>
+                    <span class="step-badge" style="font-size: 0.72rem; font-weight: 700; color: var(--accent-blue);">${escapeHtml(p.incidentRef)}</span>
+                    <code style="color: var(--accent-cyan); font-size: 0.72rem;">${escapeHtml(p.ref)}</code>
+                  </div>
+                  <h4 style="margin: 0.4rem 0 0 0; font-size: 1.02rem;">${escapeHtml(p.systemAffected)}</h4>
+                </div>
+                <div style="text-align: right;">
+                  <span class="doc-status-pill approved" style="font-size: 0.7rem;">Investigation Closed</span>
+                  <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">${escapeHtml(p.closedDate)}</div>
+                </div>
+              </div>
+
+              <div style="font-size: 0.84rem; line-height: 1.45; margin-bottom: 1rem; color: var(--text-secondary);">
+                <strong>Incident Summary:</strong> ${escapeHtml(p.incidentSummary)}
+              </div>
+
+              <!-- 5-Whys Box -->
+              <div style="background: var(--bg-card-hover); border-left: 3px solid var(--accent-orange); padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.8rem; line-height: 1.45;">
+                <div style="font-weight: 700; color: var(--accent-orange); margin-bottom: 4px;">🔬 Root Cause Analysis (5-Whys)</div>
+                <div>${escapeHtml(p.rootCauseAnalysis)}</div>
+              </div>
+
+              <!-- Contributing Factors & Lessons -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.78rem;">
+                <div style="background: rgba(239,68,68,0.06); padding: 0.6rem; border-radius: 4px;">
+                  <div style="font-weight: 700; color: #ef4444; margin-bottom: 4px;">⚠️ Contributing Factors</div>
+                  <ul style="margin: 0; padding-left: 1.1rem; line-height: 1.35;">
+                    ${(p.contributingFactors || []).map(f => `<li>${escapeHtml(f)}</li>`).join('')}
+                  </ul>
+                </div>
+                <div style="background: rgba(59,130,246,0.06); padding: 0.6rem; border-radius: 4px;">
+                  <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;">💡 Lessons Learned</div>
+                  <ul style="margin: 0; padding-left: 1.1rem; line-height: 1.35;">
+                    ${(p.lessonsLearned || []).map(l => `<li>${escapeHtml(l)}</li>`).join('')}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Actions Completed Checklist -->
+              <div style="font-size: 0.8rem; margin-bottom: 1rem;">
+                <div style="font-weight: 700; margin-bottom: 4px;">✅ Remediations Completed:</div>
+                ${(p.actionsCompleted || []).map(ac => `
+                  <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 2px;">
+                    <span style="color: var(--accent-green); font-size: 0.8rem;">✓</span>
+                    <span style="color: var(--text-secondary);">${escapeHtml(ac)}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Sign-Off & Recurrence Guarantee Footer -->
+            <div style="border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div style="color: var(--accent-green); font-weight: 600;">
+                🛡️ Recurrence Prevention: ${escapeHtml(p.recurrencePrevented)}
+              </div>
+              <div style="color: var(--text-muted);">
+                <strong>Signed Off:</strong> ${escapeHtml(p.signedOff)}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
 
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {
