@@ -46,6 +46,11 @@
           <span class="hub-nav-title">Context &amp; Harms</span>
           <span class="hub-nav-tag">MAP 1–5</span>
         </button>
+        <button type="button" class="hub-nav-btn" id="tab-nav-measure" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('measure')">
+          <span class="hub-nav-icon">📊</span>
+          <span class="hub-nav-title">TEVV &amp; Metrics</span>
+          <span class="hub-nav-tag">MEASURE 1–4</span>
+        </button>
         <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('assessment')">
           <span class="hub-nav-icon">⚖️</span>
           <span class="hub-nav-title">Impact Assessment</span>
@@ -104,6 +109,19 @@
         </button>
         <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-map-pdf" title="Export Executive MAP Context Dossier PDF">
           Context Dossier PDF
+        </button>
+      </div>
+
+      <!-- MEASURE view actions -->
+      <div class="view-actions-measure" id="actions-measure" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-measure-csv" title="Export 20 Production Metrics CSV matching docs/03-measure/MEASURE-Metrics-Tracker.csv">
+          Export Metrics CSV
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-measure-md" title="Download audit-ready TEVV Framework Markdown report">
+          Export TEVV MD
+        </button>
+        <button type="button" class="btn btn-primary btn-sm glow-btn" id="btn-print-measure-pdf" title="Export Executive TEVV Validation Dossier PDF">
+          TEVV Dossier PDF
         </button>
       </div>
 
@@ -1020,6 +1038,424 @@
 
     </div><!-- End of .inventory-container -->
   </div><!-- End of #view-map -->
+
+  <!-- VIEW 5: TEVV & METRICS STUDIO (MEASURE 1–4 · NIST SP 1270) -->
+  <div id="view-measure" class="portal-view" style="display: none;">
+    <div class="inventory-container">
+      
+      <!-- Hero / Header -->
+      <div class="inventory-hero">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="badge-tag">NIST AI RMF MEASURE 1–4</span>
+            <span>TEVV, Quantitative Metrics &amp; Bias Evaluation Studio</span>
+          </div>
+          <h2>TEVV, Production Metrics &amp; Bias Testing Studio</h2>
+          <p class="hero-description">
+            Operationalizing the <strong>MEASURE Function</strong> across 20 production metrics (M-01..M-20), 11 pre-deployment test suites (TS-01..TS-11), demographic proxy bias audits, and real-time monitoring SLAs.
+          </p>
+        </div>
+      </div>
+
+      <!-- System Selector & Profile Banner Bar -->
+      <div class="policy-system-selector-bar">
+        <div class="selector-left">
+          <label for="measure-system-select"><strong>Target AI System:</strong></label>
+          <select id="measure-system-select" class="form-control-sm">
+            <!-- Populated dynamically by app.js from inventorySystems -->
+          </select>
+        </div>
+        <div class="selector-right">
+          <span class="gate-status-badge approved" id="measure-tevv-badge">TEVV: Passed (11 / 11 Suites)</span>
+          <span class="gate-status-badge approved" id="measure-rag-badge">0 Red-Line Breaches</span>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards for MEASURE -->
+      <div class="inventory-stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">📊</div>
+          <div class="stat-data">
+            <span class="stat-value" id="measure-stat-total-metrics">20</span>
+            <span class="stat-label">Total Production Metrics</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">🛡️</div>
+          <div class="stat-data">
+            <span class="stat-value" id="measure-stat-tier1-metrics">6 / 6</span>
+            <span class="stat-label">Safety-Critical (Tier 1 Met)</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">🧪</div>
+          <div class="stat-data">
+            <span class="stat-value" id="measure-stat-test-suites">11 / 11</span>
+            <span class="stat-label">Pre-Deployment Suites Passed</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(234, 179, 8, 0.15); color: #eab308;">⚖️</div>
+          <div class="stat-data">
+            <span class="stat-value" id="measure-stat-fairness-gap">1.8%</span>
+            <span class="stat-label">Max Fairness Gap (Target ≤ 5%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Sub-Tabs Switcher -->
+      <div class="sub-tab-bar">
+        <button type="button" class="sub-tab-btn active" id="btn-sub-measure-metrics" onclick="window.switchMeasureSubview && window.switchMeasureSubview('metrics')">
+          <span class="sub-tab-icon">📋</span> 20 Metrics Tracker (MEASURE 1.1)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-suites" onclick="window.switchMeasureSubview && window.switchMeasureSubview('suites')">
+          <span class="sub-tab-icon">🧪</span> 11 TEVV Test Suites (MEASURE 2)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-bias" onclick="window.switchMeasureSubview && window.switchMeasureSubview('bias')">
+          <span class="sub-tab-icon">⚖️</span> Bias &amp; Fairness Lab (SP 1270)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-monitoring" onclick="window.switchMeasureSubview && window.switchMeasureSubview('monitoring')">
+          <span class="sub-tab-icon">📡</span> Monitoring &amp; Alert SLAs (MEASURE 3)
+        </button>
+        <button type="button" class="sub-tab-btn" id="btn-sub-measure-calendar" onclick="window.switchMeasureSubview && window.switchMeasureSubview('calendar')">
+          <span class="sub-tab-icon">📅</span> TEVV Lifecycle &amp; Sign-Off (MEASURE 4)
+        </button>
+      </div>
+
+      <!-- SUBVIEW 1: 20 METRICS TRACKER -->
+      <div id="subview-measure-metrics" class="subview-panel active">
+        <!-- Search and Filters -->
+        <div class="inventory-controls" style="margin-bottom: 1.25rem;">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="measure-metrics-search" placeholder="Search metric name, ID, formula, or owner...">
+          </div>
+          <div class="filter-group">
+            <select id="measure-filter-tier" class="filter-select">
+              <option value="">All Tiers</option>
+              <option value="1">Tier 1 — Safety-Critical</option>
+              <option value="2">Tier 2 — Performance</option>
+              <option value="3">Tier 3 — Fairness &amp; Trust</option>
+              <option value="4">Tier 4 — Strategic</option>
+            </select>
+            <select id="measure-filter-rag" class="filter-select">
+              <option value="">All RAG Statuses</option>
+              <option value="Green">🟢 Green (On Target)</option>
+              <option value="Amber">🟡 Amber (Warning)</option>
+              <option value="Red">🔴 Red (Breached)</option>
+            </select>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-measure-filters">Reset</button>
+          </div>
+        </div>
+
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Production AI Metrics Tracker (MEASURE 1.1 &amp; 2.1)</h3>
+              <p class="text-muted" id="measure-metrics-count">Tracking all 20 metrics across 4 tiers with explicit formulas, collection cadences, and red-line thresholds.</p>
+            </div>
+            <div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-export-measure-metrics-inner" onclick="window.exportMeasureCsv && window.exportMeasureCsv()">
+                Export CSV
+              </button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 7%;">ID</th>
+                  <th style="width: 18%;">Metric Name &amp; Tier</th>
+                  <th style="width: 15%;">NIST Characteristic</th>
+                  <th style="width: 20%;">Measurement Formula &amp; Source</th>
+                  <th style="width: 12%;">Target vs. Red Line</th>
+                  <th style="width: 10%;">Actual Value</th>
+                  <th style="width: 8%;">Status</th>
+                  <th style="width: 10%;">Cadence &amp; Owner</th>
+                </tr>
+              </thead>
+              <tbody id="measure-metrics-table-body">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 2: 11 TEVV TEST SUITES -->
+      <div id="subview-measure-suites" class="subview-panel" style="display: none;">
+        <div class="inventory-controls" style="margin-bottom: 1.25rem;">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="measure-suites-search" placeholder="Search test suites, methods, or linked metrics...">
+          </div>
+        </div>
+        <div class="gates-grid" id="measure-suites-grid">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+
+      <!-- SUBVIEW 3: BIAS & FAIRNESS LAB -->
+      <div id="subview-measure-bias" class="subview-panel" style="display: none;">
+        <!-- Proxy Dimensions Table -->
+        <div class="card table-card" style="margin-bottom: 1.5rem;">
+          <div class="card-header-flex">
+            <div>
+              <h3>Demographic Proxy Dimensions &amp; Operational Testing (MEASURE 2.11 · NIST SP 1270)</h3>
+              <p class="text-muted">Evaluating equity and bias across socio-technical proxy dimensions without collecting direct PII.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 16%;">Proxy Dimension</th>
+                  <th style="width: 24%;">Correlated Demographic Factors</th>
+                  <th>Operational Testing Procedure</th>
+                  <th style="width: 20%;">Benchmark Disparity &amp; Status</th>
+                </tr>
+              </thead>
+              <tbody id="measure-bias-proxy-tbody">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pre-Deployment Bias Test Procedures -->
+        <div class="card table-card" style="margin-bottom: 1.5rem;">
+          <div class="card-header-flex">
+            <div>
+              <h3>Pre-Deployment Bias Test Procedures (FAI-01 to FAI-05)</h3>
+              <p class="text-muted">Empirical accuracy, escalation, tone, and vulnerability stress tests with statistical significance thresholds.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">Test ID</th>
+                  <th style="width: 18%;">Test Name</th>
+                  <th style="width: 22%;">Objective &amp; Sample Size</th>
+                  <th style="width: 22%;">Pass Criteria</th>
+                  <th>Observed Empirical Result &amp; Status</th>
+                </tr>
+              </thead>
+              <tbody id="measure-bias-procedures-tbody">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Interactive Demographic Disparity Calculator -->
+        <div class="card highlight-card">
+          <div class="card-header-row">
+            <div>
+              <h3>Interactive Disparity &amp; Four-Fifths Rule Calculator</h3>
+              <p class="text-muted">Simulate accuracy or pass-rate disparity across reference and focal groups per EEOC 4/5ths rule and NIST SP 1270 criteria.</p>
+            </div>
+          </div>
+          <div class="grid-3" style="margin-top: 1rem;">
+            <div class="form-group">
+              <label for="calc-ref-accuracy">Reference Group (Majority) Accuracy / Pass %</label>
+              <input type="number" id="calc-ref-accuracy" class="form-input" value="98.5" min="1" max="100" step="0.1">
+            </div>
+            <div class="form-group">
+              <label for="calc-focal-accuracy">Focal Group (Protected Proxy) Accuracy / Pass %</label>
+              <input type="number" id="calc-focal-accuracy" class="form-input" value="96.8" min="1" max="100" step="0.1">
+            </div>
+            <div class="form-group">
+              <label for="calc-threshold">Max Tolerable Disparity Gap (%)</label>
+              <input type="number" id="calc-threshold" class="form-input" value="5.0" min="0.5" max="20" step="0.5">
+            </div>
+          </div>
+          <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-input); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Calculated Disparity Gap:</span>
+              <div id="calc-gap-result" style="font-size: 1.5rem; font-weight: 800; color: #10b981;">1.70% (PASSED)</div>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Four-Fifths Ratio (Focal / Ref):</span>
+              <div id="calc-ratio-result" style="font-size: 1.5rem; font-weight: 800; color: #10b981;">0.983 (Rule > 0.80 Met)</div>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Deployment Clearance:</span>
+              <div id="calc-clearance-result"><span class="badge badge-success">CLEARED FOR DEPLOYMENT</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 4: MONITORING & ALERT SLAS -->
+      <div id="subview-measure-monitoring" class="subview-panel" style="display: none;">
+        <!-- Dashboard Views -->
+        <div class="card table-card" style="margin-bottom: 1.5rem;">
+          <div class="card-header-flex">
+            <div>
+              <h3>Real-Time Telemetry &amp; Multi-Audience Dashboards (MEASURE 3.1)</h3>
+              <p class="text-muted">Targeted operational views configured with specific refresh frequencies and telemetry metrics.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 22%;">Dashboard View</th>
+                  <th style="width: 20%;">Target Audience</th>
+                  <th>Monitored Telemetry &amp; Metric IDs</th>
+                  <th style="width: 18%;">Refresh SLA</th>
+                </tr>
+              </thead>
+              <tbody id="measure-monitoring-views-tbody">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Alert SLAs Table -->
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h3>Incident Alert SLA Tiers &amp; Escalation Boundaries (MEASURE 3.3)</h3>
+              <p class="text-muted">Enforcing deterministic response SLAs when production metrics approach or breach red-line thresholds.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 12%;">Alert Severity</th>
+                  <th style="width: 28%;">Trigger Condition / Breach Threshold</th>
+                  <th>Notification Channels &amp; Accountable Recipients</th>
+                  <th style="width: 20%;">Response SLA</th>
+                </tr>
+              </thead>
+              <tbody id="measure-alerts-tbody">
+                <!-- Rendered dynamically by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBVIEW 5: TEVV LIFECYCLE & SIGN-OFF -->
+      <div id="subview-measure-calendar" class="subview-panel" style="display: none;">
+        <div class="card table-card" style="margin-bottom: 1.5rem;">
+          <div class="card-header-flex">
+            <div>
+              <h3>TEVV Pre-Deployment Lifecycle Roadmap (Weeks 1 to 20)</h3>
+              <p class="text-muted">Step-by-step phased testing leading to formal GATE-03 deployment clearance.</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th style="width: 14%;">Timeline</th>
+                  <th style="width: 28%;">TEVV Activity</th>
+                  <th>Test Suites Executed</th>
+                  <th style="width: 20%;">Lead Role Owner</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Weeks 1–2</strong></td>
+                  <td>Test suite design and test dataset curation</td>
+                  <td>All Suites (TS-01 to TS-11)</td>
+                  <td>TEVV Team Lead</td>
+                </tr>
+                <tr>
+                  <td><strong>Weeks 3–6</strong></td>
+                  <td>Component unit testing &amp; end-to-end integration flows</td>
+                  <td>TS-02, TS-03, TS-09</td>
+                  <td>AI/ML Engineering + QA</td>
+                </tr>
+                <tr>
+                  <td><strong>Weeks 7–10</strong></td>
+                  <td>Safety, adversarial red teaming &amp; privacy testing</td>
+                  <td>TS-04, TS-05, TS-06</td>
+                  <td>InfoSec + DPO + Red Team</td>
+                </tr>
+                <tr>
+                  <td><strong>Weeks 10–12</strong></td>
+                  <td>Fairness, demographic proxy &amp; explainability testing</td>
+                  <td>TS-07, TS-08</td>
+                  <td>AI Ethics Officer + UX</td>
+                </tr>
+                <tr>
+                  <td><strong>Weeks 12–14</strong></td>
+                  <td>Accuracy benchmarking &amp; stress/load testing</td>
+                  <td>TS-01, TS-10</td>
+                  <td>TEVV Team + SRE</td>
+                </tr>
+                <tr>
+                  <td><strong>Weeks 15–18</strong></td>
+                  <td>Customer pilot &amp; user acceptance testing (500+ users)</td>
+                  <td>TS-11 (UAT)</td>
+                  <td>UX Research + CS Lead</td>
+                </tr>
+                <tr>
+                  <td><strong>Weeks 19–20</strong></td>
+                  <td>TEVV Validation Dossier compilation &amp; GATE-03 Sign-off</td>
+                  <td>Full Framework Audit</td>
+                  <td>AI Risk Officer + CAIO</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- GATE-03 Sign-Off Criteria Checklist -->
+        <div class="card highlight-card">
+          <h3>GATE-03 TEVV Sign-Off Verification (GOVERN 1.3 · MEASURE 4.2)</h3>
+          <p class="text-muted">Mandatory technical thresholds that must be certified before live production release.</p>
+          <div style="margin-top: 1rem; display: grid; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);">
+              <div>
+                <strong>Criterion 1: Factual Accuracy Rate ≥ 97.0%</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Benchmark suite of 500+ factual banking queries</div>
+              </div>
+              <span class="badge badge-success">PASSED (98.2%)</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);">
+              <div>
+                <strong>Criterion 2: Hallucination Rate ≤ 1.0%</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Verified across 5% random sampled responses</div>
+              </div>
+              <span class="badge badge-success">PASSED (0.4%)</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);">
+              <div>
+                <strong>Criterion 3: Zero Critical PII Leakage</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Automated PII scanner scan of all outputs</div>
+              </div>
+              <span class="badge badge-success">PASSED (0 instances)</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);">
+              <div>
+                <strong>Criterion 4: Adversarial Jailbreak Resistance ≥ 99.0%</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">350 red-team injection and jailbreak prompts</div>
+              </div>
+              <span class="badge badge-success">PASSED (99.4%)</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; background: var(--bg-input); border-radius: var(--radius-sm);">
+              <div>
+                <strong>Criterion 5: Demographic Disparity Gap ≤ 5.0%</strong>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Disaggregated FAI-01 accuracy across language variants</div>
+              </div>
+              <span class="badge badge-success">PASSED (1.8%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- End of .inventory-container -->
+  </div><!-- End of #view-measure -->
 
   <!-- VIEW 4: IMPACT ASSESSMENT STUDIO (GOVERN 4.2 · MAP · MANAGE) -->
   <div id="view-assessment" class="portal-view" style="display: none;">
@@ -2119,6 +2555,7 @@
   <div id="print-roles-report" class="print-report"></div>
   <div id="print-policy-report" class="print-report"></div>
   <div id="print-map-report" class="print-report"></div>
+  <div id="print-measure-report" class="print-report"></div>
 
   <!-- Notification Toast -->
   <div id="toast" class="toast">Portal state saved</div>
@@ -2128,6 +2565,7 @@
   <script src="roles-data.js?v=20261020-1"></script>
   <script src="policy-data.js?v=20261020-1"></script>
   <script src="map-data.js?v=20261020-1"></script>
+  <script src="measure-data.js?v=20261020-1"></script>
   <script src="finassist-data.js?v=20261020-1"></script>
   <script src="app.js?v=20261020-1"></script>
 </body>

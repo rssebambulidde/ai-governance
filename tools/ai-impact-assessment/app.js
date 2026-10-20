@@ -49,6 +49,7 @@ function initAntigravityGovernanceApp() {
       { id: 'roles', btn: document.getElementById('tab-nav-roles'), view: document.getElementById('view-roles'), act: document.getElementById('actions-roles') },
       { id: 'policy', btn: document.getElementById('tab-nav-policy'), view: document.getElementById('view-policy'), act: document.getElementById('actions-policy') },
       { id: 'map', btn: document.getElementById('tab-nav-map'), view: document.getElementById('view-map'), act: document.getElementById('actions-map') },
+      { id: 'measure', btn: document.getElementById('tab-nav-measure'), view: document.getElementById('view-measure'), act: document.getElementById('actions-measure') },
       { id: 'assessment', btn: document.getElementById('tab-nav-assessment'), view: document.getElementById('view-assessment'), act: document.getElementById('actions-assessment') }
     ];
 
@@ -79,6 +80,8 @@ function initAntigravityGovernanceApp() {
       renderPolicyModule();
     } else if (target === 'map') {
       renderMapModule();
+    } else if (target === 'measure') {
+      renderMeasureModule();
     } else {
       syncHeaderBadges();
       updateProgress();
@@ -102,6 +105,7 @@ function initAntigravityGovernanceApp() {
   document.getElementById('tab-nav-roles')?.addEventListener('click', () => switchHubView('roles'));
   document.getElementById('tab-nav-policy')?.addEventListener('click', () => switchHubView('policy'));
   document.getElementById('tab-nav-map')?.addEventListener('click', () => switchHubView('map'));
+  document.getElementById('tab-nav-measure')?.addEventListener('click', () => switchHubView('measure'));
   document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
 
   // Inventory Data State
@@ -2071,6 +2075,622 @@ function initAntigravityGovernanceApp() {
   }
   document.getElementById('btn-print-map-pdf')?.addEventListener('click', triggerPrintMapPdf);
 
+  // ==========================================================================
+  // 0.4 TEVV & QUANTITATIVE METRICS MODULE (MEASURE 1–4 · NIST SP 1270)
+  // ==========================================================================
+  let selectedMeasureSystemId = 'AI-001';
+  let activeMeasureSubview = 'metrics';
+
+  function switchMeasureSubview(target) {
+    activeMeasureSubview = target;
+    const subtabs = [
+      { id: 'metrics', btn: document.getElementById('btn-sub-measure-metrics'), panel: document.getElementById('subview-measure-metrics') },
+      { id: 'suites', btn: document.getElementById('btn-sub-measure-suites'), panel: document.getElementById('subview-measure-suites') },
+      { id: 'bias', btn: document.getElementById('btn-sub-measure-bias'), panel: document.getElementById('subview-measure-bias') },
+      { id: 'monitoring', btn: document.getElementById('btn-sub-measure-monitoring'), panel: document.getElementById('subview-measure-monitoring') },
+      { id: 'calendar', btn: document.getElementById('btn-sub-measure-calendar'), panel: document.getElementById('subview-measure-calendar') }
+    ];
+
+    subtabs.forEach(st => {
+      st.btn?.classList.toggle('active', st.id === target);
+      if (st.panel) {
+        st.panel.classList.toggle('active', st.id === target);
+        st.panel.style.display = st.id === target ? 'block' : 'none';
+      }
+    });
+
+    if (target === 'metrics') renderMetricsTracker();
+    else if (target === 'suites') renderTevvTestSuites();
+    else if (target === 'bias') renderBiasLabModule();
+    else if (target === 'monitoring') renderMonitoringModule();
+  }
+  window.switchMeasureSubview = switchMeasureSubview;
+
+  document.getElementById('btn-sub-measure-metrics')?.addEventListener('click', () => switchMeasureSubview('metrics'));
+  document.getElementById('btn-sub-measure-suites')?.addEventListener('click', () => switchMeasureSubview('suites'));
+  document.getElementById('btn-sub-measure-bias')?.addEventListener('click', () => switchMeasureSubview('bias'));
+  document.getElementById('btn-sub-measure-monitoring')?.addEventListener('click', () => switchMeasureSubview('monitoring'));
+  document.getElementById('btn-sub-measure-calendar')?.addEventListener('click', () => switchMeasureSubview('calendar'));
+
+  function renderMeasureModule() {
+    // Populate Measure system select dropdown
+    const sel = document.getElementById('measure-system-select');
+    if (sel && inventorySystems && inventorySystems.length > 0) {
+      const currentVal = sel.value || selectedMeasureSystemId;
+      sel.innerHTML = inventorySystems.map(s => {
+        const sid = s.systemId || s.id;
+        const selected = (sid === currentVal || s.id === currentVal) ? 'selected' : '';
+        return `<option value="${s.id}" ${selected}>${sid} — ${s.name} (${s.riskTier || s.riskLevel} Risk)</option>`;
+      }).join('');
+      selectedMeasureSystemId = sel.value;
+    }
+
+    renderMeasureHeaderAndStats();
+
+    if (activeMeasureSubview === 'metrics') renderMetricsTracker();
+    else if (activeMeasureSubview === 'suites') renderTevvTestSuites();
+    else if (activeMeasureSubview === 'bias') renderBiasLabModule();
+    else if (activeMeasureSubview === 'monitoring') renderMonitoringModule();
+  }
+
+  function renderMeasureHeaderAndStats() {
+    const profile = (typeof SYSTEM_MEASURE_PROFILES !== 'undefined' && SYSTEM_MEASURE_PROFILES[selectedMeasureSystemId])
+      ? SYSTEM_MEASURE_PROFILES[selectedMeasureSystemId] : null;
+
+    const tevvBadge = document.getElementById('measure-tevv-badge');
+    const ragBadge = document.getElementById('measure-rag-badge');
+
+    if (tevvBadge) {
+      if (profile) {
+        tevvBadge.textContent = `TEVV: ${profile.tevvStatus} (${profile.testSuitesPassed})`;
+        tevvBadge.className = profile.tevvStatus === 'Passed' ? 'gate-status-badge approved' : (profile.tevvStatus === 'Failed' ? 'gate-status-badge blocked' : 'gate-status-badge pending');
+      } else {
+        tevvBadge.textContent = 'TEVV: Passed (11 / 11 Suites)';
+        tevvBadge.className = 'gate-status-badge approved';
+      }
+    }
+
+    if (ragBadge) {
+      if (profile) {
+        if (profile.breaches === 0) {
+          ragBadge.textContent = '0 Red-Line Breaches';
+          ragBadge.className = 'gate-status-badge approved';
+        } else {
+          ragBadge.textContent = `${profile.breaches} Red-Line Breach(es)`;
+          ragBadge.className = 'gate-status-badge blocked';
+        }
+      } else {
+        ragBadge.textContent = '0 Red-Line Breaches';
+        ragBadge.className = 'gate-status-badge approved';
+      }
+    }
+
+    // KPI Cards
+    const totalEl = document.getElementById('measure-stat-total-metrics');
+    const tier1El = document.getElementById('measure-stat-tier1-metrics');
+    const suitesEl = document.getElementById('measure-stat-test-suites');
+    const gapEl = document.getElementById('measure-stat-fairness-gap');
+
+    if (totalEl) totalEl.textContent = profile ? profile.totalMetrics : (typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG.length : '20');
+    if (tier1El) tier1El.textContent = profile ? `${profile.tier1Count} / 6 (${profile.breaches === 0 ? '100% Met' : profile.breaches + ' Breached'})` : '6 / 6 (100% Met)';
+    if (suitesEl) suitesEl.textContent = profile ? profile.testSuitesPassed : '11 / 11 Passed';
+    if (gapEl) gapEl.textContent = profile ? `${profile.fairnessGap} (Target ≤ 5%)` : '1.8% (Target ≤ 5%)';
+  }
+
+  document.getElementById('measure-system-select')?.addEventListener('change', (e) => {
+    selectedMeasureSystemId = e.target.value;
+    renderMeasureModule();
+  });
+
+  // Metrics Tracker Renderer
+  function renderMetricsTracker() {
+    const tbody = document.getElementById('measure-metrics-table-body');
+    if (!tbody) return;
+
+    const q = (document.getElementById('measure-metrics-search')?.value || '').toLowerCase().trim();
+    const selTier = document.getElementById('measure-filter-tier')?.value || '';
+    const selRag = document.getElementById('measure-filter-rag')?.value || '';
+
+    let items = typeof MEASURE_METRICS_CATALOG !== 'undefined' ? [...MEASURE_METRICS_CATALOG] : [];
+
+    if (q) {
+      items = items.filter(m => 
+        m.id.toLowerCase().includes(q) ||
+        m.name.toLowerCase().includes(q) ||
+        m.formula.toLowerCase().includes(q) ||
+        m.owner.toLowerCase().includes(q) ||
+        m.trustworthiness.toLowerCase().includes(q)
+      );
+    }
+
+    if (selTier) {
+      items = items.filter(m => String(m.tier) === selTier);
+    }
+
+    if (selRag) {
+      items = items.filter(m => m.ragStatus === selRag);
+    }
+
+    const countText = document.getElementById('measure-metrics-count');
+    if (countText) {
+      countText.textContent = `Showing ${items.length} of ${typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG.length : 20} metrics across 4 tiers with explicit formulas and red-line thresholds.`;
+    }
+
+    if (items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">No metrics match your filter criteria.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = items.map(m => {
+      const tierBadge = m.tier === 1 ? 'tag-crit' : (m.tier === 2 ? 'tag-high' : (m.tier === 3 ? 'tag-med' : 'tag-low'));
+      const statusPill = m.ragStatus === 'Green' ? 'approved' : (m.ragStatus === 'Amber' ? 'pending' : 'blocked');
+      const trendIcon = m.trend === '↑' ? '↗️' : (m.trend === '↓' ? '↘️' : '➡️');
+
+      return `
+        <tr>
+          <td><strong>${m.id}</strong></td>
+          <td>
+            <strong>${m.name}</strong>
+            <div style="margin-top: 0.2rem;"><span class="stat-tag ${tierBadge}">Tier ${m.tier}: ${m.tierName}</span></div>
+          </td>
+          <td>
+            <span class="badge-dept">${m.trustworthiness}</span>
+          </td>
+          <td>
+            <div style="font-size: 0.8rem; font-family: monospace; line-height: 1.4; color: var(--text-primary);">${m.formula}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;">Source: ${m.dataSource}</div>
+          </td>
+          <td>
+            <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">Target: ${m.target}</div>
+            <div style="font-size: 0.76rem; color: #ef4444; font-weight: 600; margin-top: 0.2rem;">Red Line: ${m.redLine}</div>
+          </td>
+          <td>
+            <span style="font-weight: 700; font-size: 0.88rem; color: var(--accent-primary);">${m.actualValue}</span>
+          </td>
+          <td>
+            <span class="doc-status-pill ${statusPill}">${m.ragStatus} ${trendIcon}</span>
+          </td>
+          <td>
+            <div style="font-weight: 600; font-size: 0.8rem;">${m.frequency}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">${m.owner}</div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Filter event listeners for metrics tracker
+  document.getElementById('measure-metrics-search')?.addEventListener('input', renderMetricsTracker);
+  document.getElementById('measure-filter-tier')?.addEventListener('change', renderMetricsTracker);
+  document.getElementById('measure-filter-rag')?.addEventListener('change', renderMetricsTracker);
+  document.getElementById('btn-reset-measure-filters')?.addEventListener('click', () => {
+    if (document.getElementById('measure-metrics-search')) document.getElementById('measure-metrics-search').value = '';
+    if (document.getElementById('measure-filter-tier')) document.getElementById('measure-filter-tier').value = '';
+    if (document.getElementById('measure-filter-rag')) document.getElementById('measure-filter-rag').value = '';
+    renderMetricsTracker();
+  });
+
+  // TEVV Test Suites Renderer
+  function renderTevvTestSuites() {
+    const container = document.getElementById('measure-suites-grid');
+    if (!container) return;
+
+    const q = (document.getElementById('measure-suites-search')?.value || '').toLowerCase().trim();
+    let suites = typeof TEVV_TEST_SUITES !== 'undefined' ? [...TEVV_TEST_SUITES] : [];
+
+    if (q) {
+      suites = suites.filter(s =>
+        s.id.toLowerCase().includes(q) ||
+        s.name.toLowerCase().includes(q) ||
+        s.description.toLowerCase().includes(q) ||
+        s.runBy.toLowerCase().includes(q)
+      );
+    }
+
+    if (suites.length === 0) {
+      container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">No TEVV test suites match your search.</div>';
+      return;
+    }
+
+    container.innerHTML = suites.map(s => {
+      const cardClass = s.status === 'Passed' ? 'gate-passed' : (s.status === 'Failed' ? 'gate-failed' : 'gate-pending');
+      const badgePill = s.status === 'Passed' ? 'approved' : (s.status === 'Failed' ? 'blocked' : 'pending');
+
+      return `
+        <div class="gate-card ${cardClass}">
+          <div class="gate-header">
+            <div>
+              <span class="gate-id">${s.id}</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); margin-left: 0.5rem;">${s.testCases} Test Cases</span>
+            </div>
+            <span class="gate-status-pill ${badgePill}">${s.status} (${s.passRate})</span>
+          </div>
+          <h4>${s.name}</h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; margin: 0.5rem 0;">${s.description}</p>
+          
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Results</span>
+            <span class="gate-detail-value">
+              <span style="color: #10b981; font-weight: 700;">${s.passedCases} Passed</span> · 
+              <span style="color: ${s.failedCases > 0 ? '#ef4444' : 'var(--text-muted)'}; font-weight: 700;">${s.failedCases} Failed</span>
+            </span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Linked Metrics</span>
+            <span class="gate-detail-value"><code>${s.linkedMetrics.join(', ')}</code></span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Executed By</span>
+            <span class="gate-detail-value"><strong>${s.runBy}</strong></span>
+          </div>
+
+          <div class="gate-detail-row">
+            <span class="gate-detail-label">Cadence</span>
+            <span class="gate-detail-value" style="font-size: 0.76rem;">${s.frequency}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('measure-suites-search')?.addEventListener('input', renderTevvTestSuites);
+
+  // Bias Lab Module Renderer
+  function renderBiasLabModule() {
+    // 1. Proxy Dimensions
+    const proxyTbody = document.getElementById('measure-bias-proxy-tbody');
+    if (proxyTbody) {
+      const proxies = typeof BIAS_PROXY_DIMENSIONS !== 'undefined' ? BIAS_PROXY_DIMENSIONS : [];
+      proxyTbody.innerHTML = proxies.map(p => `
+        <tr>
+          <td><strong>${p.dimension}</strong></td>
+          <td style="font-size: 0.8rem; line-height: 1.4;">${p.correlatedAttributes}</td>
+          <td style="font-size: 0.8rem; line-height: 1.4; color: var(--text-secondary);">${p.testingMethod}</td>
+          <td>
+            <div style="font-weight: 700; font-size: 0.8rem; color: var(--accent-primary);">${p.benchmarkDisparity}</div>
+            <span class="stat-tag tag-low" style="margin-top: 0.2rem;">${p.status}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 2. Pre-Deployment Bias Test Procedures
+    const procTbody = document.getElementById('measure-bias-procedures-tbody');
+    if (procTbody) {
+      const procs = typeof BIAS_TEST_PROCEDURES !== 'undefined' ? BIAS_TEST_PROCEDURES : [];
+      procTbody.innerHTML = procs.map(pr => `
+        <tr>
+          <td><strong>${pr.id}</strong></td>
+          <td><strong>${pr.name}</strong></td>
+          <td>
+            <div style="font-size: 0.8rem; line-height: 1.4;">${pr.objective}</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">Sample: ${pr.sampleSize}</div>
+          </td>
+          <td style="font-size: 0.8rem; color: #10b981; font-weight: 600;">${pr.passCriteria}</td>
+          <td>
+            <div style="font-size: 0.8rem; line-height: 1.4;">${pr.actualResult}</div>
+            <span class="doc-status-pill approved" style="margin-top: 0.25rem;">${pr.status}</span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 3. Calculator Event Listeners
+    setupDisparityCalculator();
+  }
+
+  function setupDisparityCalculator() {
+    const refInput = document.getElementById('calc-ref-accuracy');
+    const focalInput = document.getElementById('calc-focal-accuracy');
+    const threshInput = document.getElementById('calc-threshold');
+
+    function updateCalc() {
+      const ref = parseFloat(refInput?.value) || 0;
+      const focal = parseFloat(focalInput?.value) || 0;
+      const thresh = parseFloat(threshInput?.value) || 5.0;
+
+      const gap = Math.abs(ref - focal).toFixed(2);
+      const ratio = ref > 0 ? (focal / ref).toFixed(3) : '1.000';
+
+      const gapEl = document.getElementById('calc-gap-result');
+      const ratioEl = document.getElementById('calc-ratio-result');
+      const clearEl = document.getElementById('calc-clearance-result');
+
+      const gapPassed = parseFloat(gap) <= thresh;
+      const ratioPassed = parseFloat(ratio) >= 0.80;
+
+      if (gapEl) {
+        gapEl.textContent = `${gap}% (${gapPassed ? 'PASSED' : 'DISPARITY BREACH'})`;
+        gapEl.style.color = gapPassed ? '#10b981' : '#ef4444';
+      }
+
+      if (ratioEl) {
+        ratioEl.textContent = `${ratio} (${ratioPassed ? 'Rule ≥ 0.80 Met' : 'Adverse Impact (< 0.80)'})`;
+        ratioEl.style.color = ratioPassed ? '#10b981' : '#ef4444';
+      }
+
+      if (clearEl) {
+        if (gapPassed && ratioPassed) {
+          clearEl.innerHTML = '<span class="badge badge-success">CLEARED FOR DEPLOYMENT</span>';
+        } else {
+          clearEl.innerHTML = '<span class="badge badge-danger">GATE-03 BIAS BLOCKED</span>';
+        }
+      }
+    }
+
+    refInput?.addEventListener('input', updateCalc);
+    focalInput?.addEventListener('input', updateCalc);
+    threshInput?.addEventListener('input', updateCalc);
+    updateCalc();
+  }
+
+  // Monitoring Module Renderer
+  function renderMonitoringModule() {
+    const viewsTbody = document.getElementById('measure-monitoring-views-tbody');
+    if (viewsTbody) {
+      const views = typeof MONITORING_DASHBOARD_VIEWS !== 'undefined' ? MONITORING_DASHBOARD_VIEWS : [];
+      viewsTbody.innerHTML = views.map(v => `
+        <tr>
+          <td><strong>${v.viewName}</strong></td>
+          <td><span class="badge-dept">${v.audience}</span></td>
+          <td style="font-size: 0.82rem; line-height: 1.4;">${v.metrics}</td>
+          <td style="font-size: 0.8rem; font-weight: 600; color: var(--accent-primary);">${v.cadence}</td>
+        </tr>
+      `).join('');
+    }
+
+    const alertsTbody = document.getElementById('measure-alerts-tbody');
+    if (alertsTbody) {
+      const alerts = typeof ALERT_SLA_TIERS !== 'undefined' ? ALERT_SLA_TIERS : [];
+      alertsTbody.innerHTML = alerts.map(a => `
+        <tr>
+          <td><span class="stat-tag ${a.badgeClass}">${a.tier}</span></td>
+          <td style="font-size: 0.82rem; line-height: 1.4;">${a.trigger}</td>
+          <td style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">${a.notification}</td>
+          <td style="font-size: 0.84rem; font-weight: 700; color: #ef4444;">${a.sla}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Measure Exports & PDF Generator
+  function exportMeasureCsv() {
+    const metrics = typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG : [];
+    if (metrics.length === 0) return;
+
+    function escapeCsv(val) {
+      if (val === null || val === undefined) return '""';
+      const str = String(val).replace(/"/g, '""');
+      return `"${str}"`;
+    }
+
+    const headers = [
+      'Metric_ID', 'Metric_Name', 'Tier', 'Trustworthiness_Characteristic',
+      'Measurement_Formula', 'Data_Source', 'Collection_Frequency', 'Target',
+      'Red_Line', 'Owner', 'Review_Date', 'Actual_Value', 'RAG_Status', 'Trend', 'Notes_and_Actions'
+    ];
+
+    const rows = metrics.map(m => [
+      escapeCsv(m.id),
+      escapeCsv(m.name),
+      escapeCsv(m.tier),
+      escapeCsv(m.trustworthiness),
+      escapeCsv(m.formula),
+      escapeCsv(m.dataSource),
+      escapeCsv(m.frequency),
+      escapeCsv(m.target),
+      escapeCsv(m.redLine),
+      escapeCsv(m.owner),
+      escapeCsv(new Date().toISOString().slice(0, 10)),
+      escapeCsv(m.actualValue),
+      escapeCsv(m.ragStatus === 'Green' ? '🟢' : (m.ragStatus === 'Amber' ? '🟡' : '🔴')),
+      escapeCsv(m.trend),
+      escapeCsv(m.notes)
+    ].join(','));
+
+    const csvContent = [headers.join(','), ...rows].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MEASURE-Metrics-Tracker-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Exported MEASURE-Metrics-Tracker.csv');
+  }
+  window.exportMeasureCsv = exportMeasureCsv;
+  document.getElementById('btn-export-measure-csv')?.addEventListener('click', exportMeasureCsv);
+
+  function exportMeasureMarkdown() {
+    const metrics = typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG : [];
+    const suites = typeof TEVV_TEST_SUITES !== 'undefined' ? TEVV_TEST_SUITES : [];
+    const profile = (typeof SYSTEM_MEASURE_PROFILES !== 'undefined' && SYSTEM_MEASURE_PROFILES[selectedMeasureSystemId])
+      ? SYSTEM_MEASURE_PROFILES[selectedMeasureSystemId] : null;
+
+    let md = `# NIST AI RMF TEVV & Metrics Report: ${profile ? profile.name : selectedMeasureSystemId}\n\n`;
+    md += `**Framework:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1 — MEASURE Function)\n`;
+    md += `**System ID:** ${selectedMeasureSystemId}\n`;
+    md += `**Date:** ${new Date().toISOString().slice(0, 10)}\n`;
+    md += `**TEVV Status:** ${profile ? profile.tevvStatus : 'Passed'} (${profile ? profile.testSuitesPassed : '11 / 11 Passed'})\n`;
+    md += `**Independent Validator:** ${profile ? profile.independentValidator : 'SamaBrains Assurance & Independent TEVV Lab'}\n\n`;
+    md += `> **GATE-03 Clearance:** ${profile && profile.tevvStatus === 'Passed' ? 'PASSED — Cleared for Live Deployment' : 'BLOCKED'}\n\n`;
+    md += `---\n\n## 1. 20 Production Metrics Evaluation (MEASURE 1.1)\n\n`;
+
+    metrics.forEach(m => {
+      md += `### ${m.id}: ${m.name} (Tier ${m.tier}: ${m.tierName})\n`;
+      md += `- **Trustworthiness:** ${m.trustworthiness}\n`;
+      md += `- **Formula:** \`${m.formula}\`\n`;
+      md += `- **Source & Cadence:** ${m.dataSource} (${m.frequency})\n`;
+      md += `- **Target:** ${m.target} | **Red Line:** ${m.redLine}\n`;
+      md += `- **Actual Result:** **${m.actualValue}** (Status: ${m.ragStatus}, Trend: ${m.trend})\n`;
+      md += `- **Owner:** ${m.owner}\n\n`;
+    });
+
+    md += `---\n\n## 2. 11 Pre-Deployment TEVV Test Suites (MEASURE 2)\n\n`;
+    suites.forEach(s => {
+      md += `### ${s.id}: ${s.name}\n`;
+      md += `- **Test Cases:** ${s.testCases} (${s.passedCases} Passed, ${s.failedCases} Failed — Pass Rate: ${s.passRate})\n`;
+      md += `- **Status:** ${s.status}\n`;
+      md += `- **Linked Metrics:** ${s.linkedMetrics.join(', ')}\n`;
+      md += `- **Executed By:** ${s.runBy} (${s.frequency})\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MEASURE-TEVV-Report-${selectedMeasureSystemId}-${new Date().toISOString().slice(0, 10)}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`Exported TEVV Report for ${selectedMeasureSystemId}`);
+  }
+  document.getElementById('btn-export-measure-md')?.addEventListener('click', exportMeasureMarkdown);
+
+  function triggerPrintMeasurePdf() {
+    const container = document.getElementById('print-measure-report');
+    if (!container) return;
+
+    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    const metrics = typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG : [];
+    const suites = typeof TEVV_TEST_SUITES !== 'undefined' ? TEVV_TEST_SUITES : [];
+    const profile = (typeof SYSTEM_MEASURE_PROFILES !== 'undefined' && SYSTEM_MEASURE_PROFILES[selectedMeasureSystemId])
+      ? SYSTEM_MEASURE_PROFILES[selectedMeasureSystemId] : null;
+
+    const html = `
+      <div class="pr-header">
+        <div>
+          <div class="pr-org">SAMABRAINS ASSURANCE &amp; TEVV PRACTICE</div>
+          <h1 class="pr-title">Executive TEVV Validation Dossier (MEASURE 1–4)</h1>
+          <div class="pr-subtitle">Operationalizing NIST AI Risk Management Framework 1.0 (NIST AI 100-1) &amp; NIST SP 1270</div>
+        </div>
+        <div>
+          <span class="pr-badge-go">${profile && profile.tevvStatus === 'Passed' ? 'GATE-03 CLEARED' : 'GATE-03 PENDING'}</span>
+        </div>
+      </div>
+
+      <div class="pr-meta-box">
+        <div class="pr-grid-4">
+          <div class="pr-field">
+            <span class="pr-label">Target System</span>
+            <span class="pr-value" style="font-weight: 700;">${selectedMeasureSystemId} · ${profile ? profile.name : ''}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">TEVV Status</span>
+            <span class="pr-value" style="font-weight: 700; color: ${profile && profile.tevvStatus === 'Passed' ? '#10b981' : '#ef4444'};">${profile ? profile.tevvStatus : 'Passed'}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Test Suites Passed</span>
+            <span class="pr-value">${profile ? profile.testSuitesPassed : '11 / 11 Passed'}</span>
+          </div>
+          <div class="pr-field">
+            <span class="pr-label">Evaluation Date</span>
+            <span class="pr-value">${new Date().toISOString().slice(0, 10)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pr-section">
+        <div class="pr-section-title">Section 1 — Production AI Metrics Evaluation (MEASURE 1.1)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 14%;">Metric &amp; Tier</th>
+              <th style="width: 14%;">NIST Characteristic</th>
+              <th style="width: 26%;">Formula &amp; Source</th>
+              <th style="width: 14%;">Target vs. Red Line</th>
+              <th style="width: 12%;">Actual Result</th>
+              <th style="width: 12%;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${metrics.map(m => `
+              <tr>
+                <td><strong>${m.id}</strong></td>
+                <td><strong>${m.name}</strong><br><span style="font-size: 6.5pt; color: #64748b;">Tier ${m.tier}: ${m.tierName}</span></td>
+                <td style="font-size: 7pt;">${m.trustworthiness}</td>
+                <td style="font-size: 6.5pt; font-family: monospace;">${m.formula}<br><span style="color: #64748b;">${m.dataSource}</span></td>
+                <td style="font-size: 7pt;"><span style="color: #10b981;">T: ${m.target}</span><br><span style="color: #ef4444;">RL: ${m.redLine}</span></td>
+                <td><strong>${m.actualValue}</strong></td>
+                <td><span class="${m.ragStatus === 'Green' ? 'pr-badge-go' : 'pr-badge-nogo'}">${m.ragStatus}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pr-section pr-page-break">
+        <div class="pr-section-title">Section 2 — 11 Pre-Deployment TEVV Test Suites (MEASURE 2)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 10%;">Suite ID</th>
+              <th style="width: 25%;">Test Suite Name</th>
+              <th style="width: 15%;">Test Cases</th>
+              <th style="width: 15%;">Pass Rate</th>
+              <th>Linked Metrics &amp; Scope</th>
+              <th style="width: 12%;">Gate Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${suites.map(s => `
+              <tr>
+                <td><strong>${s.id}</strong></td>
+                <td><strong>${s.name}</strong></td>
+                <td>${s.testCases} Cases (${s.passedCases} passed)</td>
+                <td><strong>${s.passRate}</strong></td>
+                <td style="font-size: 7pt;">Metrics: ${s.linkedMetrics.join(', ')}<br>${s.description}</td>
+                <td><span class="${s.status === 'Passed' ? 'pr-badge-go' : 'pr-badge-nogo'}">${s.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="pr-section-title" style="margin-top: 1.5rem;">Section 3 — Demographic Proxy Disparity &amp; Bias Audit (MEASURE 2.11)</div>
+        <table class="pr-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Proxy Dimension</th>
+              <th style="width: 30%;">Testing Procedure</th>
+              <th style="width: 30%;">Benchmark Empirical Disparity</th>
+              <th style="width: 20%;">Compliance</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${(typeof BIAS_PROXY_DIMENSIONS !== 'undefined' ? BIAS_PROXY_DIMENSIONS : []).map(p => `
+              <tr>
+                <td><strong>${p.dimension}</strong></td>
+                <td style="font-size: 7pt;">${p.testingMethod}</td>
+                <td style="font-size: 7pt;"><strong>${p.benchmarkDisparity}</strong></td>
+                <td><span class="pr-badge-go">${p.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="pr-footer">
+          Official NIST AI RMF MEASURE Validation Dossier · SamaBrains AI Governance Hub · NIST AI 100-1 (MEASURE 1–4)
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+    showToast('Opening Executive TEVV Validation Dossier Print / PDF dialog...');
+
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }, 500);
+    }, 200);
+  }
+  document.getElementById('btn-print-measure-pdf')?.addEventListener('click', triggerPrintMeasurePdf);
+
   // 1. Navigation & Tab Switching
   stepItems.forEach(item => {
     item.addEventListener('click', () => {
@@ -3769,6 +4389,7 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     if (h === 'roles') switchHubView('roles', false);
     else if (h === 'policy') switchHubView('policy', false);
     else if (h === 'map' || h === 'context' || h === 'harms') switchHubView('map', false);
+    else if (h === 'measure' || h === 'tevv' || h === 'metrics') switchHubView('measure', false);
     else if (h === 'assessment' || h === 'aiia') switchHubView('assessment', false);
     else if (h === 'inventory') switchHubView('inventory', false);
   });
@@ -3795,6 +4416,8 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     switchHubView('policy', false);
   } else if (initialHash === 'map' || initialHash === 'context' || initialHash === 'harms') {
     switchHubView('map', false);
+  } else if (initialHash === 'measure' || initialHash === 'tevv' || initialHash === 'metrics') {
+    switchHubView('measure', false);
   } else if (initialHash === 'assessment' || initialHash === 'aiia') {
     switchHubView('assessment', false);
   } else {

@@ -10,7 +10,7 @@ A working AI governance toolkit: policy release gates, a risk register, bias-tes
 
 > **Key Figures:** 20 production metrics with breach thresholds, 13 profiled risks, 28 RACI activities across 18 roles, and a 15-minute incident containment SLA.
 
-* **Live Web Application:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev) (Inventory · Roles · Policy Gates · Context & Harms · Impact Assessment)
+* **Live Web Application:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev) (Inventory · Roles · Policy Gates · Context & Harms · TEVV & Metrics · Impact Assessment)
 * **Live Regulatory Assistant:** [samabrains.com/ask/](https://samabrains.com/ask/) (Bounded retrieval over official governance standards)
 
 ---
@@ -35,7 +35,7 @@ A working AI governance toolkit: policy release gates, a risk register, bias-tes
 > **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
 > **Architecture:** Pure client-side HTML5/CSS3/JavaScript hosted on Cloudflare Pages (zero backend runtime, local storage persistence, corporate print styling).
 
-The web hub operationalizes governance workflows into five interactive modules:
+The web hub operationalizes governance workflows into six interactive modules:
 
 ### Module 1: AI System Inventory (GOVERN 1.6)
 * Central registry tracking model classes, task types, risk tiers, foundation models, data classifications, and lifecycle states.
@@ -68,7 +68,16 @@ The web hub operationalizes governance workflows into five interactive modules:
 * **Third-Party AI Supply Chain Risk:** Supplier evaluations covering edge inference, vector indexes, foundation model weights, data residency, and zero-retention SLA verification.
 * **Executive PDF Dossier:** Corporate light-theme printable Context & Harm Dossier for executive sign-off and regulatory examination.
 
-### Module 5: Impact Assessment Studio (GOVERN 4.2 · MAP · MANAGE)
+### Module 5: TEVV & Metrics Studio (MEASURE 1–4 · NIST SP 1270)
+* Operationalization of [`MEASURE-Metrics-Tracker.csv`](docs/03-measure/MEASURE-Metrics-Tracker.csv), [`MEASURE-TEVV-Metrics-Framework.md`](docs/03-measure/MEASURE-TEVV-Metrics-Framework.md), and [`MEASURE-Bias-Testing-Methodology.md`](docs/03-measure/MEASURE-Bias-Testing-Methodology.md).
+* **20 Production AI Metrics Tracker:** Central telemetry catalog (`M-01` to `M-20`) across Tier 1 (Safety-Critical), Tier 2 (Performance), Tier 3 (Fairness & Trust), and Tier 4 (Strategic), with explicit mathematical formulas, data sources, targets, red-lines, owners, and trend monitoring.
+* **11 Pre-Deployment TEVV Test Suites:** Full test harness cards (`TS-01` to `TS-11`) tracking case counts, linked metrics, execution cadences, and empirical pass rates (98.2% factual accuracy, 99.4% jailbreak resistance, 100% PII containment).
+* **Demographic Proxy Bias Lab & Live Calculator:** Empirical evaluations for 5 proxy dimensions (Language Pattern, Query Complexity, Name Diversity, Accessibility, Sentiment) and 5 test procedures (`FAI-01` to `FAI-05`) alongside an interactive EEOC 4/5ths Rule and disparity gap simulator.
+* **Real-Time Monitoring Dashboards & Alert SLAs:** 5 targeted operational telemetry views (Operations 30s, Quality daily, Supervisor 30s, Fairness monthly, Executive quarterly) and deterministic response SLAs (15-min Critical containment).
+* **TEVV Lifecycle Roadmap & GATE-03 Sign-Off:** Pre-deployment Weeks 1–20 testing milestone schedule and formal GATE-03 verification certificate.
+* **Executive TEVV Dossier PDF:** Corporate print-optimized audit dossier for independent verification, committee sign-off, and regulatory examination.
+
+### Module 6: Impact Assessment Studio (GOVERN 4.2 · MAP · MANAGE)
 * 10-part assessment wizard covering business context, trustworthy alignment, legal thresholds, harms, mitigations, and stakeholder consultations.
 * Interactive Likelihood (1–5) $\times$ Impact (1–5) calculation with dynamic heat badges and risk scorecards.
 * One-click preset to load the FinAssist AI banking case study or start a blank assessment.
