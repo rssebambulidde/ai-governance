@@ -3,14 +3,513 @@
  * Aligned with NIST AI RMF 1.0 (GOVERN 4.2 · MAP 3.1 · MAP 5.1 · MANAGE 1.1)
  */
 
+// ============================================================================
+// TOOLTIP DATA - Purpose + Use Case Examples for Each Sub-Category
+// ============================================================================
+const tooltipData = {
+  // ROLES & RACI (7 sub-tabs)
+  'raci': {
+    purpose: 'Maps 28 governance activities across 6 lifecycle phases to 18 enterprise roles using RACI (Responsible, Accountable, Consulted, Informed) framework.',
+    useCases: 'Example: Identifying who must sign off on GATE-03 TEVV validation. Example: Determining who is consulted during incident response.',
+    nistRef: 'GOVERN 2.1'
+  },
+  'catalog': {
+    purpose: 'Role directory documenting 18 governance roles, their reporting lines, responsibilities, and binding veto powers for Ethics, Legal, and Risk officers.',
+    useCases: 'Example: Checking which roles have veto authority over high-risk deployments. Example: Understanding escalation paths for AI governance decisions.',
+    nistRef: 'GOVERN 2.1'
+  },
+  'haii': {
+    purpose: 'Human-AI Interaction (HAII) configuration register documenting human-in-the-loop (HITL), human-on-the-loop (HOTL), and human-in-command (HIC) boundaries per system.',
+    useCases: 'Example: Defining when FinAssist AI must escalate to a human agent. Example: Setting override authority for critical financial queries.',
+    nistRef: 'GOVERN 3.2'
+  },
+  'training': {
+    purpose: 'Mandatory AI governance training tracker ensuring personnel are trained across 6 core AI risk domains: AI Ethics, NIST RMF, Bias/Fairness, AI Security, Incident Response, and Policy.',
+    useCases: 'Example: Tracking compliance training for all AI engineers. Example: Ensuring incident responders are certified on playbooks before deployment.',
+    nistRef: 'GOVERN 2.2'
+  },
+  'crossteam': {
+    purpose: 'Cross-functional collaboration practices including AI Risk Committee meetings, working groups, and forums that embed AI risk management across the organization.',
+    useCases: 'Example: Monthly AI Risk Committee reviewing high-risk deployments. Example: Cross-team red-teaming exercises with security and ethics teams.',
+    nistRef: 'GOVERN 2.3'
+  },
+  'leadership': {
+    purpose: 'Evidence that organizational leadership formally directs and oversees AI risk management decisions through executive commitments, budget allocation, and strategic alignment.',
+    useCases: 'Example: Board-level AI risk posture review. Example: CAIO presenting quarterly AI governance report to executive leadership.',
+    nistRef: 'GOVERN 3.1'
+  },
+  'culture': {
+    purpose: 'Organizational programs building awareness, accountability, and ethical commitment to responsible AI across all staff through training, communication, and recognition.',
+    useCases: 'Example: Responsible AI awareness month with workshops. Example: Recognition program for teams identifying AI risks early.',
+    nistRef: 'GOVERN 4.1'
+  },
+
+  // POLICY & GATES (9 sub-tabs)
+  'gates': {
+    purpose: 'Mandatory 4-tier Go/No-Go deployment gates: GATE-01 (zero unmitigated critical risks), GATE-02 (legal compliance), GATE-03 (TEVV validation), GATE-04 (executive sign-off).',
+    useCases: 'Example: Blocking FinAssist AI deployment until M-02 hallucination rate is under 1%. Example: Legal sign-off required before production release.',
+    nistRef: 'GOVERN 1.3'
+  },
+  'principles': {
+    purpose: 'Trustworthy AI principles audit across 8 NIST characteristics: Valid & Reliable, Safe, Secure & Resilient, Accountable & Transparent, Fair, Privacy-Preserved, Explainable, Managed.',
+    useCases: 'Example: Verifying FinAssist AI meets all 8 principles before GATE-03. Example: Annual audit of principle compliance across all AI systems.',
+    nistRef: 'GOVERN 1.2'
+  },
+  'artifacts': {
+    purpose: 'Lifecycle documentation tracker ensuring 9 mandatory artifacts are maintained: Impact Assessment, TEVV Report, Risk Register, Incident Log, Policy Sign-off, Architecture Docs, Data Lineage, Model Cards, Decommissioning Plan.',
+    useCases: 'Example: Checking if FinAssist AI has all required documents before deployment. Example: Auditor verifying documentation completeness for regulatory exam.',
+    nistRef: 'GOVERN 1.4'
+  },
+  'thirdparty': {
+    purpose: 'Third-party AI supply chain screener evaluating external foundation models, APIs, and AI services for data residency, zero-retention SLAs, and compliance.',
+    useCases: 'Example: Screening Cloudflare Workers AI for data residency compliance. Example: Evaluating a new LLM provider for PII handling policies.',
+    nistRef: 'GOVERN 5.1 & 6'
+  },
+  'exceptions': {
+    purpose: 'Exceptions and waivers register tracking temporary policy exemptions with justification, approval authority, expiration dates, and compensating controls.',
+    useCases: 'Example: Temporary waiver for TEVV timeline during emergency deployment. Example: Exception approval process for experimental AI features.',
+    nistRef: 'GOVERN 1.1'
+  },
+  'risktolerance': {
+    purpose: 'Organizational AI risk tolerance framework defining 4-tier risk levels (Critical, High, Medium, Low) with trigger thresholds, required responses, and review cadences.',
+    useCases: 'Example: Classifying FinAssist AI as High-risk due to financial sector. Example: Setting quarterly review cadence for Critical-risk systems.',
+    nistRef: 'GOVERN 1.5'
+  },
+  'tpmonitoring': {
+    purpose: 'Ongoing monitoring of contracted third-party AI vendors for compliance, performance, contractual obligations, and risk changes.',
+    useCases: 'Example: Quarterly audit of Cloudflare AI compliance with data residency. Example: Monitoring LLM provider for policy changes.',
+    nistRef: 'GOVERN 5.2'
+  },
+  'govreview': {
+    purpose: 'Scheduled reviews ensuring all AI system risk assessments remain current and are updated as system context or risk environment changes.',
+    useCases: 'Example: Annual review of FinAssist AI Impact Assessment. Example: Triggering review after major model update or regulatory change.',
+    nistRef: 'GOVERN 6.1'
+  },
+  'govimprove': {
+    purpose: 'Continuous improvement log tracking governance process enhancements driven by incident learnings, audits, and regulatory feedback.',
+    useCases: 'Example: Updating TEVV process after hallucination incident. Example: Adding new gate requirement based on regulator feedback.',
+    nistRef: 'GOVERN 6.2'
+  },
+
+  // CONTEXT & HARMS (10 sub-tabs)
+  'harms': {
+    purpose: '13 profiled harm scenarios (R-01 to R-13) detailing trigger conditions, failure cascades, trustworthiness characteristics, controls, owners, and monitoring cadences.',
+    useCases: 'Example: Understanding R-03 (hallucination causing financial harm) controls. Example: Searching for all privacy-related harm scenarios.',
+    nistRef: 'MAP 3.2'
+  },
+  'matrix': {
+    purpose: 'Quantitative risk vs. benefit scoring matrix balancing business inclusion against residual risks with live filtering, CSV export, and Markdown report generation.',
+    useCases: 'Example: Comparing FinAssist AI benefits vs. privacy risks. Example: Exporting matrix for executive risk-benefit analysis.',
+    nistRef: 'MAP 3.1'
+  },
+  'stakeholders': {
+    purpose: 'Stakeholder and vulnerability screener identifying 6 vulnerable cohorts (elderly, disabled, low-literacy, non-English, distressed, first-time) and 20 stakeholders across Power-Interest quadrants.',
+    useCases: 'Example: Identifying low-literacy customers as vulnerable cohort for FinAssist AI. Example: Mapping regulator as high-power/high-interest stakeholder.',
+    nistRef: 'MAP 5.1–5.2'
+  },
+  'conops': {
+    purpose: 'Concept of Operations defining authorized uses, foreseeable misuses with guardrails, hard-blocked prohibitions, and 6-layer defense-in-depth human oversight architecture.',
+    useCases: 'Example: Documenting that FinAssist AI must NOT execute transactions. Example: Setting escalation guardrails for financial advice queries.',
+    nistRef: 'MAP 1.1 & 3.5'
+  },
+  'dependencies': {
+    purpose: 'Third-party AI supply chain risk evaluation covering edge inference, vector indexes, foundation model weights, data residency, and zero-retention SLA verification.',
+    useCases: 'Example: Evaluating Cloudflare AI Search for data residency. Example: Assessing vector database for PII retention policies.',
+    nistRef: 'MAP 4.1'
+  },
+  'taskclass': {
+    purpose: 'AI task classification system categorizing AI systems by task type (NLU, generation, classification, etc.) to determine appropriate governance requirements.',
+    useCases: 'Example: Classifying FinAssist AI as conversational NLU + generation. Example: Applying stricter controls to decision-making tasks.',
+    nistRef: 'MAP 1.3'
+  },
+  'science': {
+    purpose: 'Scientific risk principles documentation covering AI-specific challenges: emergent behavior, data drift, black-box opacity, and socio-technical interaction.',
+    useCases: 'Example: Documenting FinAssist AI data drift monitoring strategy. Example: Explaining black-box opacity risks to auditors.',
+    nistRef: 'MAP 2.1'
+  },
+  'lineage': {
+    purpose: 'Data lineage tracking documenting data sources, transformations, quality controls, and provenance from collection to model training.',
+    useCases: 'Example: Tracking FinAssist AI knowledge base data sources. Example: Auditing data provenance for regulatory compliance.',
+    nistRef: 'MAP 2.3'
+  },
+  'expertreview': {
+    purpose: 'Expert review process engaging domain experts (legal, ethics, technical, sector-specific) to validate context mapping and risk identification.',
+    useCases: 'Example: Legal expert reviewing FinAssist AI regulatory compliance. Example: Banking expert validating use case assumptions.',
+    nistRef: 'MAP 4.2'
+  },
+  'transparency': {
+    purpose: 'External transparency documentation defining what information about AI systems is disclosed to customers, regulators, and the public.',
+    useCases: 'Example: Drafting AI disclosure notice for FinAssist AI customers. Example: Preparing regulatory transparency report.',
+    nistRef: 'MAP 5.3'
+  },
+
+  // TEVV & METRICS (16 sub-tabs)
+  'metrics': {
+    purpose: '20 production AI metrics tracker across Tier 1 (Safety-Critical), Tier 2 (Performance), Tier 3 (Fairness & Trust), and Tier 4 (Strategic) with formulas, targets, red-lines, and trend monitoring.',
+    useCases: 'Example: Monitoring M-02 hallucination rate in real-time. Example: Tracking M-12 fairness gap across demographic segments.',
+    nistRef: 'MEASURE 1.1'
+  },
+  'suites': {
+    purpose: '11 pre-deployment TEVV test suites (TS-01 to TS-11) tracking case counts, linked metrics, execution cadences, and empirical pass rates (98.2% accuracy, 99.4% jailbreak resistance).',
+    useCases: 'Example: Running TS-01 accuracy benchmark before GATE-03. Example: Tracking TS-04 safety test pass rate over time.',
+    nistRef: 'MEASURE 2.1'
+  },
+  'bias': {
+    purpose: 'Demographic proxy bias lab with empirical evaluations for 5 proxy dimensions (Language, Query Complexity, Name Diversity, Accessibility, Sentiment) and EEOC 4/5ths Rule calculator.',
+    useCases: 'Example: Testing FinAssist AI accuracy across English dialect variants. Example: Calculating disparate impact ratio for intent classification.',
+    nistRef: 'MEASURE 2.5'
+  },
+  'monitoring': {
+    purpose: 'Real-time monitoring dashboards with 5 targeted views (Operations 30s, Quality daily, Supervisor 30s, Fairness monthly, Executive quarterly) and deterministic response SLAs.',
+    useCases: 'Example: Operations team monitoring M-01 accuracy rate every 30 seconds. Example: Executive reviewing quarterly fairness trends.',
+    nistRef: 'MEASURE 3.1'
+  },
+  'calendar': {
+    purpose: 'TEVV lifecycle roadmap with pre-deployment Weeks 1–20 testing milestone schedule and formal GATE-03 verification certificate.',
+    useCases: 'Example: Planning TEVV calendar for new AI system deployment. Example: Tracking GATE-03 sign-off completion.',
+    nistRef: 'MEASURE 4.2'
+  },
+  'expertrev': {
+    purpose: 'Internal and external expert reviews of the TEVV framework and metrics catalog to ensure scientific validity and coverage.',
+    useCases: 'Example: External academic partner reviewing bias testing methodology. Example: Internal audit validating metric selection.',
+    nistRef: 'MEASURE 1.3'
+  },
+  'arch': {
+    purpose: 'AI system architecture documentation enabling rigorous and consistent evaluation of model types, infrastructure, and evaluability.',
+    useCases: 'Example: Documenting FinAssist AI RAG architecture for TEVV team. Example: Auditor reviewing system architecture for evaluation gaps.',
+    nistRef: 'MEASURE 2.2'
+  },
+  'trust': {
+    purpose: 'Systematic evaluation of all 7 NIST AI RMF trustworthiness characteristics with thresholds, methods, and current verdicts.',
+    useCases: 'Example: Evaluating FinAssist AI against all 7 characteristics. Example: Tracking trustworthiness verdicts over time.',
+    nistRef: 'MEASURE 2.3'
+  },
+  'hf': {
+    purpose: 'Human factors evaluation assessing how AI system outputs are understood and used by people, including usability studies, automation bias, and accessibility testing.',
+    useCases: 'Example: Usability study of FinAssist AI escalation experience. Example: Testing automation bias in agent-AI collaboration.',
+    nistRef: 'MEASURE 2.7'
+  },
+  'tpeval': {
+    purpose: 'Evaluation of risks introduced by third-party AI components, APIs, and infrastructure in the AI system supply chain.',
+    useCases: 'Example: Assessing Cloudflare AI model update risks. Example: Evaluating vector database security vulnerabilities.',
+    nistRef: 'MEASURE 2.8'
+  },
+  'privacy': {
+    purpose: 'Privacy risk assessment including PII leakage, model inversion attacks, GDPR compliance, and Privacy-Enhancing Techniques (PETs) deployed.',
+    useCases: 'Example: Running M-03 PII leakage scanner on FinAssist AI outputs. Example: Documenting differential privacy PETs applied.',
+    nistRef: 'MEASURE 2.9–2.10'
+  },
+  'env': {
+    purpose: 'Environmental impact evaluation tracking energy per query, monthly CO₂ footprint, and carbon offset schemes for AI systems.',
+    useCases: 'Example: Calculating FinAssist AI monthly energy consumption. Example: Selecting carbon offset provider for AI operations.',
+    nistRef: 'MEASURE 2.11'
+  },
+  'comms': {
+    purpose: 'AI risk metrics communication plan defining how metrics are documented and communicated to board, technical teams, regulators, and customers.',
+    useCases: 'Example: Preparing quarterly AI risk report for board. Example: Drafting regulator metrics submission.',
+    nistRef: 'MEASURE 2.12'
+  },
+  'ctrleff': {
+    purpose: 'Periodic evaluation of whether implemented risk controls are actually working, with evidence and verdicts.',
+    useCases: 'Example: Evaluating PII filter effectiveness after deployment. Example: Assessing jailbreak guardrail control effectiveness.',
+    nistRef: 'MEASURE 2.13'
+  },
+  'metupdate': {
+    purpose: 'Risk metrics update and trend monitoring tracking key metric changes over time to ensure continuous monitoring and prompt response.',
+    useCases: 'Example: Tracking M-02 hallucination rate trend over 6 months. Example: Alerting on metric degradation patterns.',
+    nistRef: 'MEASURE 3.2'
+  },
+  'improvmeth': {
+    purpose: 'Measurement methodology improvement log tracking enhancements to evaluation methods, TEVV suites, and metrics catalog driven by operational experience.',
+    useCases: 'Example: Adding new bias test after fairness incident. Example: Updating metric threshold based on operational data.',
+    nistRef: 'MEASURE 4.1'
+  },
+
+  // RISK & INCIDENTS (13 sub-tabs)
+  'incidents': {
+    purpose: 'Incident triage and logging register tracking production AI incidents with severity classification (P1-P4), detection source analysis, containment SLAs, and audit trails.',
+    useCases: 'Example: Logging INC-2026-001 hallucination incident as P1. Example: Filtering incidents by system or severity.',
+    nistRef: 'MANAGE 4.1'
+  },
+  'playbooks': {
+    purpose: '7 operational incident response playbooks (A-G) covering Hallucination, PII Exposure, Jailbreak, Customer Distress, Infrastructure Outage, Regulatory Inquiry, and Demographic Disparity with 4-phase checklists.',
+    useCases: 'Example: Activating Playbook A for hallucination incident. Example: Running Playbook B for PII breach containment.',
+    nistRef: 'MANAGE 4.2'
+  },
+  'responses': {
+    purpose: '13 mapped risk response plans for all enterprise harm scenarios (R-01 to R-13) categorized across Avoidance, Mitigation, Transfer, and Acceptance strategies.',
+    useCases: 'Example: Viewing mitigation plan for R-03 hallucination risk. Example: Checking acceptance criteria for R-08 low-risk scenario.',
+    nistRef: 'MANAGE 1.1'
+  },
+  'improvements': {
+    purpose: 'Continuous improvement audit log linking monitoring alerts and post-mortems to model retraining, prompt hardening, and TEVV verification suite updates.',
+    useCases: 'Example: Logging retraining triggered by incident INC-2026-001. Example: Tracking prompt hardening after jailbreak attempt.',
+    nistRef: 'MANAGE 3.1'
+  },
+  'override': {
+    purpose: 'Emergency circuit breakers and override dashboard enforcing safe-mode fallbacks, mandatory human-in-the-loop approvals, guardrail sensitivity adjustments, or emergency decommissioning.',
+    useCases: 'Example: Triggering emergency safe-mode during hallucination spike. Example: Adjusting jailbreak guardrail sensitivity.',
+    nistRef: 'MANAGE 2.3'
+  },
+  'resources': {
+    purpose: 'Resource allocation tracking ensuring adequate budget, personnel, and infrastructure for AI risk management activities.',
+    useCases: 'Example: Tracking TEVV team headcount allocation. Example: Budgeting for red-teaming exercises.',
+    nistRef: 'MANAGE 1.2'
+  },
+  'docreg': {
+    purpose: 'Risk documentation registry maintaining all risk-related documents including risk registers, response plans, incident logs, and assessment reports.',
+    useCases: 'Example: Accessing latest risk register for audit. Example: Retrieving incident log for regulatory inquiry.',
+    nistRef: 'MANAGE 1.3'
+  },
+  'residual': {
+    purpose: 'Risk acceptance framework documenting formally accepted residual risks with justification, approval authority, and review triggers.',
+    useCases: 'Example: Documenting acceptance of R-08 low-risk scenario. Example: Setting review trigger for accepted risks.',
+    nistRef: 'MANAGE 1.4'
+  },
+  'trustmaint': {
+    purpose: 'Trustworthiness maintenance activities ensuring AI systems continue to meet trustworthiness characteristics throughout their lifecycle.',
+    useCases: 'Example: Quarterly trustworthiness audit of FinAssist AI. Example: Updating controls after trustworthiness degradation.',
+    nistRef: 'MANAGE 2.1'
+  },
+  'decommission': {
+    purpose: 'Decommissioning criteria and process defining triggers, stakeholder notification, data archiving/deletion, and post-decommission review.',
+    useCases: 'Example: Planning decommission of legacy AI system. Example: Ensuring data deletion per policy during decommission.',
+    nistRef: 'MANAGE 2.2'
+  },
+  'stakeng': {
+    purpose: 'Stakeholder engagement practices for ongoing communication with affected parties about AI system performance, incidents, and changes.',
+    useCases: 'Example: Customer notification after AI incident. Example: Regular stakeholder forum for AI system feedback.',
+    nistRef: 'MANAGE 2.4'
+  },
+  'procimprove': {
+    purpose: 'Process improvement log tracking enhancements to AI risk management processes driven by operational experience and feedback.',
+    useCases: 'Example: Updating incident response process after slow containment. Example: Improving TEVV process based on lessons learned.',
+    nistRef: 'MANAGE 3.2'
+  },
+  'pia': {
+    purpose: 'Post-incident analysis conducting root cause investigation, impact assessment, remediation tracking, and lessons learned documentation.',
+    useCases: 'Example: Completing PIA for INC-2026-001 hallucination incident. Example: Documenting lessons learned for playbook updates.',
+    nistRef: 'MANAGE 4.3'
+  }
+};
+
 function initAntigravityGovernanceApp() {
+  // ==========================================================================
+  // TOOLTIP SYSTEM - Interactive Help Tooltips
+  // ==========================================================================
+  (function initTooltipSystem() {
+    console.log('Initializing tooltip system...');
+
+    // Create tooltip container
+    const tooltipContainer = document.createElement('div');
+    tooltipContainer.className = 'tooltip-container';
+    tooltipContainer.id = 'tooltip-container';
+    tooltipContainer.setAttribute('role', 'tooltip');
+    tooltipContainer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(tooltipContainer);
+
+    console.log('Tooltip container created');
+    console.log('Tooltip data available:', Object.keys(tooltipData).length, 'entries');
+
+    let activeTooltipId = null;
+    let autoHideTimer = null;
+    let isClickActivated = false;
+
+    // Show tooltip
+    function showTooltip(tooltipId, triggerElement) {
+      console.log('showTooltip called with ID:', tooltipId);
+      console.log('Trigger element:', triggerElement);
+      const data = tooltipData[tooltipId];
+      if (!data) {
+        console.error('No tooltip data found for ID:', tooltipId);
+        return;
+      }
+
+      console.log('Tooltip data found:', data);
+
+      // Clear any existing auto-hide timer
+      if (autoHideTimer) {
+        clearTimeout(autoHideTimer);
+        autoHideTimer = null;
+      }
+
+      // Build tooltip content
+      tooltipContainer.innerHTML = `
+        <div class="tooltip-content">
+          <div class="tooltip-section">
+            <span class="tooltip-label">Purpose</span>
+            <p class="tooltip-text">${data.purpose}</p>
+          </div>
+          <div class="tooltip-section">
+            <span class="tooltip-label">Use Cases</span>
+            <p class="tooltip-text">${data.useCases}</p>
+          </div>
+          <span class="tooltip-nist-ref">${data.nistRef}</span>
+        </div>
+      `;
+
+      console.log('Tooltip HTML set, container classes:', tooltipContainer.className);
+
+      // Calculate position
+      const rect = triggerElement.getBoundingClientRect();
+      console.log('Element rect:', rect);
+      const tooltipRect = tooltipContainer.getBoundingClientRect();
+      console.log('Tooltip rect before positioning:', tooltipRect);
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Default position: right of trigger
+      let left = rect.right + 10;
+      let top = rect.top;
+
+      console.log('Calculated position - left:', left, 'top:', top);
+
+      // Check if tooltip would go off right edge
+      if (left + 380 > viewportWidth) {
+        // Position to left instead
+        left = rect.left - 390;
+        tooltipContainer.classList.add('position-left');
+      } else {
+        tooltipContainer.classList.remove('position-left');
+      }
+
+      // Check if tooltip would go off bottom edge
+      if (top + tooltipRect.height > viewportHeight) {
+        // Position above trigger instead
+        top = rect.bottom - tooltipRect.height - 10;
+      }
+
+      tooltipContainer.style.left = `${left}px`;
+      tooltipContainer.style.top = `${top}px`;
+      tooltipContainer.classList.add('visible');
+      tooltipContainer.setAttribute('aria-hidden', 'false');
+
+      console.log('Tooltip positioned and made visible');
+      console.log('Final styles - left:', tooltipContainer.style.left, 'top:', tooltipContainer.style.top);
+      console.log('Container classes after visible:', tooltipContainer.className);
+
+      activeTooltipId = tooltipId;
+    }
+
+    // Hide tooltip
+    function hideTooltip() {
+      tooltipContainer.classList.remove('visible');
+      tooltipContainer.setAttribute('aria-hidden', 'true');
+      activeTooltipId = null;
+      isClickActivated = false;
+
+      if (autoHideTimer) {
+        clearTimeout(autoHideTimer);
+        autoHideTimer = null;
+      }
+    }
+
+    // Handle tooltip icon click
+    function handleTooltipClick(e, icon) {
+      console.log('Tooltip icon clicked');
+      const tooltipId = icon.getAttribute('data-tooltip-id');
+      console.log('Tooltip ID from attribute:', tooltipId);
+
+      if (activeTooltipId === tooltipId && isClickActivated) {
+        // Toggle off if already active via click
+        hideTooltip();
+      } else {
+        // Show new tooltip
+        isClickActivated = true;
+        showTooltip(tooltipId, icon);
+      }
+
+      e.stopPropagation();
+    }
+
+    // Handle tooltip icon hover
+    function handleTooltipMouseEnter(e, icon) {
+      console.log('Tooltip icon hovered');
+      if (isClickActivated) return; // Don't interfere with click-activated tooltips
+
+      const tooltipId = icon.getAttribute('data-tooltip-id');
+      console.log('Tooltip ID from hover:', tooltipId);
+      showTooltip(tooltipId, icon);
+
+      // Auto-hide after 5 seconds on hover
+      autoHideTimer = setTimeout(() => {
+        if (!isClickActivated) {
+          hideTooltip();
+        }
+      }, 5000);
+    }
+
+    function handleTooltipMouseLeave(e) {
+      if (isClickActivated) return; // Don't hide if click-activated
+
+      // Keep tooltip open if the pointer moved onto the tooltip container itself
+      const related = e.relatedTarget;
+      if (related && (related.closest('#tooltip-container') || related.closest('.tooltip-icon'))) {
+        return;
+      }
+
+      if (autoHideTimer) {
+        clearTimeout(autoHideTimer);
+        autoHideTimer = null;
+      }
+      hideTooltip();
+    }
+
+    // Handle keyboard events
+    function handleKeyDown(e) {
+      if (e.key === 'Escape' && activeTooltipId) {
+        hideTooltip();
+      }
+    }
+
+    // Handle click outside to close
+    function handleDocumentClick(e) {
+      if (isClickActivated && !e.target.closest('.tooltip-icon') && !e.target.closest('#tooltip-container')) {
+        hideTooltip();
+      }
+    }
+
+    // Event delegation for dynamic tooltip icons
+    document.addEventListener('click', (e) => {
+      const icon = e.target.closest('.tooltip-icon');
+      if (icon) {
+        handleTooltipClick(e, icon);
+      } else {
+        handleDocumentClick(e);
+      }
+    });
+
+    document.addEventListener('mouseover', (e) => {
+      const icon = e.target.closest('.tooltip-icon');
+      if (icon) {
+        handleTooltipMouseEnter(e, icon);
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const icon = e.target.closest('.tooltip-icon');
+      if (icon) {
+        handleTooltipMouseLeave(e);
+      }
+    });
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Expose functions globally for testing and inline handlers
+    window.tooltipSystem = {
+      show: showTooltip,
+      hide: hideTooltip
+    };
+    window.showTooltip = showTooltip;
+    window.hideTooltip = hideTooltip;
+  })();
+
   // DOM Elements
   const stepperMenu = document.getElementById('stepper-menu');
   const sections = document.querySelectorAll('.form-section');
   const stepItems = document.querySelectorAll('.step-item');
   const progressBar = document.getElementById('progress-bar');
   const progressIndicator = document.getElementById('progress-indicator');
-  const themeToggleBtn = document.getElementById('theme-toggle-btn');
   const toast = document.getElementById('toast');
 
   // Header badges
@@ -43,7 +542,248 @@ function initAntigravityGovernanceApp() {
   // ==========================================================================
   // 0. HUB NAVIGATION & INVENTORY REGISTRY (GOVERN 1.6)
   // ==========================================================================
+  let currentUser = null;
+  let organizations = [];
+  let activeOrganization = null;
+  const workspaceGate = document.getElementById('workspace-gate');
+  const workspaceGateTitle = document.getElementById('workspace-gate-title');
+  const workspaceGateCopy = document.getElementById('workspace-gate-copy');
+  const workspaceGateAlert = document.getElementById('workspace-gate-alert');
+  const workspaceGateContent = document.getElementById('workspace-gate-content');
+  const workspaceSelector = document.getElementById('workspace-selector');
+  const moduleBindings = {
+    roles: {
+      ROLES_CATALOG, RACI_ACTIVITIES, HUMAN_AI_CONFIGS, TRAINING_TRACKER,
+      GOVERN_CROSS_TEAM_COLLABORATION, GOVERN_LEADERSHIP_ALIGNMENT, GOVERN_RESPONSIBLE_AI_CULTURE
+    },
+    policy: {
+      POLICY_METADATA, TRUSTWORTHY_PRINCIPLES, DEPLOYMENT_GATES, MANDATORY_ARTIFACTS,
+      DECOMMISSION_TRIGGERS, THIRD_PARTY_SCREENING_RUBRIC, POLICY_EXCEPTIONS_DATA,
+      SYSTEM_GATE_EVALUATIONS, GOVERN_RISK_TOLERANCE, GOVERN_THIRD_PARTY_MONITORING,
+      GOVERN_ASSESSMENT_REVIEW, GOVERN_PROCESS_IMPROVEMENT
+    },
+    map: {
+      MAP_METADATA, MAP_RISK_BENEFIT_ITEMS, MAP_STAKEHOLDERS_REGISTER, MAP_VULNERABLE_GROUPS,
+      MAP_CONOPS_DATA, MAP_THIRD_PARTY_DEPENDENCIES, SYSTEM_MAP_PROFILES,
+      MAP_AI_TASK_CLASSIFICATION, MAP_SCIENTIFIC_PRINCIPLES, MAP_DATA_LINEAGE,
+      MAP_EXPERT_REVIEW, MAP_EXTERNAL_TRANSPARENCY
+    },
+    measure: {
+      MEASURE_METADATA, MEASURE_METRICS_CATALOG, TEVV_TEST_SUITES, BIAS_PROXY_DIMENSIONS,
+      BIAS_TEST_PROCEDURES, MONITORING_DASHBOARD_VIEWS, ALERT_SLA_TIERS, SYSTEM_MEASURE_PROFILES,
+      MEASURE_EXPERT_REVIEW_APPROACHES, MEASURE_ARCHITECTURE_DOCUMENTATION,
+      MEASURE_TRUSTWORTHINESS_EVALUATION, MEASURE_HUMAN_FACTORS,
+      MEASURE_THIRD_PARTY_RISK_EVALUATION, MEASURE_PRIVACY_EVALUATION,
+      MEASURE_PRIVACY_ENHANCING_TECH, MEASURE_ENVIRONMENTAL_IMPACT,
+      MEASURE_METRICS_COMMUNICATION, MEASURE_CONTROL_EFFECTIVENESS,
+      MEASURE_METRICS_MONITORING, MEASURE_METHODOLOGY_IMPROVEMENT, MEASURE_FRAMEWORK_FEEDBACK
+    },
+    manage: {
+      MANAGE_METADATA, MANAGE_INCIDENTS_DATA, MANAGE_PLAYBOOKS, MANAGE_RISK_RESPONSES,
+      MANAGE_IMPROVEMENTS_DATA, SYSTEM_MANAGE_PROFILES, MANAGE_RESOURCE_ALLOCATION,
+      MANAGE_RISK_RESPONSE_DOCUMENTATION, MANAGE_RESIDUAL_RISK_ACCEPTANCE,
+      MANAGE_TRUSTWORTHINESS_MAINTENANCE, MANAGE_DECOMMISSION_CRITERIA,
+      MANAGE_STAKEHOLDER_ENGAGEMENT_RESPONSE, MANAGE_PROCESS_IMPROVEMENT_FROM_LEARNINGS,
+      MANAGE_POST_INCIDENT_ANALYSIS
+    },
+    assessment: { FINASSIST_PRESET }
+  };
+  const tenantModuleKeys = Object.keys(moduleBindings);
+  const organizationModuleDocuments = new Map();
+  const moduleSaveQueues = new Map();
+  let activationSequence = 0;
+  let canEditWorkspace = false;
+  let activeAssessmentData = null;
+  let activeHubView = 'inventory';
+
+  function cloneModuleData(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  const moduleExampleDefaults = Object.fromEntries(
+    Object.entries(moduleBindings).map(([moduleKey, bindings]) => [
+      moduleKey,
+      Object.fromEntries(Object.entries(bindings).map(([name, value]) => [name, cloneModuleData(value)]))
+    ])
+  );
+
+  function applyModuleSnapshot(moduleKey, snapshot) {
+    const bindings = moduleBindings[moduleKey];
+    if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) {
+      throw new Error(`The ${moduleKey} workspace data is invalid.`);
+    }
+
+    for (const [name, target] of Object.entries(bindings)) {
+      const source = snapshot[name];
+      if (Array.isArray(target) && Array.isArray(source)) {
+        target.splice(0, target.length, ...cloneModuleData(source));
+      } else if (target && typeof target === 'object' && !Array.isArray(target)
+        && source && typeof source === 'object' && !Array.isArray(source)) {
+        Object.keys(target).forEach(key => delete target[key]);
+        Object.assign(target, cloneModuleData(source));
+      } else {
+        throw new Error(`The ${moduleKey} workspace data is missing ${name}.`);
+      }
+    }
+  }
+
+  function normalizeModuleSnapshot(moduleKey, snapshot) {
+    const normalized = cloneModuleData(snapshot);
+    if (moduleKey === 'manage' && Array.isArray(normalized.MANAGE_INCIDENTS_DATA)) {
+      normalized.MANAGE_INCIDENTS_DATA = normalized.MANAGE_INCIDENTS_DATA.map((incident, index) => {
+        const severityMatch = String(incident.severity || '').match(/P[1-4]/i);
+        const duration = Number.parseInt(
+          incident.containmentDurationMinutes ?? incident.containmentTime ?? '',
+          10
+        );
+        return {
+          ...incident,
+          id: String(incident.id || `INC-EXAMPLE-${index + 1}`),
+          title: incident.title || incident.description || 'AI incident',
+          severity: severityMatch ? severityMatch[0].toUpperCase() : 'P3',
+          detectionSource: incident.detectionSource || incident.source || 'Workspace example',
+          applicablePlaybook: incident.applicablePlaybook || incident.postMortemRef || 'General Response Playbook',
+          detectedTimestamp: incident.detectedTimestamp
+            || [incident.date, incident.timeDetected].filter(Boolean).join(' '),
+          containedTimestamp: incident.containedTimestamp || incident.containmentTime || '',
+          containmentDurationMinutes: Number.isFinite(duration) ? duration : 0,
+          rootCause: incident.rootCause || '',
+          containmentAction: incident.containmentAction || incident.immediateAction || '',
+          correctiveAction: incident.correctiveAction || '',
+          status: incident.status || incident.resolutionStatus || 'Under review'
+        };
+      });
+    }
+    return normalized;
+  }
+
+  function buildModuleDefaults(moduleKey) {
+    const snapshot = cloneModuleData(moduleExampleDefaults[moduleKey]);
+    if (moduleKey === 'assessment') {
+      snapshot.workspaceState = {
+        assessment: cloneModuleData(moduleExampleDefaults.assessment.FINASSIST_PRESET)
+      };
+    }
+    return snapshot;
+  }
+
+  function readCurrentModuleSnapshot(moduleKey) {
+    const snapshot = Object.fromEntries(
+      Object.entries(moduleBindings[moduleKey]).map(([name, value]) => [name, cloneModuleData(value)])
+    );
+    if (moduleKey === 'assessment') {
+      snapshot.workspaceState = { assessment: cloneModuleData(activeAssessmentData || FINASSIST_PRESET) };
+    }
+    return snapshot;
+  }
+
+  function moduleUrl(moduleKey, organizationId) {
+    return `/api/modules/${moduleKey}?organizationId=${encodeURIComponent(organizationId)}`;
+  }
+
+  async function loadOrganizationModules(organization) {
+    const organizationId = organization.id;
+    const documents = {};
+    for (const moduleKey of tenantModuleKeys) {
+      const url = moduleUrl(moduleKey, organizationId);
+      let document = await apiRequest(url);
+      if (!document) {
+        const defaults = buildModuleDefaults(moduleKey);
+        if (['owner', 'admin', 'editor'].includes(organization.role)) {
+          document = await apiRequest(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: defaults })
+          });
+        } else {
+          document = { data: defaults, revision: null, updatedAt: null };
+        }
+      }
+      documents[moduleKey] = document;
+    }
+
+    if (activeOrganization?.id !== organizationId) return false;
+    let normalizedManageData = false;
+    for (const moduleKey of tenantModuleKeys) {
+      const document = documents[moduleKey];
+      const originalData = JSON.stringify(document.data);
+      document.data = normalizeModuleSnapshot(moduleKey, document.data);
+      if (moduleKey === 'manage' && JSON.stringify(document.data) !== originalData) {
+        normalizedManageData = true;
+      }
+      applyModuleSnapshot(moduleKey, documents[moduleKey].data);
+    }
+    organizationModuleDocuments.set(organizationId, documents);
+    if (normalizedManageData && ['owner', 'admin', 'editor'].includes(organization.role)) {
+      scheduleModuleSave('manage');
+    }
+    canEditWorkspace = ['owner', 'admin', 'editor'].includes(organization.role);
+    activeAssessmentData = cloneModuleData(
+      documents.assessment.data.workspaceState?.assessment || FINASSIST_PRESET
+    );
+    populateForm(activeAssessmentData);
+    manageIncidents = MANAGE_INCIDENTS_DATA;
+    manageProfiles = SYSTEM_MANAGE_PROFILES;
+    return true;
+  }
+
+  function scheduleModuleSave(moduleKey) {
+    const organizationId = activeOrganization?.id;
+    if (!organizationId || !canEditWorkspace) return;
+    const documents = organizationModuleDocuments.get(organizationId);
+    const document = documents?.[moduleKey];
+    if (!document || !Number.isSafeInteger(document.revision)) {
+      showWorkspaceAlert(`The ${moduleKey} data is not ready to save. Reload the workspace and try again.`);
+      return;
+    }
+
+    document.data = readCurrentModuleSnapshot(moduleKey);
+    const queueKey = `${organizationId}:${moduleKey}`;
+    let queue = moduleSaveQueues.get(queueKey);
+    if (!queue) {
+      queue = { timer: null, snapshot: null, saving: false, failed: false };
+      moduleSaveQueues.set(queueKey, queue);
+    }
+    queue.snapshot = cloneModuleData(document.data);
+    queue.failed = false;
+    clearTimeout(queue.timer);
+    queue.timer = setTimeout(() => flushModuleSave(queueKey, organizationId, moduleKey), 500);
+  }
+
+  async function flushModuleSave(queueKey, organizationId, moduleKey) {
+    const queue = moduleSaveQueues.get(queueKey);
+    if (!queue || queue.saving || queue.failed || !queue.snapshot) return;
+    const document = organizationModuleDocuments.get(organizationId)?.[moduleKey];
+    if (!document || !Number.isSafeInteger(document.revision)) return;
+
+    const snapshot = queue.snapshot;
+    queue.snapshot = null;
+    queue.saving = true;
+    try {
+      const updated = await apiRequest(moduleUrl(moduleKey, organizationId), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: snapshot, revision: document.revision })
+      });
+      document.data = updated.data;
+      document.revision = updated.revision;
+      document.updatedAt = updated.updatedAt;
+    } catch (error) {
+      queue.failed = true;
+      if (activeOrganization?.id === organizationId) showWorkspaceAlert(error.message);
+    } finally {
+      queue.saving = false;
+      if (!queue.failed && queue.snapshot) {
+        flushModuleSave(queueKey, organizationId, moduleKey);
+      } else if (!queue.snapshot) {
+        moduleSaveQueues.delete(queueKey);
+      }
+    }
+  }
+
   function switchHubView(target, updateHash = true) {
+    if (target !== 'inventory') target = 'inventory';
+    activeHubView = target;
     const allTabs = [
       { id: 'inventory', btn: document.getElementById('tab-nav-inventory'), view: document.getElementById('view-inventory'), act: document.getElementById('actions-inventory') },
       { id: 'roles', btn: document.getElementById('tab-nav-roles'), view: document.getElementById('view-roles'), act: document.getElementById('actions-roles') },
@@ -89,9 +829,10 @@ function initAntigravityGovernanceApp() {
       syncHeaderBadges();
       updateProgress();
     }
+    applyWorkspaceEditPermissions();
 
     const breadcrumbNames = {
-      inventory: 'AI System Inventory (GOVERN 1.6)',
+      inventory: 'AI System Inventory',
       roles: 'Roles & RACI Matrix (GOVERN 2)',
       policy: 'Policy & Release Gates (GOVERN 1 & 6)',
       map: 'Context & Harms Studio (MAP 1–5)',
@@ -109,6 +850,7 @@ function initAntigravityGovernanceApp() {
     if (sidebar?.classList.contains('sidebar-open')) {
       sidebar.classList.remove('sidebar-open');
       backdrop?.classList.remove('active');
+      mobileToggle?.setAttribute('aria-expanded', 'false');
     }
 
     if (updateHash && window.location.hash !== `#${target}`) {
@@ -125,6 +867,12 @@ function initAntigravityGovernanceApp() {
   // Expose switchHubView globally for direct inline onclick and integrations
   window.switchHubView = switchHubView;
 
+  function openRmfSubcategory(viewId, subviewId) {
+    if (viewId !== 'inventory') return;
+    switchHubView(viewId, true);
+  }
+  window.openRmfSubcategory = openRmfSubcategory;
+
   document.getElementById('tab-nav-inventory')?.addEventListener('click', () => switchHubView('inventory'));
   document.getElementById('tab-nav-roles')?.addEventListener('click', () => switchHubView('roles'));
   document.getElementById('tab-nav-policy')?.addEventListener('click', () => switchHubView('policy'));
@@ -132,6 +880,28 @@ function initAntigravityGovernanceApp() {
   document.getElementById('tab-nav-measure')?.addEventListener('click', () => switchHubView('measure'));
   document.getElementById('tab-nav-manage')?.addEventListener('click', () => switchHubView('manage'));
   document.getElementById('tab-nav-assessment')?.addEventListener('click', () => switchHubView('assessment'));
+  document.querySelectorAll('.hub-nav-btn:not(#tab-nav-inventory)').forEach(button => {
+    button.hidden = true;
+  });
+
+  function applyWorkspaceEditPermissions() {
+    const canEdit = canEditWorkspace;
+    [
+      'btn-open-log-incident',
+      'btn-open-incident-modal',
+      'btn-load-preset',
+      'btn-blank-form',
+      'btn-import-json-trigger'
+    ].forEach(id => {
+      const button = document.getElementById(id);
+      if (button) button.hidden = !canEdit;
+    });
+
+    document.querySelectorAll('#aiia-form input, #aiia-form select, #aiia-form textarea, #aiia-form button')
+      .forEach(element => { element.disabled = !canEdit; });
+    document.querySelectorAll('.toggle-safe-mode, .toggle-hitl, .select-guardrail, .btn-toggle-decom')
+      .forEach(element => { element.disabled = !canEdit; });
+  }
 
   // Mobile sidebar drawer handlers
   const mobileToggle = document.getElementById('sidebar-mobile-toggle');
@@ -139,33 +909,97 @@ function initAntigravityGovernanceApp() {
   const backdropEl = document.getElementById('sidebar-backdrop');
 
   mobileToggle?.addEventListener('click', () => {
-    sidebarEl?.classList.toggle('sidebar-open');
-    backdropEl?.classList.toggle('active');
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+      const isOpen = sidebarEl?.classList.toggle('sidebar-open') || false;
+      backdropEl?.classList.toggle('active', isOpen);
+      mobileToggle.setAttribute('aria-expanded', String(isOpen));
+      mobileToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+      mobileToggle.title = isOpen ? 'Close navigation menu' : 'Open navigation menu';
+      return;
+    }
+
+    const isCollapsed = document.getElementById('hub-shell')?.classList.toggle('sidebar-collapsed') || false;
+    mobileToggle.setAttribute('aria-expanded', String(!isCollapsed));
+    mobileToggle.setAttribute('aria-label', isCollapsed ? 'Expand navigation sidebar' : 'Collapse navigation sidebar');
+    mobileToggle.title = isCollapsed ? 'Expand navigation sidebar' : 'Collapse navigation sidebar';
   });
+
+  const syncSidebarToggle = () => {
+    if (!mobileToggle) return;
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    const isExpanded = isMobile
+      ? sidebarEl?.classList.contains('sidebar-open') || false
+      : !document.getElementById('hub-shell')?.classList.contains('sidebar-collapsed');
+    mobileToggle.setAttribute('aria-expanded', String(isExpanded));
+    mobileToggle.setAttribute('aria-label', isMobile
+      ? (isExpanded ? 'Close navigation menu' : 'Open navigation menu')
+      : (isExpanded ? 'Collapse navigation sidebar' : 'Expand navigation sidebar'));
+    mobileToggle.title = mobileToggle.getAttribute('aria-label');
+  };
+  syncSidebarToggle();
+  window.addEventListener('resize', syncSidebarToggle);
 
   backdropEl?.addEventListener('click', () => {
     sidebarEl?.classList.remove('sidebar-open');
     backdropEl?.classList.remove('active');
+    mobileToggle?.setAttribute('aria-expanded', 'false');
+    mobileToggle?.setAttribute('aria-label', 'Open navigation menu');
+    if (mobileToggle) mobileToggle.title = 'Open navigation menu';
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !sidebarEl?.classList.contains('sidebar-open')) return;
+    sidebarEl.classList.remove('sidebar-open');
+    backdropEl?.classList.remove('active');
+    mobileToggle?.setAttribute('aria-expanded', 'false');
+    mobileToggle?.setAttribute('aria-label', 'Open navigation menu');
+    if (mobileToggle) mobileToggle.title = 'Open navigation menu';
   });
 
   // Inventory Data State
   let inventorySystems = [];
+  let inventoryLoadError = '';
 
-  function loadInventoryState() {
-    const saved = localStorage.getItem('ai_inventory_systems');
-    if (saved) {
-      try {
-        inventorySystems = JSON.parse(saved);
-      } catch (e) {
-        inventorySystems = typeof DEFAULT_INVENTORY_SYSTEMS !== 'undefined' ? [...DEFAULT_INVENTORY_SYSTEMS] : [];
-      }
-    } else {
-      inventorySystems = typeof DEFAULT_INVENTORY_SYSTEMS !== 'undefined' ? [...DEFAULT_INVENTORY_SYSTEMS] : [];
+  async function loadInventoryState() {
+    if (!activeOrganization) {
+      inventorySystems = [];
+      inventoryLoadError = '';
+      renderInventoryTable();
+      return;
     }
+    const organizationId = activeOrganization.id;
+    try {
+      const systems = await apiRequest(`/api/inventory?organizationId=${encodeURIComponent(organizationId)}`);
+      if (activeOrganization?.id !== organizationId) return;
+      inventorySystems = Array.isArray(systems) ? systems : [];
+      inventoryLoadError = '';
+    } catch (error) {
+      if (activeOrganization?.id !== organizationId) return;
+      inventorySystems = [];
+      inventoryLoadError = error.message;
+      showWorkspaceAlert(error.message);
+    }
+    renderInventoryTable();
   }
 
-  function saveInventoryState() {
-    localStorage.setItem('ai_inventory_systems', JSON.stringify(inventorySystems));
+  async function persistInventorySystem(system, isEdit, organizationId = activeOrganization?.id) {
+    if (!organizationId) throw new Error('Select a company workspace before saving.');
+    const url = isEdit
+      ? `/api/inventory/${encodeURIComponent(system.id)}?organizationId=${encodeURIComponent(organizationId)}`
+      : `/api/inventory?organizationId=${encodeURIComponent(organizationId)}`;
+    return apiRequest(url, {
+      method: isEdit ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(system)
+    });
+  }
+
+  async function deleteInventorySystem(id, organizationId = activeOrganization?.id) {
+    if (!organizationId) throw new Error('Select a company workspace before deleting.');
+    return apiRequest(
+      `/api/inventory/${encodeURIComponent(id)}?organizationId=${encodeURIComponent(organizationId)}`,
+      { method: 'DELETE' }
+    );
   }
 
   // Inventory UI Elements
@@ -174,8 +1008,10 @@ function initAntigravityGovernanceApp() {
   const filterDept = document.getElementById('filter-dept');
   const filterRisk = document.getElementById('filter-risk');
   const filterStatus = document.getElementById('filter-status');
+  const filterAttention = document.getElementById('filter-attention');
   const btnResetFilters = document.getElementById('btn-reset-filters');
   const inventoryCountText = document.getElementById('inventory-count-text');
+  const inventoryAttentionSummary = document.getElementById('inventory-attention-summary');
 
   // KPI elements
   const kpiTotal = document.getElementById('kpi-total-systems');
@@ -192,6 +1028,45 @@ function initAntigravityGovernanceApp() {
     if (kpiProd) kpiProd.textContent = prod;
     const assessed = inventorySystems.filter(s => s.assessmentStatus === 'Signed Off').length;
     if (kpiAssessed) kpiAssessed.textContent = `${assessed} / ${inventorySystems.length}`;
+    if (inventoryAttentionSummary) {
+      const today = getLocalDateString();
+      const deadline = new Date(`${today}T00:00:00`);
+      deadline.setDate(deadline.getDate() + 30);
+      const dueSoon = getLocalDateString(deadline);
+      const activeSystems = inventorySystems.filter(system => system.deploymentStatus !== 'Decommissioned');
+      const overdue = activeSystems.filter(system => getReviewState(system, today) === 'OVERDUE').length;
+      const upcoming = activeSystems.filter(system => getReviewState(system, today) === 'DUE_SOON' && system.nextReviewDate <= dueSoon).length;
+      const missingDetails = inventorySystems.filter(system => getMissingSystemDetails(system).length > 0).length;
+      inventoryAttentionSummary.textContent =
+        `${overdue} overdue review${overdue === 1 ? '' : 's'} · ${upcoming} due within 30 days · ${missingDetails} record${missingDetails === 1 ? '' : 's'} missing key details`;
+    }
+  }
+
+  function getLocalDateString(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function getReviewState(system, today = getLocalDateString()) {
+    if (system.deploymentStatus === 'Decommissioned') return 'NOT_REQUIRED';
+    if (!system.nextReviewDate) return 'NO_REVIEW';
+    if (system.nextReviewDate < today) return 'OVERDUE';
+    const deadline = new Date(`${today}T00:00:00`);
+    deadline.setDate(deadline.getDate() + 30);
+    if (system.nextReviewDate <= getLocalDateString(deadline)) return 'DUE_SOON';
+    return 'SCHEDULED';
+  }
+
+  function getMissingSystemDetails(system) {
+    return [
+      ['department', 'department'],
+      ['purpose', 'intended use'],
+      ['dataTypes', 'data types'],
+      ['accountableOwner', 'accountable owner'],
+      ['projectLead', 'project lead']
+    ].filter(([field]) => !String(system[field] || '').trim()).map(([, label]) => label);
   }
 
   function populateDeptDropdown() {
@@ -222,27 +1097,31 @@ function initAntigravityGovernanceApp() {
   function getRiskBadgeHtml(risk) {
     const r = (risk || 'Low').toLowerCase();
     let cls = 'low';
-    let label = 'Low (🟢)';
-    if (r.includes('crit')) { cls = 'crit'; label = 'Critical (🔴)'; }
-    else if (r.includes('high')) { cls = 'high'; label = 'High (🟠)'; }
-    else if (r.includes('med')) { cls = 'med'; label = 'Medium (🟡)'; }
-    return `<span class="badge-risk ${cls}">${label}</span>`;
+    let label = 'Low';
+    if (r.includes('crit')) { cls = 'crit'; label = 'Critical'; }
+    else if (r.includes('high')) { cls = 'high'; label = 'High'; }
+    else if (r.includes('med')) { cls = 'med'; label = 'Medium'; }
+    return `<span class="badge-risk ${cls}"><span class="risk-indicator" aria-hidden="true"></span>${label}</span>`;
   }
 
   function renderInventoryTable() {
     if (!inventoryTbody) return;
     updateKpis();
     populateDeptDropdown();
+    const canEdit = activeOrganization && ['owner', 'admin', 'editor'].includes(activeOrganization.role);
 
     const q = (searchInput?.value || '').toLowerCase().trim();
     const selDept = filterDept?.value || 'ALL';
     const selRisk = filterRisk?.value || 'ALL';
     const selStatus = filterStatus?.value || 'ALL';
+    const selAttention = filterAttention?.value || 'ALL';
 
     const filtered = inventorySystems.filter(s => {
       if (selDept !== 'ALL' && s.department !== selDept) return false;
       if (selRisk !== 'ALL' && s.riskLevel !== selRisk) return false;
       if (selStatus !== 'ALL' && s.deploymentStatus !== selStatus) return false;
+      if (selAttention !== 'ALL' && selAttention !== 'MISSING_DETAILS' && getReviewState(s) !== selAttention) return false;
+      if (selAttention === 'MISSING_DETAILS' && getMissingSystemDetails(s).length === 0) return false;
       if (q) {
         const text = `${s.id} ${s.name} ${s.department} ${s.purpose} ${s.taskType} ${s.accountableOwner} ${s.thirdParty}`.toLowerCase();
         if (!text.includes(q)) return false;
@@ -255,13 +1134,22 @@ function initAntigravityGovernanceApp() {
     }
 
     if (filtered.length === 0) {
+      const emptyContent = inventoryLoadError
+        ? `<p>${escapeHtml(inventoryLoadError)}</p>`
+        : inventorySystems.length
+          ? '<p>No systems match the current search or filters. Adjust your criteria and try again.</p>'
+          : `<span class="inventory-empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="17" rx="2"></rect><path d="M8 4.5h8M8 10h8M8 14h5"></path><path d="M19 18v4M17 20h4"></path></svg></span>
+             <h4>No AI systems registered yet</h4>
+             <p>Add systems your organization develops, deploys, or uses to make ownership, intended use, lifecycle, risk, and oversight visible.</p>
+             ${canEdit ? '<button type="button" class="btn btn-primary btn-sm" data-register-empty>Add a system</button>' : ''}`;
       inventoryTbody.innerHTML = `
         <tr>
-          <td colspan="8" style="text-align:center; padding: 2.5rem; color: var(--text-muted);">
-            No matching AI systems found in registry.
+          <td colspan="8">
+            <div class="inventory-empty-state${inventoryLoadError ? ' has-error' : ''}">${emptyContent}</div>
           </td>
         </tr>
       `;
+      inventoryTbody.querySelector('[data-register-empty]')?.addEventListener('click', openNewModal);
       return;
     }
 
@@ -271,6 +1159,7 @@ function initAntigravityGovernanceApp() {
         <td>
           <span class="inv-name">${escapeHtml(sys.name)}</span>
           <span class="inv-dept">${escapeHtml(sys.department)}</span>
+          ${getMissingSystemDetails(sys).length ? `<span class="inv-completeness-badge" title="Missing: ${escapeHtml(getMissingSystemDetails(sys).join(', '))}">Needs details</span>` : ''}
         </td>
         <td>
           <div class="inv-purpose" title="${escapeHtml(sys.purpose)}">${escapeHtml(sys.purpose)}</div>
@@ -281,31 +1170,18 @@ function initAntigravityGovernanceApp() {
         <td>
           <span style="font-weight: 600; font-size: 0.8rem;">${escapeHtml(sys.tevvStatus || 'N/A')}</span>
           <div style="font-size: 0.72rem; color: var(--text-muted);">AIIA: ${escapeHtml(sys.assessmentStatus || 'Not Started')}</div>
+          ${getReviewState(sys) === 'OVERDUE' ? '<span class="inv-review-badge overdue">Review overdue</span>' : ''}
+          ${getReviewState(sys) === 'DUE_SOON' ? '<span class="inv-review-badge due-soon">Review due soon</span>' : ''}
         </td>
-        <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(sys.nextReviewDate || '—')}</td>
+        <td style="font-size: 0.8rem; font-family: monospace;">${escapeHtml(sys.nextReviewDate || (sys.deploymentStatus === 'Decommissioned' ? 'Not required' : 'Not set'))}</td>
         <td style="text-align: center;">
           <div class="inv-row-actions">
-            <button type="button" class="btn-action-assess" data-assess-id="${escapeHtml(sys.id)}" title="Open in Impact Assessment Studio">
-              Assess
-            </button>
-            <button type="button" class="btn-action-icon" data-edit-id="${escapeHtml(sys.id)}" title="Edit system entry">
-              ✏️
-            </button>
-            <button type="button" class="btn-action-icon del" data-del-id="${escapeHtml(sys.id)}" title="Delete system entry">
-              🗑️
-            </button>
+            ${canEdit ? `<button type="button" class="btn-action-icon" data-edit-id="${escapeHtml(sys.id)}" aria-label="Edit ${escapeHtml(sys.name)}" title="Edit system entry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"></path></svg></button>
+            <button type="button" class="btn-action-icon del" data-del-id="${escapeHtml(sys.id)}" aria-label="Delete ${escapeHtml(sys.name)}" title="Delete system entry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"></path></svg></button>` : ''}
           </div>
         </td>
       </tr>
     `).join('');
-
-    // Attach listeners
-    inventoryTbody.querySelectorAll('.btn-action-assess').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-assess-id');
-        launchSystemAssessment(id);
-      });
-    });
 
     inventoryTbody.querySelectorAll('[data-edit-id]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -352,23 +1228,52 @@ function initAntigravityGovernanceApp() {
   const btnCancelModal = document.getElementById('btn-cancel-modal');
   const modalTitle = document.getElementById('modal-system-title');
   const regEditId = document.getElementById('reg-edit-id');
+  const registryCompletion = document.getElementById('registry-completion-summary');
+  let registerModalTrigger = null;
+  const aboutInventoryModal = document.getElementById('modal-about-inventory');
+  const aboutInventoryTrigger = document.getElementById('btn-about-inventory');
+  let aboutInventoryOpener = null;
+
+  function updateRegistryCompletion() {
+    if (!formSystemRegistry || !registryCompletion) return;
+    const requiredFields = Array.from(formSystemRegistry.querySelectorAll('[required]'));
+    const missingFields = requiredFields.filter(field => !String(field.value || '').trim());
+    const completeCount = requiredFields.length - missingFields.length;
+    if (!missingFields.length) {
+      registryCompletion.textContent = `All ${requiredFields.length} required details are ready. Review the information before saving.`;
+      registryCompletion.classList.add('is-complete');
+      return;
+    }
+    const nextFields = missingFields.slice(0, 3).map(field =>
+      field.labels?.[0]?.textContent.replace('*', '').trim() || field.id
+    );
+    registryCompletion.textContent =
+      `${completeCount} of ${requiredFields.length} required details completed. Still needed: ${nextFields.join(', ')}${missingFields.length > nextFields.length ? ', and more' : ''}.`;
+    registryCompletion.classList.remove('is-complete');
+  }
 
   function openNewModal() {
     if (!modalSystem) return;
+    registerModalTrigger = document.activeElement;
     regEditId.value = '';
     modalTitle.textContent = 'Register New AI System';
     formSystemRegistry.reset();
-    const nextNum = inventorySystems.length + 1;
+    const usedNumbers = inventorySystems
+      .map(system => /^AI-(\d+)$/i.exec(system.id))
+      .filter(Boolean)
+      .map(match => Number(match[1]));
+    const nextNum = usedNumbers.length ? Math.max(...usedNumbers) + 1 : 1;
     document.getElementById('reg-system-id').value = `AI-${String(nextNum).padStart(3, '0')}`;
-    document.getElementById('reg-last-review').value = '2026-10-18';
-    document.getElementById('reg-next-review').value = '2027-04-18';
+    updateRegistryCompletion();
     modalSystem.style.display = 'flex';
+    document.getElementById('reg-system-id').focus();
   }
 
   function openEditModal(id) {
     if (!modalSystem) return;
     const sys = inventorySystems.find(s => s.id === id);
     if (!sys) return;
+    registerModalTrigger = document.activeElement;
     regEditId.value = sys.id;
     modalTitle.textContent = `Edit AI System: ${sys.name} (${sys.id})`;
 
@@ -388,24 +1293,86 @@ function initAntigravityGovernanceApp() {
     document.getElementById('reg-operator-team').value = sys.operatorTeam || '';
     document.getElementById('reg-last-review').value = sys.lastReviewDate || '';
     document.getElementById('reg-next-review').value = sys.nextReviewDate || '';
-    document.getElementById('reg-assessment-status').value = sys.assessmentStatus || 'Signed Off';
+    document.getElementById('reg-assessment-status').value = sys.assessmentStatus || 'Not Started';
     document.getElementById('reg-doc-link').value = sys.docLink || '';
     document.getElementById('reg-incident-link').value = sys.incidentLogLink || '';
     document.getElementById('reg-notes').value = sys.notes || '';
 
+    updateRegistryCompletion();
     modalSystem.style.display = 'flex';
+    document.getElementById('reg-system-name').focus();
   }
 
   function closeModal() {
     if (modalSystem) modalSystem.style.display = 'none';
+    if (registerModalTrigger instanceof HTMLElement) registerModalTrigger.focus();
   }
+
+  function openAboutInventory() {
+    if (!aboutInventoryModal) return;
+    aboutInventoryOpener = document.activeElement;
+    aboutInventoryModal.style.display = 'flex';
+    document.getElementById('btn-close-about-inventory')?.focus();
+  }
+
+  function closeAboutInventory() {
+    if (aboutInventoryModal) aboutInventoryModal.style.display = 'none';
+    if (aboutInventoryOpener instanceof HTMLElement) aboutInventoryOpener.focus();
+  }
+
+  aboutInventoryTrigger?.addEventListener('click', openAboutInventory);
+  document.getElementById('btn-close-about-inventory')?.addEventListener('click', closeAboutInventory);
+  document.getElementById('btn-dismiss-about-inventory')?.addEventListener('click', closeAboutInventory);
+  document.getElementById('btn-about-register-system')?.addEventListener('click', () => {
+    closeAboutInventory();
+    openNewModal();
+  });
+  aboutInventoryModal?.addEventListener('click', event => {
+    if (event.target === aboutInventoryModal) closeAboutInventory();
+  });
+  formSystemRegistry?.addEventListener('input', updateRegistryCompletion);
+  formSystemRegistry?.addEventListener('change', updateRegistryCompletion);
 
   document.getElementById('btn-open-register-modal')?.addEventListener('click', openNewModal);
   document.getElementById('btn-hero-register-modal')?.addEventListener('click', openNewModal);
   btnCloseModal?.addEventListener('click', closeModal);
   btnCancelModal?.addEventListener('click', closeModal);
+  modalSystem?.addEventListener('click', event => {
+    if (event.target === modalSystem) closeModal();
+  });
+  document.addEventListener('keydown', event => {
+    const dialogs = [
+      { element: aboutInventoryModal, close: closeAboutInventory },
+      { element: modalSystem, close: closeModal },
+      { element: inviteModal, close: closeInviteModal },
+      { element: importModal, close: closeCsvImportModal }
+    ].filter(dialog => dialog.element?.style.display === 'flex');
+    const activeDialog = dialogs[dialogs.length - 1];
+    if (!activeDialog) return;
+    if (event.key === 'Escape') {
+      activeDialog.close();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.from(activeDialog.element.querySelectorAll(
+      'button:not([disabled]), input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+    )).filter(element => !element.hidden && element.getAttribute('aria-hidden') !== 'true' && element.getClientRects().length > 0);
+    if (!focusable.length) {
+      event.preventDefault();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !activeDialog.element.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
 
-  formSystemRegistry?.addEventListener('submit', (e) => {
+  formSystemRegistry?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const isEdit = Boolean(regEditId.value);
     const sysData = {
@@ -431,30 +1398,43 @@ function initAntigravityGovernanceApp() {
       notes: document.getElementById('reg-notes').value.trim()
     };
 
-    if (isEdit) {
-      const idx = inventorySystems.findIndex(s => s.id === regEditId.value);
-      if (idx !== -1) {
-        inventorySystems[idx] = sysData;
+    const organizationId = activeOrganization?.id;
+    const saveButton = document.getElementById('btn-save-system');
+    saveButton.disabled = true;
+    try {
+      await persistInventorySystem(sysData, isEdit, organizationId);
+      if (activeOrganization?.id !== organizationId) return;
+      if (isEdit) {
+        const idx = inventorySystems.findIndex(s => s.id === regEditId.value);
+        if (idx !== -1) inventorySystems[idx] = sysData;
         showToast(`Updated ${sysData.name} in inventory registry`);
+      } else {
+        inventorySystems.push(sysData);
+        showToast(`Registered ${sysData.name} (${sysData.id}) in inventory registry`);
       }
-    } else {
-      inventorySystems.push(sysData);
-      showToast(`Registered ${sysData.name} (${sysData.id}) in inventory registry`);
+      closeModal();
+      renderInventoryTable();
+    } catch (error) {
+      showWorkspaceAlert(error.message);
+    } finally {
+      saveButton.disabled = false;
     }
-
-    saveInventoryState();
-    closeModal();
-    renderInventoryTable();
   });
 
-  function deleteSystem(id) {
+  async function deleteSystem(id) {
     const sys = inventorySystems.find(s => s.id === id);
     if (!sys) return;
+    const organizationId = activeOrganization?.id;
     if (confirm(`Are you sure you want to delete ${sys.name} (${sys.id}) from the inventory registry?`)) {
-      inventorySystems = inventorySystems.filter(s => s.id !== id);
-      saveInventoryState();
-      renderInventoryTable();
-      showToast(`Removed ${sys.name} from inventory`);
+      try {
+        await deleteInventorySystem(id, organizationId);
+        if (activeOrganization?.id !== organizationId) return;
+        inventorySystems = inventorySystems.filter(s => s.id !== id);
+        renderInventoryTable();
+        showToast(`Removed ${sys.name} from inventory`);
+      } catch (error) {
+        showWorkspaceAlert(error.message);
+      }
     }
   }
 
@@ -463,11 +1443,13 @@ function initAntigravityGovernanceApp() {
   filterDept?.addEventListener('change', renderInventoryTable);
   filterRisk?.addEventListener('change', renderInventoryTable);
   filterStatus?.addEventListener('change', renderInventoryTable);
+  filterAttention?.addEventListener('change', renderInventoryTable);
   btnResetFilters?.addEventListener('click', () => {
     if (searchInput) searchInput.value = '';
     if (filterDept) filterDept.value = 'ALL';
     if (filterRisk) filterRisk.value = 'ALL';
     if (filterStatus) filterStatus.value = 'ALL';
+    if (filterAttention) filterAttention.value = 'ALL';
     renderInventoryTable();
   });
 
@@ -477,19 +1459,22 @@ function initAntigravityGovernanceApp() {
     'Deployment_Status', 'Risk_Level', 'Data_Types_Used', 'Third_Party_Components',
     'Accountable_Owner', 'AI_Project_Lead', 'Developer_Team', 'Operator_Team',
     'TEVV_Status', 'Last_Review_Date', 'Next_Review_Date', 'Impact_Assessment_Done',
-    'Documentation_Repo_Link', 'Incident_Log_Link', 'Notes'
+    'Documentation_Repo_Link', 'Incident_Log_Link', 'Notes', 'Workspace', 'Exported_At'
   ];
 
   function escapeCsvCell(val) {
     if (val === null || val === undefined) return '';
-    const s = String(val);
-    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
-      return `"${s.replace(/"/g, '""')}"`;
-    }
-    return s;
+    let value = String(val);
+    if (/^[\s\u0000-\u001f]*[=+\-@]/.test(value)) value = `'${value}`;
+    return `"${value.replace(/"/g, '""')}"`;
   }
 
   function exportInventoryCsv() {
+    if (!activeOrganization) {
+      showWorkspaceAlert('Select a company workspace before exporting the inventory.');
+      return;
+    }
+    const exportedAt = new Date().toISOString();
     const rows = [CSV_HEADERS.join(',')];
     inventorySystems.forEach(s => {
       const row = [
@@ -512,7 +1497,9 @@ function initAntigravityGovernanceApp() {
         escapeCsvCell(s.assessmentStatus),
         escapeCsvCell(s.docLink),
         escapeCsvCell(s.incidentLogLink),
-        escapeCsvCell(s.notes)
+        escapeCsvCell(s.notes),
+        escapeCsvCell(activeOrganization.name),
+        escapeCsvCell(exportedAt)
       ];
       rows.push(row.join(','));
     });
@@ -522,10 +1509,12 @@ function initAntigravityGovernanceApp() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AI-System-Inventory.csv`;
+    const workspaceSlug = String(activeOrganization.slug || activeOrganization.name)
+      .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'workspace';
+    a.download = `${workspaceSlug}-ai-system-inventory-${exportedAt.slice(0, 10)}.csv`;
     a.click();
-    URL.revokeObjectURL(url);
-    showToast('Exported AI-System-Inventory.csv');
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast(`Exported ${inventorySystems.length} workspace records as CSV`);
   }
 
   document.getElementById('btn-export-inventory-csv')?.addEventListener('click', exportInventoryCsv);
@@ -537,93 +1526,354 @@ function initAntigravityGovernanceApp() {
     inventoryCsvInput?.click();
   });
 
+  const importModal = document.getElementById('inventory-import-modal');
+  const importPreviewBody = document.getElementById('inventory-import-preview-body');
+  const importSummary = document.getElementById('inventory-import-summary');
+  const importErrors = document.getElementById('inventory-import-errors');
+  const importConfirmButton = document.getElementById('btn-confirm-inventory-import');
+  const importFileName = document.getElementById('inventory-import-filename');
+  let pendingCsvImport = null;
+  let importModalOpener = null;
+
   inventoryCsvInput?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    e.target.value = '';
+    if (file.size > 5 * 1024 * 1024) {
+      showWorkspaceAlert('CSV files must be 5 MB or smaller.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
-        const text = evt.target.result;
-        parseAndLoadCsv(text);
-      } catch (err) {
-        alert('Failed to parse CSV file: ' + err.message);
+        openCsvImportPreview(file, String(evt.target.result || ''));
+      } catch (error) {
+        openCsvImportError(file.name, error.message);
       }
     };
+    reader.onerror = () => openCsvImportError(file.name, 'The selected CSV file could not be read.');
     reader.readAsText(file);
-    inventoryCsvInput.value = '';
   });
 
-  function parseAndLoadCsv(text) {
-    const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
-    if (lines.length < 2) throw new Error('CSV is empty or missing data rows');
+  const csvFieldMap = {
+    id: 'ID',
+    name: 'System_Name',
+    department: 'Department_Owner',
+    purpose: 'Business_Purpose',
+    taskType: 'AI_Task_Type',
+    deploymentStatus: 'Deployment_Status',
+    riskLevel: 'Risk_Level',
+    dataTypes: 'Data_Types_Used',
+    thirdParty: 'Third_Party_Components',
+    accountableOwner: 'Accountable_Owner',
+    projectLead: 'AI_Project_Lead',
+    devTeam: 'Developer_Team',
+    operatorTeam: 'Operator_Team',
+    tevvStatus: 'TEVV_Status',
+    lastReviewDate: 'Last_Review_Date',
+    nextReviewDate: 'Next_Review_Date',
+    assessmentStatus: 'Impact_Assessment_Done',
+    docLink: 'Documentation_Repo_Link',
+    incidentLogLink: 'Incident_Log_Link',
+    notes: 'Notes'
+  };
+  const requiredCsvFields = [
+    'id', 'name', 'department', 'purpose', 'taskType', 'deploymentStatus',
+    'riskLevel', 'dataTypes', 'accountableOwner', 'projectLead', 'tevvStatus',
+    'assessmentStatus'
+  ];
+  const validCsvValues = {
+    deploymentStatus: ['Planning / Pre-Development', 'Development', 'Testing / TEVV', 'Piloting', 'Production', 'Decommissioned'],
+    riskLevel: ['Low', 'Medium', 'High', 'Critical'],
+    tevvStatus: ['Not Started', 'In Progress', 'Passed', 'Failed'],
+    assessmentStatus: ['Not Started', 'In Progress', 'Signed Off']
+  };
 
-    function parseCsvLine(line) {
-      const result = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"') {
-          if (inQuotes && line[i + 1] === '"') {
-            current += '"';
+  function parseCsvRecords(text) {
+    const source = String(text).replace(/^\uFEFF/, '');
+    const records = [];
+    let record = [];
+    let field = '';
+    let inQuotes = false;
+    let quoteClosed = false;
+    let rowNumber = 1;
+
+    for (let i = 0; i < source.length; i++) {
+      const character = source[i];
+      if (inQuotes) {
+        if (character === '"') {
+          if (source[i + 1] === '"') {
+            field += '"';
             i++;
           } else {
-            inQuotes = !inQuotes;
+            inQuotes = false;
+            quoteClosed = true;
           }
-        } else if (char === ',' && !inQuotes) {
-          result.push(current);
-          current = '';
+        } else if (character === '\r') {
+          if (source[i + 1] === '\n') i++;
+          field += '\n';
+          rowNumber++;
         } else {
-          current += char;
+          field += character;
+          if (character === '\n') rowNumber++;
+        }
+        continue;
+      }
+
+      if (quoteClosed && character !== ',' && character !== '\r' && character !== '\n') {
+        if (character === ' ' || character === '\t') continue;
+        throw new Error(`Unexpected character after a quoted CSV field near line ${rowNumber}.`);
+      }
+      if (character === '"' && field.length === 0 && !quoteClosed) {
+        inQuotes = true;
+      } else if (character === ',' ) {
+        record.push(field);
+        field = '';
+        quoteClosed = false;
+      } else if (character === '\r' || character === '\n') {
+        if (character === '\r' && source[i + 1] === '\n') i++;
+        record.push(field);
+        if (record.some(value => value.trim() !== '')) records.push(record);
+        record = [];
+        field = '';
+        quoteClosed = false;
+        rowNumber++;
+      } else if (character === '"') {
+        throw new Error(`Unexpected quote in an unquoted CSV field near line ${rowNumber}.`);
+      } else {
+        field += character;
+      }
+    }
+    if (inQuotes) throw new Error('The CSV ends inside a quoted field. Check for an unclosed quote.');
+    if (field.length || record.length) {
+      record.push(field);
+      if (record.some(value => value.trim() !== '')) records.push(record);
+    }
+    return records;
+  }
+
+  function normalizeCsvHeader(value) {
+    return String(value).replace(/^\uFEFF/, '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+
+  function cleanSpreadsheetPrefix(value) {
+    return value.replace(/^'(?=[\s\u0000-\u001f]*[=+\-@])/, '');
+  }
+
+  function validateCsvRows(text) {
+    const records = parseCsvRecords(text);
+    if (records.length < 2) throw new Error('CSV must include a header row and at least one system row.');
+    const headers = records[0].map(normalizeCsvHeader);
+    const headerIndexes = new Map();
+    headers.forEach((header, index) => {
+      if (!header) return;
+      if (headerIndexes.has(header)) throw new Error(`The CSV contains a duplicate "${records[0][index]}" column.`);
+      headerIndexes.set(header, index);
+    });
+
+    const requiredHeaders = requiredCsvFields.map(field => normalizeCsvHeader(csvFieldMap[field]));
+    const missingHeaders = requiredHeaders.filter(header => !headerIndexes.has(header))
+      .map(header => csvFieldMap[requiredCsvFields[requiredHeaders.indexOf(header)]]);
+    if (missingHeaders.length) throw new Error(`Missing required CSV columns: ${missingHeaders.join(', ')}.`);
+
+    const dataRows = records.slice(1);
+    if (dataRows.length > 200) throw new Error('Import up to 200 systems at a time. Split this file into smaller batches.');
+    const rowErrors = [];
+    const systems = [];
+    const seenIds = new Set();
+    dataRows.forEach((columns, index) => {
+      const rowNumber = index + 2;
+      if (columns.length !== headers.length) {
+        rowErrors.push({ row: rowNumber, message: `Expected ${headers.length} columns but found ${columns.length}.` });
+        return;
+      }
+      const system = {};
+      Object.entries(csvFieldMap).forEach(([fieldName, headerName]) => {
+        const columnIndex = headerIndexes.get(normalizeCsvHeader(headerName));
+        system[fieldName] = columnIndex === undefined ? '' : cleanSpreadsheetPrefix(columns[columnIndex]).trim();
+      });
+
+      for (const fieldName of requiredCsvFields) {
+        if (!system[fieldName]) {
+          rowErrors.push({ row: rowNumber, message: `${csvFieldMap[fieldName]} is required.` });
+          return;
         }
       }
-      result.push(current);
-      return result;
-    }
+      if (system.id.length > 100 || system.name.length > 250) {
+        rowErrors.push({ row: rowNumber, message: 'System ID must be 100 characters or fewer and name 250 or fewer.' });
+        return;
+      }
+      if (Object.values(system).some(value => value.length > 10000)) {
+        rowErrors.push({ row: rowNumber, message: 'A field exceeds the 10,000 character import limit.' });
+        return;
+      }
+      if (!Object.entries(validCsvValues).every(([fieldName, values]) => values.includes(system[fieldName]))) {
+        const invalidField = Object.entries(validCsvValues).find(([fieldName, values]) => !values.includes(system[fieldName]))[0];
+        rowErrors.push({ row: rowNumber, message: `${csvFieldMap[invalidField]} has an unsupported value.` });
+        return;
+      }
+      for (const fieldName of ['lastReviewDate', 'nextReviewDate']) {
+        if (system[fieldName] && !isValidInventoryDate(system[fieldName])) {
+          rowErrors.push({ row: rowNumber, message: `${csvFieldMap[fieldName]} must use YYYY-MM-DD format.` });
+          return;
+        }
+      }
+      if (seenIds.has(system.id)) {
+        rowErrors.push({ row: rowNumber, message: `Duplicate system ID "${system.id}" in this file.` });
+        return;
+      }
+      seenIds.add(system.id);
+      systems.push({ ...system, _csvRow: rowNumber });
+    });
 
-    const parsedSystems = [];
-    for (let i = 1; i < lines.length; i++) {
-      const cols = parseCsvLine(lines[i]);
-      if (cols.length < 2 || !cols[0]) continue;
-      const sys = {
-        id: cols[0]?.trim() || `AI-${i}`,
-        name: cols[1]?.trim() || 'Untitled AI System',
-        department: cols[2]?.trim() || 'General Operations',
-        purpose: cols[3]?.trim() || '',
-        taskType: cols[4]?.trim() || '',
-        deploymentStatus: cols[5]?.trim() || 'Planning / Pre-Development',
-        riskLevel: cols[6]?.trim() || 'High',
-        dataTypes: cols[7]?.trim() || '',
-        thirdParty: cols[8]?.trim() || '',
-        accountableOwner: cols[9]?.trim() || '',
-        projectLead: cols[10]?.trim() || '',
-        devTeam: cols[11]?.trim() || '',
-        operatorTeam: cols[12]?.trim() || '',
-        tevvStatus: cols[13]?.trim() || 'Not Started',
-        lastReviewDate: cols[14]?.trim() || '',
-        nextReviewDate: cols[15]?.trim() || '',
-        assessmentStatus: cols[16]?.trim() || 'Not Started',
-        docLink: cols[17]?.trim() || '',
-        incidentLogLink: cols[18]?.trim() || '',
-        notes: cols[19]?.trim() || ''
-      };
-      parsedSystems.push(sys);
-    }
-
-    if (parsedSystems.length === 0) throw new Error('No valid system rows found');
-
-    inventorySystems = parsedSystems;
-    saveInventoryState();
-    renderInventoryTable();
-    showToast(`Successfully imported ${parsedSystems.length} systems from CSV`);
+    return { systems, rowErrors };
   }
+
+  function isValidInventoryDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const date = new Date(`${value}T00:00:00.000Z`);
+    return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+  }
+
+  function openCsvImportError(fileName, message) {
+    pendingCsvImport = null;
+    importFileName.textContent = fileName;
+    importSummary.textContent = 'This file cannot be imported yet.';
+    importErrors.textContent = message;
+    importErrors.hidden = false;
+    importPreviewBody.replaceChildren();
+    importConfirmButton.disabled = true;
+    showCsvImportModal();
+  }
+
+  function showCsvImportModal() {
+    importModalOpener = document.activeElement;
+    importModal.style.display = 'flex';
+    document.getElementById('btn-close-inventory-import')?.focus();
+  }
+
+  function openCsvImportPreview(file, text) {
+    if (!activeOrganization || !['owner', 'admin', 'editor'].includes(activeOrganization.role)) {
+      throw new Error('You do not have permission to import records into this workspace.');
+    }
+    const { systems, rowErrors } = validateCsvRows(text);
+    const existingIds = new Set(inventorySystems.map(system => system.id));
+    const newCount = systems.filter(system => !existingIds.has(system.id)).length;
+    const updateCount = systems.length - newCount;
+    pendingCsvImport = rowErrors.length ? null : {
+      organizationId: activeOrganization.id,
+      systems: systems.map(({ _csvRow, ...system }) => system)
+    };
+    importFileName.textContent = file.name;
+    importSummary.textContent = `${systems.length} valid system row${systems.length === 1 ? '' : 's'}: ${newCount} new and ${updateCount} existing record${updateCount === 1 ? '' : 's'} to update in ${activeOrganization.name}.`;
+    importErrors.hidden = rowErrors.length === 0;
+    importErrors.replaceChildren();
+    if (rowErrors.length) {
+      const heading = document.createElement('strong');
+      heading.textContent = `Fix ${rowErrors.length} issue${rowErrors.length === 1 ? '' : 's'} before importing:`;
+      const list = document.createElement('ul');
+      rowErrors.slice(0, 50).forEach(error => {
+        const item = document.createElement('li');
+        item.textContent = `Row ${error.row}: ${error.message}`;
+        list.appendChild(item);
+      });
+      if (rowErrors.length > 50) {
+        const item = document.createElement('li');
+        item.textContent = `And ${rowErrors.length - 50} more row errors.`;
+        list.appendChild(item);
+      }
+      importErrors.append(heading, list);
+    }
+    importPreviewBody.replaceChildren();
+    const previewRows = systems.slice(0, 10);
+    previewRows.forEach(system => {
+      const row = document.createElement('tr');
+      const values = [
+        system._csvRow,
+        system.id,
+        system.name,
+        system.department,
+        system.riskLevel,
+        existingIds.has(system.id) ? 'Update existing' : 'Add new'
+      ];
+      values.forEach(value => {
+        const cell = document.createElement('td');
+        cell.textContent = String(value);
+        row.appendChild(cell);
+      });
+      importPreviewBody.appendChild(row);
+    });
+    if (systems.length > previewRows.length) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 6;
+      cell.textContent = `Showing first ${previewRows.length} of ${systems.length} valid rows.`;
+      row.appendChild(cell);
+      importPreviewBody.appendChild(row);
+    }
+    importConfirmButton.disabled = !pendingCsvImport;
+    importConfirmButton.textContent = rowErrors.length ? 'Fix errors to import' : `Import ${systems.length} systems`;
+    showCsvImportModal();
+  }
+
+  function closeCsvImportModal() {
+    importModal.style.display = 'none';
+    pendingCsvImport = null;
+    if (importModalOpener instanceof HTMLElement) importModalOpener.focus();
+  }
+
+  document.getElementById('btn-close-inventory-import')?.addEventListener('click', closeCsvImportModal);
+  document.getElementById('btn-cancel-inventory-import')?.addEventListener('click', closeCsvImportModal);
+  importModal?.addEventListener('click', event => {
+    if (event.target === importModal) closeCsvImportModal();
+  });
+  importConfirmButton?.addEventListener('click', async () => {
+    if (!pendingCsvImport || !activeOrganization || pendingCsvImport.organizationId !== activeOrganization.id) {
+      importErrors.textContent = 'The selected workspace changed. Close this preview and choose the CSV again.';
+      importErrors.hidden = false;
+      return;
+    }
+    const { organizationId, systems } = pendingCsvImport;
+    importConfirmButton.disabled = true;
+    importConfirmButton.setAttribute('aria-busy', 'true');
+    importConfirmButton.textContent = 'Importing...';
+    try {
+      const result = await apiRequest('/api/inventory/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ organizationId, systems })
+      });
+      if (activeOrganization?.id !== organizationId) return;
+      closeCsvImportModal();
+      await loadInventoryState();
+      showToast(`Imported ${result.imported} AI systems. Existing matching IDs were updated.`);
+    } catch (error) {
+      importErrors.replaceChildren();
+      const message = document.createElement('p');
+      message.textContent = error.message;
+      importErrors.appendChild(message);
+      if (Array.isArray(error.rowErrors) && error.rowErrors.length) {
+        const list = document.createElement('ul');
+        error.rowErrors.forEach(rowError => {
+          const item = document.createElement('li');
+          item.textContent = `Row ${rowError.row}: ${rowError.message}`;
+          list.appendChild(item);
+        });
+        importErrors.appendChild(list);
+      }
+      importErrors.hidden = false;
+      importConfirmButton.disabled = false;
+      importConfirmButton.textContent = `Import ${systems.length} systems`;
+    } finally {
+      importConfirmButton.removeAttribute('aria-busy');
+    }
+  });
 
   // Inventory Print PDF Generator
   function triggerPrintInventoryPdf() {
     const container = document.getElementById('print-inventory-report');
     if (!container) return;
 
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     const html = `
@@ -634,11 +1884,15 @@ function initAntigravityGovernanceApp() {
           <div class="pr-subtitle">Operationalizing NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN 1.6)</div>
         </div>
         <div>
-          <span class="pr-badge-go">GOVERN 1.6 COMPLIANT</span>
+          <span class="pr-badge-go">GOVERN 1.6 REFERENCE</span>
         </div>
       </div>
 
       <div class="pr-meta-box">
+        <div class="pr-field">
+          <span class="pr-label">Company Workspace</span>
+          <span class="pr-value" style="font-weight: 700;">${escapeHtml(activeOrganization?.name || 'Company workspace')}</span>
+        </div>
         <div class="pr-grid-4">
           <div class="pr-field">
             <span class="pr-label">Total AI Systems</span>
@@ -693,7 +1947,7 @@ function initAntigravityGovernanceApp() {
           </tbody>
         </table>
         <div class="pr-footer">
-          Official AI System Inventory Registry · Generated by SamaBrains NIST AI Governance Hub · NIST AI RMF 1.0 (GOVERN 1.6)
+          Generated by SamaBrains · NIST AI RMF 1.0 GOVERN 1.6 reference. This inventory supports governance work and is not a compliance determination.
         </div>
       </div>
     `;
@@ -704,8 +1958,7 @@ function initAntigravityGovernanceApp() {
     setTimeout(() => {
       window.print();
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
@@ -1080,7 +2333,6 @@ function initAntigravityGovernanceApp() {
     const container = document.getElementById('print-roles-report');
     if (!container) return;
 
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     const activities = typeof RACI_ACTIVITIES !== 'undefined' ? RACI_ACTIVITIES : [];
@@ -1162,8 +2414,7 @@ function initAntigravityGovernanceApp() {
     setTimeout(() => {
       window.print();
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
@@ -1614,7 +2865,6 @@ function initAntigravityGovernanceApp() {
     const container = document.getElementById('print-policy-report');
     if (!container) return;
 
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     const meta = typeof POLICY_METADATA !== 'undefined' ? POLICY_METADATA : {};
@@ -1769,8 +3019,7 @@ function initAntigravityGovernanceApp() {
     setTimeout(() => {
       window.print();
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
@@ -2360,7 +3609,6 @@ function initAntigravityGovernanceApp() {
     const container = document.getElementById('print-map-report');
     if (!container) return;
 
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     const meta = typeof MAP_METADATA !== 'undefined' ? MAP_METADATA : {};
@@ -2463,8 +3711,7 @@ function initAntigravityGovernanceApp() {
     setTimeout(() => {
       window.print();
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
@@ -3292,7 +4539,6 @@ function initAntigravityGovernanceApp() {
     const container = document.getElementById('print-measure-report');
     if (!container) return;
 
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     const metrics = typeof MEASURE_METRICS_CATALOG !== 'undefined' ? MEASURE_METRICS_CATALOG : [];
@@ -3424,8 +4670,7 @@ function initAntigravityGovernanceApp() {
     setTimeout(() => {
       window.print();
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
@@ -3440,35 +4685,16 @@ function initAntigravityGovernanceApp() {
   let manageProfiles = {};
 
   function loadManageState() {
-    const savedInc = localStorage.getItem('ai_manage_incidents');
-    if (savedInc) {
-      try { manageIncidents = JSON.parse(savedInc); } catch (e) { manageIncidents = [...MANAGE_INCIDENTS_DATA]; }
-    } else {
-      manageIncidents = typeof MANAGE_INCIDENTS_DATA !== 'undefined' ? [...MANAGE_INCIDENTS_DATA] : [];
-    }
-
-    const savedProf = localStorage.getItem('ai_manage_profiles');
-    if (savedProf) {
-      try { manageProfiles = JSON.parse(savedProf); } catch (e) { manageProfiles = typeof SYSTEM_MANAGE_PROFILES !== 'undefined' ? JSON.parse(JSON.stringify(SYSTEM_MANAGE_PROFILES)) : {}; }
-    } else {
-      manageProfiles = typeof SYSTEM_MANAGE_PROFILES !== 'undefined' ? JSON.parse(JSON.stringify(SYSTEM_MANAGE_PROFILES)) : {};
-    }
+    manageIncidents = MANAGE_INCIDENTS_DATA;
+    manageProfiles = SYSTEM_MANAGE_PROFILES;
   }
 
   function saveManageIncidentsState() {
-    try {
-      localStorage.setItem('ai_manage_incidents', JSON.stringify(manageIncidents));
-    } catch (e) {
-      console.warn('Failed to save manage incidents state', e);
-    }
+    scheduleModuleSave('manage');
   }
 
   function saveManageProfilesState() {
-    try {
-      localStorage.setItem('ai_manage_profiles', JSON.stringify(manageProfiles));
-    } catch (e) {
-      console.warn('Failed to save manage profiles state', e);
-    }
+    scheduleModuleSave('manage');
   }
 
   function switchManageSubview(target) {
@@ -4143,6 +5369,7 @@ function initAntigravityGovernanceApp() {
 
   document.getElementById('form-log-incident')?.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (!canEditWorkspace) return;
     const id = document.getElementById('inc-id').value;
     const sysId = document.getElementById('inc-system').value;
     const title = document.getElementById('inc-title').value;
@@ -4257,7 +5484,6 @@ function initAntigravityGovernanceApp() {
     const container = document.getElementById('print-manage-report');
     if (!container) return;
 
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     let html = `
@@ -4405,8 +5631,7 @@ function initAntigravityGovernanceApp() {
     setTimeout(() => {
       window.print();
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
@@ -4699,19 +5924,12 @@ function initAntigravityGovernanceApp() {
     progressIndicator.textContent = `Step ${currentIndex + 1} of ${allBtns.length} (${pct}%)`;
   }
 
-  // 2. Theme Toggle
+  // Keep the hub light-only, including for browsers with an older saved preference.
   function initTheme() {
-    const savedTheme = localStorage.getItem('aiia_theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    localStorage.removeItem('aiia_theme');
+    document.documentElement.setAttribute('data-theme', 'light');
   }
   initTheme();
-
-  themeToggleBtn.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('aiia_theme', newTheme);
-  });
 
   // 3. Toast Notifications
   function showToast(msg) {
@@ -5441,6 +6659,8 @@ function initAntigravityGovernanceApp() {
   // 7. Preset and Blank Handlers
   btnLoadPreset.addEventListener('click', () => {
     populateForm(FINASSIST_PRESET);
+    activeAssessmentData = cloneModuleData(FINASSIST_PRESET);
+    scheduleModuleSave('assessment');
     showToast('Loaded FinAssist AI sample assessment data');
   });
 
@@ -5460,14 +6680,16 @@ function initAntigravityGovernanceApp() {
         part10: { approvals: [] }
       };
       populateForm(blankData);
+      activeAssessmentData = cloneModuleData(blankData);
+      scheduleModuleSave('assessment');
       showToast('Form reset to blank assessment');
     }
   });
 
-  // 8. Auto-Save to LocalStorage
+  // 8. Auto-Save to the active company workspace
   document.getElementById('aiia-form').addEventListener('input', () => {
-    const data = serializeForm();
-    localStorage.setItem('aiia_assessment_data', JSON.stringify(data));
+    activeAssessmentData = serializeForm();
+    scheduleModuleSave('assessment');
   });
 
   // 9. Export & Import JSON
@@ -5493,6 +6715,8 @@ function initAntigravityGovernanceApp() {
       try {
         const parsed = JSON.parse(event.target.result);
         populateForm(parsed);
+        activeAssessmentData = cloneModuleData(parsed);
+        scheduleModuleSave('assessment');
         showToast('Successfully loaded assessment JSON');
       } catch (err) {
         alert('Invalid JSON file format.');
@@ -6339,7 +7563,6 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
     renderPrintReport(data);
 
     // Save active theme & switch temporarily to light mode for printing
-    const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.documentElement.setAttribute('data-theme', 'light');
 
     showToast('Opening Executive Print / PDF dialog...');
@@ -6348,63 +7571,380 @@ ${d.part10.approvals.map(a => `| **${a.role}** | ${a.name} | ${a.decision} | ${a
       window.print();
       // Restore theme after print dialog initiates
       setTimeout(() => {
-        const savedTheme = localStorage.getItem('aiia_theme') || previousTheme;
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.documentElement.setAttribute('data-theme', 'light');
       }, 500);
     }, 200);
   }
 
   window.addEventListener('afterprint', () => {
-    const savedTheme = localStorage.getItem('aiia_theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-theme', 'light');
   });
 
   btnPrintPdf.addEventListener('click', triggerPrintPdf);
   btnPrintPdfBottom?.addEventListener('click', triggerPrintPdf);
 
+  async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        Accept: 'application/json',
+        ...(options.headers || {})
+      },
+      cache: 'no-store'
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(result.error || `Request failed (${response.status}).`);
+      if (Array.isArray(result.rowErrors)) error.rowErrors = result.rowErrors;
+      throw error;
+    }
+    return result;
+  }
+
+  function showWorkspaceAlert(message) {
+    if (!workspaceGate.hidden) {
+      workspaceGateAlert.textContent = message;
+      workspaceGateAlert.hidden = false;
+      return;
+    }
+    showToast(message);
+  }
+
+  function renderWorkspaceGate() {
+    workspaceGate.hidden = false;
+    document.getElementById('hub-shell')?.setAttribute('inert', '');
+    workspaceGateTitle.textContent = organizations.length ? 'Select your company workspace' : 'Create your company workspace';
+    workspaceGateCopy.textContent = currentUser
+      ? organizations.length
+        ? `Signed in as ${currentUser.email}. Select a workspace or create another; each register is private to its members.`
+        : `Signed in as ${currentUser.email}. Create your first workspace below to start a private AI system register.`
+      : 'Sign in with email verification. New users can create a private company workspace after signing in.';
+    workspaceGateAlert.hidden = true;
+
+    const choices = organizations.length
+      ? `<div class="workspace-choice-list">${organizations.map(org => `
+          <button type="button" class="workspace-choice" data-workspace-id="${escapeHtml(org.id)}">
+            <span><strong>${escapeHtml(org.name)}</strong><br><small>${escapeHtml(org.role)}</small></span>
+            <span aria-hidden="true">→</span>
+          </button>`).join('')}</div>`
+      : '<p class="text-muted">Create a company workspace to start a private AI system register.</p>';
+
+    workspaceGateContent.innerHTML = `
+      ${choices}
+      <form class="workspace-gate-form" id="form-create-workspace">
+        <div>
+          <label for="new-workspace-name">Company or organization name</label>
+          <input id="new-workspace-name" name="name" required maxlength="150" autocomplete="organization">
+        </div>
+        <button type="submit" class="btn btn-primary">${organizations.length ? 'Create another workspace' : 'Create workspace'}</button>
+      </form>`;
+
+    workspaceGateContent.querySelectorAll('[data-workspace-id]').forEach(button => {
+      button.addEventListener('click', () => {
+        const organization = organizations.find(org => org.id === button.dataset.workspaceId);
+        if (organization) activateOrganization(organization);
+      });
+    });
+    workspaceGateContent.querySelector('#form-create-workspace')?.addEventListener('submit', async event => {
+      event.preventDefault();
+      const submit = event.currentTarget.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      try {
+        const name = new FormData(event.currentTarget).get('name');
+        const organization = await apiRequest('/api/organizations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name })
+        });
+        organizations = [...organizations, organization];
+        activateOrganization(organization);
+      } catch (error) {
+        workspaceGateAlert.textContent = error.message;
+        workspaceGateAlert.hidden = false;
+        submit.disabled = false;
+      }
+    });
+  }
+
+  async function activateOrganization(organization) {
+    const sequence = ++activationSequence;
+    closeModal();
+    closeInviteModal();
+    closeCsvImportModal();
+    activeOrganization = organization;
+    canEditWorkspace = ['owner', 'admin', 'editor'].includes(organization.role);
+    inventorySystems = [];
+    inventoryLoadError = '';
+    workspaceGate.hidden = false;
+    workspaceGateTitle.textContent = 'Loading company workspace';
+    workspaceGateCopy.textContent = "Loading this company's private governance modules...";
+    workspaceGateAlert.hidden = true;
+    workspaceGateContent.replaceChildren();
+    document.getElementById('hub-shell')?.setAttribute('inert', '');
+    if (workspaceSelector) {
+      workspaceSelector.replaceChildren(...organizations.map(org => {
+        const option = document.createElement('option');
+        option.value = org.id;
+        option.textContent = org.name;
+        option.selected = org.id === organization.id;
+        return option;
+      }));
+      workspaceSelector.value = organization.id;
+    }
+    const canInvite = ['owner', 'admin'].includes(organization.role);
+    ['btn-open-register-modal', 'btn-hero-register-modal', 'btn-import-inventory-csv-trigger']
+      .forEach(id => {
+        const button = document.getElementById(id);
+        if (button) button.hidden = !canEditWorkspace;
+      });
+    const inviteButton = document.getElementById('btn-invite-colleague');
+    if (inviteButton) inviteButton.hidden = !canInvite;
+    const manageAccessButton = document.getElementById('btn-manage-access');
+    if (manageAccessButton) manageAccessButton.hidden = !canInvite;
+    try {
+      const [systems, modulesLoaded] = await Promise.all([
+        apiRequest(`/api/inventory?organizationId=${encodeURIComponent(organization.id)}`),
+        loadOrganizationModules(organization)
+      ]);
+      if (sequence !== activationSequence || activeOrganization?.id !== organization.id || !modulesLoaded) return;
+
+      inventorySystems = Array.isArray(systems) ? systems : [];
+      inventoryLoadError = '';
+      document.querySelectorAll('.hub-nav-btn').forEach(button => { button.hidden = false; });
+      workspaceGate.hidden = true;
+      document.getElementById('hub-shell')?.removeAttribute('inert');
+      switchHubView(activeHubView, false);
+    } catch (error) {
+      if (sequence !== activationSequence || activeOrganization?.id !== organization.id) return;
+      workspaceGateTitle.textContent = 'Company workspace unavailable';
+      workspaceGateCopy.textContent = 'Company data is not displayed unless every workspace module can be loaded securely.';
+      workspaceGateAlert.textContent = error.message;
+      workspaceGateAlert.hidden = false;
+      workspaceGateContent.innerHTML = '<button type="button" class="btn btn-secondary" id="btn-retry-workspace-modules">Retry loading workspace</button>';
+      document.getElementById('btn-retry-workspace-modules')?.addEventListener('click', () => activateOrganization(organization));
+    }
+  }
+
+  async function initializeWorkspace() {
+    workspaceGate.hidden = false;
+    workspaceGateTitle.textContent = 'Checking secure access';
+    workspaceGateCopy.textContent = 'Verifying your organization sign-in and loading your workspaces...';
+    try {
+      const session = await apiRequest('/api/session');
+      currentUser = session.user;
+      organizations = await apiRequest('/api/organizations');
+
+      const inviteToken = new URLSearchParams(window.location.search).get('invite');
+      let invitedOrganizationId = '';
+      if (inviteToken) {
+        const accepted = await apiRequest('/api/invitations', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: inviteToken })
+        });
+        invitedOrganizationId = accepted.organization.id;
+        organizations = await apiRequest('/api/organizations');
+        window.history.replaceState(null, '', `${window.location.pathname}${window.location.hash}`);
+      }
+
+      if (invitedOrganizationId) {
+        const invitedOrganization = organizations.find(org => org.id === invitedOrganizationId);
+        if (invitedOrganization) return activateOrganization(invitedOrganization);
+      }
+      renderWorkspaceGate();
+    } catch (error) {
+      workspaceGateTitle.textContent = 'Secure workspace unavailable';
+      workspaceGateCopy.textContent = 'Your company data is not loaded unless your sign-in and workspace can be verified.';
+      workspaceGateAlert.textContent = error.message;
+      workspaceGateAlert.hidden = false;
+      workspaceGateContent.innerHTML = '<button type="button" class="btn btn-secondary" id="btn-retry-workspace">Try again</button>';
+      document.getElementById('btn-retry-workspace')?.addEventListener('click', initializeWorkspace);
+    }
+  }
+
+  workspaceSelector?.addEventListener('change', () => {
+    const organization = organizations.find(org => org.id === workspaceSelector.value);
+    if (organization) activateOrganization(organization);
+  });
+  document.getElementById('btn-switch-workspace')?.addEventListener('click', () => {
+    activationSequence += 1;
+    activeOrganization = null;
+    canEditWorkspace = false;
+    inventorySystems = [];
+    inventoryLoadError = '';
+    document.querySelectorAll('.hub-nav-btn:not(#tab-nav-inventory)').forEach(button => { button.hidden = true; });
+    renderInventoryTable();
+    renderWorkspaceGate();
+  });
+
+  const inviteModal = document.getElementById('invite-modal');
+  let inviteModalOpener = null;
+  const closeInviteModal = () => {
+    if (inviteModal) inviteModal.style.display = 'none';
+    if (inviteModalOpener instanceof HTMLElement) inviteModalOpener.focus();
+  };
+  async function loadWorkspaceAccess() {
+    if (!activeOrganization) return;
+    const organizationId = activeOrganization.id;
+    const status = document.getElementById('workspace-members-status');
+    const membersList = document.getElementById('workspace-member-list');
+    const invitationsList = document.getElementById('workspace-invitation-list');
+    status.textContent = 'Loading workspace access...';
+    membersList.replaceChildren();
+    invitationsList.replaceChildren();
+    try {
+      const access = await apiRequest(`/api/invitations?organizationId=${encodeURIComponent(organizationId)}`);
+      if (activeOrganization?.id !== organizationId) return;
+      access.members.forEach(member => {
+        const item = document.createElement('li');
+        item.className = 'collaborator-item';
+        const identity = document.createElement('span');
+        identity.className = 'collaborator-identity';
+        const name = document.createElement('strong');
+        name.textContent = member.name || member.email;
+        const email = document.createElement('span');
+        email.textContent = member.email;
+        identity.append(name, email);
+        const role = document.createElement('span');
+        role.className = `collaborator-role role-${member.role}`;
+        role.textContent = member.role;
+        item.append(identity, role);
+        membersList.appendChild(item);
+      });
+      if (!access.members.length) {
+        const item = document.createElement('li');
+        item.className = 'collaborator-empty';
+        item.textContent = 'No workspace members are listed yet.';
+        membersList.appendChild(item);
+      }
+      access.invitations.forEach(invitation => {
+        const item = document.createElement('li');
+        item.className = 'collaborator-item';
+        const identity = document.createElement('span');
+        identity.className = 'collaborator-identity';
+        const email = document.createElement('strong');
+        email.textContent = invitation.email;
+        const state = document.createElement('span');
+        state.textContent = `${invitation.role} · ${invitation.status} · expires ${new Date(invitation.expiresAt).toLocaleDateString()}`;
+        identity.append(email, state);
+        const badge = document.createElement('span');
+        badge.className = `collaborator-role invitation-${invitation.status.toLowerCase()}`;
+        badge.textContent = invitation.status;
+        item.append(identity, badge);
+        invitationsList.appendChild(item);
+      });
+      if (!access.invitations.length) {
+        const item = document.createElement('li');
+        item.className = 'collaborator-empty';
+        item.textContent = 'No pending invitations.';
+        invitationsList.appendChild(item);
+      }
+      status.textContent = `${access.members.length} member${access.members.length === 1 ? '' : 's'} · ${access.invitations.filter(invitation => invitation.status === 'Pending').length} active invitation${access.invitations.filter(invitation => invitation.status === 'Pending').length === 1 ? '' : 's'}.`;
+    } catch (error) {
+      status.textContent = `Workspace access could not be loaded: ${error.message}`;
+    }
+  }
+  function openInviteModal(accessOnly = false) {
+    if (!activeOrganization || !['owner', 'admin'].includes(activeOrganization.role)) return;
+    inviteModalOpener = document.activeElement;
+    const result = document.getElementById('invite-result');
+    result.hidden = true;
+    result.textContent = '';
+    document.getElementById('form-invite-colleague').reset();
+    inviteModal.style.display = 'flex';
+    loadWorkspaceAccess();
+    (accessOnly ? document.getElementById('collaborators-title') : document.getElementById('invite-email'))?.focus();
+  }
+  document.getElementById('btn-invite-colleague')?.addEventListener('click', () => openInviteModal());
+  document.getElementById('btn-manage-access')?.addEventListener('click', () => openInviteModal(true));
+  const accountMenuToggle = document.getElementById('btn-toggle-account-menu');
+  const accountMenu = document.getElementById('sidebar-account-actions');
+  const closeAccountMenu = (restoreFocus = false) => {
+    if (!accountMenu || !accountMenuToggle) return;
+    accountMenu.hidden = true;
+    accountMenuToggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) accountMenuToggle.focus();
+  };
+  accountMenuToggle?.addEventListener('click', () => {
+    const expanded = accountMenuToggle.getAttribute('aria-expanded') === 'true';
+    accountMenuToggle.setAttribute('aria-expanded', String(!expanded));
+    if (accountMenu) accountMenu.hidden = expanded;
+  });
+  accountMenu?.addEventListener('click', event => {
+    if (event.target instanceof Element && event.target.closest('.sidebar-account-action')) {
+      closeAccountMenu();
+    }
+  });
+  document.addEventListener('click', event => {
+    if (event.target instanceof Node && !document.querySelector('.sidebar-account')?.contains(event.target)) {
+      closeAccountMenu();
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && accountMenuToggle?.getAttribute('aria-expanded') === 'true') {
+      closeAccountMenu(true);
+    }
+  });
+  document.getElementById('btn-refresh-workspace-access')?.addEventListener('click', loadWorkspaceAccess);
+  document.getElementById('btn-close-invite-modal')?.addEventListener('click', closeInviteModal);
+  document.getElementById('btn-cancel-invite')?.addEventListener('click', closeInviteModal);
+  document.getElementById('form-invite-colleague')?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const result = document.getElementById('invite-result');
+    const submit = document.getElementById('btn-submit-invite');
+    submit.disabled = true;
+    try {
+      const invitation = await apiRequest('/api/invitations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          organizationId: activeOrganization.id,
+          email: document.getElementById('invite-email').value,
+          role: document.getElementById('invite-role').value
+        })
+      });
+      result.replaceChildren();
+      const message = document.createElement('p');
+      message.textContent = `Share this one-time invitation link with ${invitation.email}. It expires ${new Date(invitation.expiresAt).toLocaleString()}.`;
+      const link = document.createElement('a');
+      link.href = invitation.invitationUrl;
+      link.textContent = invitation.invitationUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      const copyButton = document.createElement('button');
+      copyButton.type = 'button';
+      copyButton.className = 'btn btn-secondary btn-sm';
+      copyButton.textContent = 'Copy invitation link';
+      copyButton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(invitation.invitationUrl);
+          copyButton.textContent = 'Link copied';
+        } catch {
+          message.textContent = `Copy the invitation link below and share it with ${invitation.email}. It expires ${new Date(invitation.expiresAt).toLocaleString()}.`;
+        }
+      });
+      result.append(message, link, copyButton);
+      result.hidden = false;
+      await loadWorkspaceAccess();
+    } catch (error) {
+      result.textContent = error.message;
+      result.hidden = false;
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
   // Hash Navigation Listener
   window.addEventListener('hashchange', () => {
     const h = (window.location.hash || '').replace('#', '').toLowerCase();
-    if (h === 'roles') switchHubView('roles', false);
-    else if (h === 'policy') switchHubView('policy', false);
-    else if (h === 'map' || h === 'context' || h === 'harms') switchHubView('map', false);
-    else if (h === 'measure' || h === 'tevv' || h === 'metrics') switchHubView('measure', false);
-    else if (h === 'manage' || h === 'incidents' || h === 'playbooks' || h === 'responses' || h === 'override') switchHubView('manage', false);
-    else if (h === 'assessment' || h === 'aiia') switchHubView('assessment', false);
-    else if (h === 'inventory') switchHubView('inventory', false);
+    if (h !== 'inventory') switchHubView('inventory', true);
   });
 
   // Initial Load & State Restoration
-  loadInventoryState();
-
-  const savedData = localStorage.getItem('aiia_assessment_data');
-  if (savedData) {
-    try {
-      populateForm(JSON.parse(savedData));
-    } catch (e) {
-      populateForm(FINASSIST_PRESET);
-    }
-  } else {
-    populateForm(FINASSIST_PRESET);
-  }
+  initializeWorkspace();
 
   // Initial View Determination (URL Hash > Default to Inventory)
-  const initialHash = (window.location.hash || '').replace('#', '').toLowerCase();
-  if (initialHash === 'roles') {
-    switchHubView('roles', false);
-  } else if (initialHash === 'policy') {
-    switchHubView('policy', false);
-  } else if (initialHash === 'map' || initialHash === 'context' || initialHash === 'harms') {
-    switchHubView('map', false);
-  } else if (initialHash === 'measure' || initialHash === 'tevv' || initialHash === 'metrics') {
-    switchHubView('measure', false);
-  } else if (initialHash === 'manage' || initialHash === 'incidents' || initialHash === 'playbooks' || initialHash === 'responses' || initialHash === 'override') {
-    switchHubView('manage', false);
-  } else if (initialHash === 'assessment' || initialHash === 'aiia') {
-    switchHubView('assessment', false);
-  } else {
-    switchHubView('inventory', false);
-  }
+  switchHubView('inventory', window.location.hash !== '#inventory');
 }
 
 // Ensure execution whether loaded synchronously or after DOMContentLoaded

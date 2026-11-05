@@ -1,0 +1,22 @@
+name = "governance"
+pages_build_output_dir = "tools/ai-impact-assessment"
+compatibility_date = "2026-11-05"
+
+[vars]
+ACCESS_TEAM_DOMAIN = "https://samabrains.cloudflareaccess.com"
+ACCESS_AUD = "331c95c09f9df6180f114bea9e7321881ae3455fd182bb57d1987c3618db4af7"
+
+[env.preview.vars]
+ACCESS_TEAM_DOMAIN = "https://samabrains.cloudflareaccess.com"
+ACCESS_AUD = "ea58927d989bb73094038a3593c24c65eeb4854b9272ddae6dc7888d8b93cd6f"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "govern-hub-preview"
+database_id = "f3f56ba2-b95a-45de-9bda-88d867654cec"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "govern-hub-production"
+database_id = "5f39e6ad-788d-4819-985d-1daa62bde2d7"
+preview_database_id = "f3f56ba2-b95a-45de-9bda-88d867654cec"

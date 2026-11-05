@@ -1,101 +1,148 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NIST AI RMF Impact Assessment Studio | SamaBrains</title>
+  <title>AI Governance Suite | SamaBrains</title>
   <meta name="description" content="Operational AI Impact Assessment tool dedicated exclusively to operationalizing the NIST AI Risk Management Framework 1.0 (NIST AI RMF — GOVERN, MAP, MEASURE, MANAGE). Interactive form, risk calculator, and executive PDF exporter.">
+  <meta name="theme-color" content="#dd6b2d">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261019-3">
+  <link rel="stylesheet" href="styles.css?v=20261105-12">
 </head>
 <body>
-  <div class="hub-shell" id="hub-shell">
+  <section class="workspace-gate" id="workspace-gate" aria-live="polite">
+    <div class="workspace-gate-card">
+      <img src="/samabrains-mark.png?v=1" alt="SamaBrains" width="48" height="48">
+      <p class="workspace-gate-eyebrow">SAMABRAINS AI GOVERNANCE</p>
+      <h1 id="workspace-gate-title">Your company AI inventory</h1>
+      <p class="workspace-gate-copy" id="workspace-gate-copy">Checking your secure sign-in...</p>
+      <div class="workspace-gate-alert" id="workspace-gate-alert" role="alert" hidden></div>
+      <div id="workspace-gate-content"></div>
+    </div>
+  </section>
+
+  <div class="hub-shell" id="hub-shell" inert>
     <!-- LEFT SIDEBAR: 7 MODULES NAVIGATION -->
     <aside class="hub-sidebar" id="hub-sidebar">
       <!-- Sidebar Brand Header -->
       <div class="sidebar-brand">
         <div class="brand-badge">
-          <span class="brand-logo">SB</span>
+          <img class="brand-logo" src="/samabrains-mark.png?v=1" alt="SamaBrains" width="40" height="40">
           <div class="brand-info">
-            <span class="brand-title">SamaBrains <span class="gradient-text">AI Hub</span></span>
-            <span class="brand-sub">NIST AI RMF 1.0 Suite</span>
+            <span class="brand-title">SamaBrains</span>
+            <span class="brand-sub">AI Governance Suite</span>
           </div>
         </div>
       </div>
 
+      <div class="workspace-controls">
+        <label for="workspace-selector">Company workspace</label>
+        <select id="workspace-selector" aria-label="Select company workspace"></select>
+      </div>
+
       <!-- Section Label -->
-      <div class="sidebar-section-label">AI RMF 1.0 Functions</div>
+      <div class="sidebar-section-label">Function</div>
 
       <!-- Modules Navigation (Vertical Tabs) -->
       <nav class="sidebar-modules-nav" role="tablist" id="sidebar-modules-nav">
-        <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true" onclick="window.switchHubView && window.switchHubView('inventory')">
-          <span class="hub-nav-icon">📋</span>
+        <button type="button" class="hub-nav-btn active" id="tab-nav-inventory" role="tab" aria-selected="true" title="AI System Inventory" onclick="window.switchHubView && window.switchHubView('inventory')">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="17" rx="2"></rect><path d="M8 4.5h8M8 10h8M8 14h8M8 18h5"></path><path d="M9 2h6"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">AI System Inventory</span>
-            <span class="hub-nav-tag">GOVERN 1.6</span>
           </div>
         </button>
 
-        <button type="button" class="hub-nav-btn" id="tab-nav-roles" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('roles')">
-          <span class="hub-nav-icon">👥</span>
+        <button type="button" class="hub-nav-btn hub-nav-coming-soon" id="tab-nav-roles" role="tab" aria-selected="false" aria-disabled="true" disabled title="Roles &amp; RACI — coming soon">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"></circle><path d="M3 20v-1.5a6 6 0 0 1 12 0V20zM16 5.2a3.2 3.2 0 0 1 0 6.1M18 14a5 5 0 0 1 3 4.5V20"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">Roles &amp; RACI</span>
-            <span class="hub-nav-tag">GOVERN 2</span>
+            <span class="hub-nav-tag">GOVERN 2–4 · 7 Views</span>
           </div>
+          <span class="hub-nav-status">Coming soon</span>
         </button>
 
-        <button type="button" class="hub-nav-btn" id="tab-nav-policy" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('policy')">
-          <span class="hub-nav-icon">📜</span>
+        <button type="button" class="hub-nav-btn hub-nav-coming-soon" id="tab-nav-policy" role="tab" aria-selected="false" aria-disabled="true" disabled title="Policy &amp; Gates — coming soon">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h9l4 4V20a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2z"></path><path d="M14 3.5V8h5M8 12h8M8 16h8"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">Policy &amp; Gates</span>
-            <span class="hub-nav-tag">GOVERN 1 &amp; 6</span>
+            <span class="hub-nav-tag">GOVERN 1 &amp; 5–6 · 9 Views</span>
           </div>
+          <span class="hub-nav-status">Coming soon</span>
         </button>
 
-        <button type="button" class="hub-nav-btn" id="tab-nav-map" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('map')">
-          <span class="hub-nav-icon">🗺️</span>
+        <button type="button" class="hub-nav-btn hub-nav-coming-soon" id="tab-nav-map" role="tab" aria-selected="false" aria-disabled="true" disabled title="Context &amp; Harms — coming soon">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">Context &amp; Harms</span>
-            <span class="hub-nav-tag">MAP 1–5</span>
+            <span class="hub-nav-tag">MAP 1–5 · 10 Views</span>
           </div>
+          <span class="hub-nav-status">Coming soon</span>
         </button>
 
-        <button type="button" class="hub-nav-btn" id="tab-nav-measure" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('measure')">
-          <span class="hub-nav-icon">📊</span>
+        <button type="button" class="hub-nav-btn hub-nav-coming-soon" id="tab-nav-measure" role="tab" aria-selected="false" aria-disabled="true" disabled title="TEVV &amp; Metrics — coming soon">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h17"></path><path d="m7 15 4-4 3 2 6-7"></path><path d="M16 6h4v4"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">TEVV &amp; Metrics</span>
-            <span class="hub-nav-tag">MEASURE 1–4</span>
+            <span class="hub-nav-tag">MEASURE 1–4 · 16 Views</span>
           </div>
+          <span class="hub-nav-status">Coming soon</span>
         </button>
 
-        <button type="button" class="hub-nav-btn" id="tab-nav-manage" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('manage')">
-          <span class="hub-nav-icon">🛡️</span>
+        <button type="button" class="hub-nav-btn hub-nav-coming-soon" id="tab-nav-manage" role="tab" aria-selected="false" aria-disabled="true" disabled title="Risk &amp; Incidents — coming soon">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"></path><path d="m9 12 2 2 4-4"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">Risk &amp; Incidents</span>
-            <span class="hub-nav-tag">MANAGE 1–4</span>
+            <span class="hub-nav-tag">MANAGE 1–4 · 13 Views</span>
           </div>
+          <span class="hub-nav-status">Coming soon</span>
         </button>
 
-        <button type="button" class="hub-nav-btn" id="tab-nav-assessment" role="tab" aria-selected="false" onclick="window.switchHubView && window.switchHubView('assessment')">
-          <span class="hub-nav-icon">⚖️</span>
+        <button type="button" class="hub-nav-btn hub-nav-coming-soon" id="tab-nav-assessment" role="tab" aria-selected="false" aria-disabled="true" disabled title="Impact Assessment — coming soon">
+          <span class="hub-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v17M5 7h14M7 7l-4 7h8zM17 7l-4 7h8zM7 20h10"></path></svg></span>
           <div class="hub-nav-text">
             <span class="hub-nav-title">Impact Assessment</span>
-            <span class="hub-nav-tag">AIIA Studio</span>
+            <span class="hub-nav-tag">AIIA Studio · 10 Parts</span>
           </div>
+          <span class="hub-nav-status">Coming soon</span>
         </button>
       </nav>
 
       <!-- Sidebar Footer -->
       <div class="sidebar-footer">
+        <section class="sidebar-account">
+          <button type="button" class="sidebar-account-toggle" id="btn-toggle-account-menu" aria-expanded="false" aria-controls="sidebar-account-actions">
+            <svg class="sidebar-account-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+            <span class="sidebar-account-toggle-label">Account</span>
+            <svg class="sidebar-account-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"></path></svg>
+          </button>
+          <div class="sidebar-account-actions" id="sidebar-account-actions" role="group" aria-label="Account actions" hidden>
+            <button type="button" class="btn btn-secondary btn-sm sidebar-account-action" id="btn-invite-colleague" aria-haspopup="dialog" aria-controls="invite-modal" title="Invite colleague">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="10" cy="7" r="4"></circle><path d="M19 8v6M22 11h-6"></path></svg>
+              <span class="sidebar-account-action-label">Invite colleague</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm sidebar-account-action" id="btn-manage-access" aria-haspopup="dialog" aria-controls="invite-modal" title="Manage access">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"></circle><path d="M3 20v-1a6 6 0 0 1 12 0v1M17 11l2 2 4-4"></path></svg>
+              <span class="sidebar-account-action-label">Manage access</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm sidebar-account-action" id="btn-switch-workspace" title="Switch or create a workspace">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 4v5M12 14h6M15 11v6"></path></svg>
+              <span class="sidebar-account-action-label">Switch / create</span>
+            </button>
+            <a class="btn btn-secondary btn-sm hub-signout sidebar-account-action" href="/cdn-cgi/access/logout" aria-label="Sign out of the hub" title="Sign out">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3"></path><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"></path></svg>
+              <span class="sidebar-account-action-label">Sign out</span>
+            </a>
+          </div>
+        </section>
         <div class="sidebar-status-card">
           <div class="sidebar-status-indicator">
             <span class="pulse-dot"></span>
-            <span style="font-size: 0.78rem; font-weight: 700;">Governance Active</span>
-          </div>
-          <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">
-            NIST AI 100-1 · 2026 Q4
+            <span style="font-size: 0.78rem; font-weight: 700;">Inventory available</span>
           </div>
         </div>
       </div>
@@ -109,15 +156,15 @@
       <!-- Top Header Bar with Mobile Toggle, Breadcrumbs, and Action Buttons -->
       <header class="app-header">
         <div class="header-left">
-          <button type="button" class="sidebar-mobile-toggle" id="sidebar-mobile-toggle" aria-label="Toggle Navigation Menu">
+          <button type="button" class="sidebar-mobile-toggle" id="sidebar-mobile-toggle" aria-label="Open navigation menu" aria-controls="hub-sidebar" aria-expanded="false" title="Open navigation menu">
             <span></span>
             <span></span>
             <span></span>
           </button>
           <div class="header-breadcrumbs">
-            <span class="breadcrumb-root">SamaBrains Hub</span>
+            <span class="breadcrumb-root">SamaBrains</span>
             <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-current" id="header-breadcrumb-current">AI System Inventory (GOVERN 1.6)</span>
+            <span class="breadcrumb-current" id="header-breadcrumb-current">AI System Inventory</span>
           </div>
         </div>
 
@@ -129,14 +176,14 @@
           <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           Register System
         </button>
-        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-inventory-csv" title="Export Inventory CSV matching docs/01-govern/AI-System-Inventory.csv">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-export-inventory-csv" title="Export all records in the active company workspace as CSV">
           Export CSV
         </button>
-        <button type="button" class="btn btn-secondary btn-sm" id="btn-import-inventory-csv-trigger" title="Import Inventory CSV">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-import-inventory-csv-trigger" title="Preview and validate a CSV before importing it into this workspace">
           Import CSV
         </button>
-        <input type="file" id="inventory-csv-input" accept=".csv" style="display: none;">
-        <button type="button" class="btn btn-secondary btn-sm" id="btn-print-inventory-pdf" title="Export executive printable inventory report">
+        <input type="file" id="inventory-csv-input" accept=".csv,text/csv" aria-label="Choose an AI system inventory CSV file" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-print-inventory-pdf" title="Open the print dialog to print or save the current workspace inventory as PDF">
           Registry PDF
         </button>
       </div>
@@ -230,29 +277,94 @@
           Export PDF
         </button>
       </div>
-
-      <button type="button" class="theme-toggle" id="theme-toggle-btn" title="Toggle Light / Dark mode" aria-label="Toggle theme">
-        <span class="theme-icon sun">☀️</span>
-        <span class="theme-icon moon">🌙</span>
-      </button>
   </header>
+
+  <div class="modal-backdrop" id="invite-modal" style="display: none;">
+    <div class="modal-content workspace-modal-content" role="dialog" aria-modal="true" aria-labelledby="invite-modal-title">
+      <div class="modal-header">
+        <h3 id="invite-modal-title">Invite a colleague</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-invite-modal" aria-label="Close">✕</button>
+      </div>
+      <form id="form-invite-colleague" aria-describedby="invite-form-help">
+        <p id="invite-form-help" class="invite-form-help">Create a time-limited link for a colleague to join this company workspace.</p>
+        <div class="form-group">
+          <label for="invite-email">Work email</label>
+          <input type="email" id="invite-email" required maxlength="254" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="invite-role">Access level</label>
+          <select id="invite-role">
+            <option value="editor">Editor — manage inventory records</option>
+            <option value="viewer">Viewer — view and export records</option>
+          </select>
+        </div>
+        <div class="workspace-gate-alert" id="invite-result" role="status" hidden></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-invite">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-invite">Create invitation link</button>
+        </div>
+      </form>
+      <section class="collaborators-panel" aria-labelledby="collaborators-title">
+        <div class="collaborators-heading">
+          <div>
+            <h4 id="collaborators-title" tabindex="-1">Workspace access</h4>
+            <p>Current members and invitation status</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-refresh-workspace-access">Refresh</button>
+        </div>
+        <p id="workspace-members-status" class="collaborators-status" role="status" aria-live="polite"></p>
+        <ul id="workspace-member-list" class="collaborator-list" aria-label="Workspace members"></ul>
+        <h5>Invitations</h5>
+        <ul id="workspace-invitation-list" class="collaborator-list" aria-label="Workspace invitations"></ul>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="inventory-import-modal" style="display: none;">
+    <section class="modal-content inventory-import-content" role="dialog" aria-modal="true" aria-labelledby="inventory-import-title">
+      <header class="modal-header">
+        <div>
+          <h2 id="inventory-import-title">Review CSV import</h2>
+          <p id="inventory-import-filename" class="text-muted"></p>
+        </div>
+        <button type="button" class="btn-modal-close" id="btn-close-inventory-import" aria-label="Close CSV import preview">&times;</button>
+      </header>
+      <div class="inventory-import-body">
+        <div id="inventory-import-summary" role="status" aria-live="polite"></div>
+        <div id="inventory-import-errors" class="inventory-import-errors" role="alert" hidden></div>
+        <div class="table-responsive inventory-import-preview" tabindex="0" role="region" aria-label="CSV rows preview">
+          <table class="data-table">
+            <caption class="sr-only">Preview of the first rows in the selected CSV file</caption>
+            <thead>
+              <tr><th>CSV row</th><th>System ID</th><th>System name</th><th>Department</th><th>Risk</th><th>Action</th></tr>
+            </thead>
+            <tbody id="inventory-import-preview-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <footer class="modal-footer inventory-import-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-inventory-import">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-confirm-inventory-import" disabled>Import valid rows</button>
+      </footer>
+    </section>
+  </div>
 
   <!-- VIEWS CONTAINER -->
   <main class="hub-views-container">
 
   <!-- VIEW 1: AI SYSTEM INVENTORY (GOVERN 1.6) -->
   <div id="view-inventory" class="portal-view active">
-    <div class="inventory-container">
+    <div class="inventory-container inventory-registry">
       <!-- Hero / Header -->
       <div class="inventory-hero">
         <div>
-          <div class="section-tag">NIST AI RMF GOVERN 1.6</div>
-          <h1 class="inventory-title">AI System Inventory &amp; Registry</h1>
-          <p class="inventory-desc">
-            Centralized organizational registry tracking model types, risk tiers, third-party components, hosting models, data classifications, TEVV verification, and review cadences.
-          </p>
+          <h1 class="inventory-title">AI System Inventory</h1>
         </div>
         <div class="inventory-hero-actions">
+          <button type="button" class="btn btn-secondary" id="btn-about-inventory" aria-haspopup="dialog" aria-controls="modal-about-inventory">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+            About this tool
+          </button>
           <button type="button" class="btn btn-primary glow-btn" id="btn-hero-register-modal">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             + Register New AI System
@@ -265,63 +377,78 @@
         <div class="kpi-card">
           <div class="kpi-header">
             <span class="kpi-label">Total AI Systems</span>
-            <span class="kpi-icon">📊</span>
+            <span class="kpi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 8h8M8 12h8M8 16h4"></path></svg></span>
           </div>
-          <div class="kpi-value" id="kpi-total-systems">6</div>
+          <div class="kpi-value" id="kpi-total-systems">0</div>
           <div class="kpi-sub">Registered across all departments</div>
         </div>
 
         <div class="kpi-card crit-kpi">
           <div class="kpi-header">
-            <span class="kpi-label">Critical &amp; High Risk</span>
-            <span class="kpi-icon">🛡️</span>
+            <span class="kpi-label">High &amp; Critical Risk</span>
+            <span class="kpi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"></path><path d="M12 8v5M12 16h.01"></path></svg></span>
           </div>
-          <div class="kpi-value" id="kpi-high-risk-systems">4</div>
-          <div class="kpi-sub">Mandatory AIIA &amp; quarterly review</div>
+          <div class="kpi-value" id="kpi-high-risk-systems">0</div>
+          <div class="kpi-sub">Prioritize assessment and review under your policy</div>
         </div>
 
         <div class="kpi-card prod-kpi">
           <div class="kpi-header">
             <span class="kpi-label">In Production</span>
-            <span class="kpi-icon">🚀</span>
+            <span class="kpi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 15h2l2-5 3 7 2-4h2"></path></svg></span>
           </div>
-          <div class="kpi-value" id="kpi-prod-systems">4</div>
+          <div class="kpi-value" id="kpi-prod-systems">0</div>
           <div class="kpi-sub">Active live deployment state</div>
         </div>
 
         <div class="kpi-card review-kpi">
           <div class="kpi-header">
-            <span class="kpi-label">Assurance Signed Off</span>
-            <span class="kpi-icon">✅</span>
+            <span class="kpi-label">Impact Assessments Signed Off</span>
+            <span class="kpi-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span>
           </div>
-          <div class="kpi-value" id="kpi-assessed-systems">4 / 6</div>
-          <div class="kpi-sub">AIIA approval compliance rate</div>
+          <div class="kpi-value" id="kpi-assessed-systems">0 / 0</div>
+          <div class="kpi-sub">Systems with a recorded assessment sign-off</div>
         </div>
       </div>
+
+      <section class="inventory-attention" aria-labelledby="inventory-attention-title">
+        <div>
+          <h2 id="inventory-attention-title">Review &amp; data completeness</h2>
+          <p>These reminders surface missing register details and scheduled reviews; they are not compliance determinations.</p>
+        </div>
+        <div id="inventory-attention-summary" class="inventory-attention-summary" role="status" aria-live="polite"></div>
+      </section>
 
       <!-- Filter & Search Toolbar -->
       <div class="inventory-toolbar card">
         <div class="search-box">
           <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="inventory-search" placeholder="Search systems by ID, name, department, task type, or owner...">
+          <input type="search" id="inventory-search" aria-label="Search AI systems" placeholder="Search systems by ID, name, department, task type, or owner...">
         </div>
         <div class="filter-controls">
-          <select id="filter-dept" class="filter-select">
+          <select id="filter-dept" class="filter-select" aria-label="Filter by department">
             <option value="ALL">All Departments</option>
           </select>
-          <select id="filter-risk" class="filter-select">
+          <select id="filter-risk" class="filter-select" aria-label="Filter by risk tier">
             <option value="ALL">All Risk Tiers</option>
-            <option value="Critical">Critical (🔴)</option>
-            <option value="High">High (🟠)</option>
-            <option value="Medium">Medium (🟡)</option>
-            <option value="Low">Low (🟢)</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
           </select>
-          <select id="filter-status" class="filter-select">
+          <select id="filter-status" class="filter-select" aria-label="Filter by lifecycle">
             <option value="ALL">All Lifecycles</option>
             <option value="Production">Production</option>
             <option value="Testing / TEVV">Testing / TEVV</option>
             <option value="Planning / Pre-Development">Planning / Pre-Dev</option>
             <option value="Decommissioned">Decommissioned</option>
+          </select>
+          <select id="filter-attention" class="filter-select" aria-label="Filter by review and completeness">
+            <option value="ALL">All review statuses</option>
+            <option value="OVERDUE">Overdue review</option>
+            <option value="DUE_SOON">Due within 30 days</option>
+            <option value="NO_REVIEW">No review date</option>
+            <option value="MISSING_DETAILS">Missing key details</option>
           </select>
           <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-filters">Reset</button>
         </div>
@@ -331,19 +458,20 @@
       <div class="card table-card">
         <div class="card-header-flex">
           <div>
-            <h3>Enterprise AI System Inventory Registry</h3>
-            <p class="text-muted" id="inventory-count-text">Showing 6 systems</p>
+            <h3>AI systems in this workspace</h3>
+            <p class="text-muted" id="inventory-count-text" role="status" aria-live="polite">Showing 0 systems</p>
           </div>
           <div class="table-actions">
             <button type="button" class="btn btn-secondary btn-sm" id="btn-sync-csv-repo">
               <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Export AI-System-Inventory.csv
+              Download workspace CSV
             </button>
           </div>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive" tabindex="0" role="region" aria-label="AI systems inventory table; scroll horizontally to see all columns">
           <table class="inventory-table" id="table-inventory">
+            <caption class="sr-only">AI systems registered in the selected company workspace</caption>
             <thead>
               <tr>
                 <th style="width: 10%;">System ID</th>
@@ -429,25 +557,25 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-raci" onclick="window.switchRolesSubview && window.switchRolesSubview('raci')">
-          <span class="sub-tab-icon">📋</span> RACI Matrix (GOVERN 2.1)
+          <span class="sub-tab-icon">📋</span> RACI Matrix (GOVERN 2.1) <span class="tooltip-icon" data-tooltip-id="raci" tabindex="0" role="button" aria-label="Show tooltip for RACI Matrix" style="background: #3b82f6; color: white; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; margin-left: 6px; font-size: 12px; cursor: pointer;">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-catalog" onclick="window.switchRolesSubview && window.switchRolesSubview('catalog')">
-          <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers (GOVERN 2.1)
+          <span class="sub-tab-icon">🏛️</span> Role Directory &amp; Veto Powers (GOVERN 2.1) <span class="tooltip-icon" data-tooltip-id="catalog" tabindex="0" role="button" aria-label="Show tooltip for Role Directory">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-haii" onclick="window.switchRolesSubview && window.switchRolesSubview('haii')">
-          <span class="sub-tab-icon">🕹️</span> Human-AI Oversight (GOVERN 3.2)
+          <span class="sub-tab-icon">🕹️</span> Human-AI Oversight (GOVERN 3.2) <span class="tooltip-icon" data-tooltip-id="haii" tabindex="0" role="button" aria-label="Show tooltip for Human-AI Oversight">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-training" onclick="window.switchRolesSubview && window.switchRolesSubview('training')">
-          <span class="sub-tab-icon">🎓</span> Training Tracker (GOVERN 2.2)
+          <span class="sub-tab-icon">🎓</span> Training Tracker (GOVERN 2.2) <span class="tooltip-icon" data-tooltip-id="training" tabindex="0" role="button" aria-label="Show tooltip for Training Tracker">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-crossteam" onclick="window.switchRolesSubview && window.switchRolesSubview('crossteam')">
-          <span class="sub-tab-icon">🤝</span> Cross-Team Collaboration (GOVERN 2.3)
+          <span class="sub-tab-icon">🤝</span> Cross-Team Collaboration (GOVERN 2.3) <span class="tooltip-icon" data-tooltip-id="crossteam" tabindex="0" role="button" aria-label="Show tooltip for Cross-Team Collaboration">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-leadership" onclick="window.switchRolesSubview && window.switchRolesSubview('leadership')">
-          <span class="sub-tab-icon">🏆</span> Leadership Decisions (GOVERN 3.1)
+          <span class="sub-tab-icon">🏆</span> Leadership Decisions (GOVERN 3.1) <span class="tooltip-icon" data-tooltip-id="leadership" tabindex="0" role="button" aria-label="Show tooltip for Leadership Decisions">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-culture" onclick="window.switchRolesSubview && window.switchRolesSubview('culture')">
-          <span class="sub-tab-icon">💡</span> Responsible AI Culture (GOVERN 4.1)
+          <span class="sub-tab-icon">💡</span> Responsible AI Culture (GOVERN 4.1) <span class="tooltip-icon" data-tooltip-id="culture" tabindex="0" role="button" aria-label="Show tooltip for Responsible AI Culture">?</span>
         </button>
       </div>
 
@@ -731,31 +859,31 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-gates" onclick="window.switchPolicySubview && window.switchPolicySubview('gates')">
-          <span class="sub-tab-icon">🚪</span> Deployment Gates (GOVERN 1.3)
+          <span class="sub-tab-icon">🚪</span> Deployment Gates (GOVERN 1.3) <span class="tooltip-icon" data-tooltip-id="gates" tabindex="0" role="button" aria-label="Show tooltip for Deployment Gates">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-principles" onclick="window.switchPolicySubview && window.switchPolicySubview('principles')">
-          <span class="sub-tab-icon">⚖️</span> Trustworthy Principles (GOVERN 1.2)
+          <span class="sub-tab-icon">⚖️</span> Trustworthy Principles (GOVERN 1.2) <span class="tooltip-icon" data-tooltip-id="principles" tabindex="0" role="button" aria-label="Show tooltip for Trustworthy Principles">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-artifacts" onclick="window.switchPolicySubview && window.switchPolicySubview('artifacts')">
-          <span class="sub-tab-icon">🗂️</span> Lifecycle Artifacts (GOVERN 1.4)
+          <span class="sub-tab-icon">🗂️</span> Lifecycle Artifacts (GOVERN 1.4) <span class="tooltip-icon" data-tooltip-id="artifacts" tabindex="0" role="button" aria-label="Show tooltip for Lifecycle Artifacts">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-thirdparty" onclick="window.switchPolicySubview && window.switchPolicySubview('thirdparty')">
-          <span class="sub-tab-icon">🌐</span> Third-Party Screener (GOVERN 5.1 &amp; 6)
+          <span class="sub-tab-icon">🌐</span> Third-Party Screener (GOVERN 5.1 &amp; 6) <span class="tooltip-icon" data-tooltip-id="thirdparty" tabindex="0" role="button" aria-label="Show tooltip for Third-Party Screener">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-exceptions" onclick="window.switchPolicySubview && window.switchPolicySubview('exceptions')">
-          <span class="sub-tab-icon">📋</span> Exceptions &amp; Waivers (GOVERN 1.1)
+          <span class="sub-tab-icon">📋</span> Exceptions &amp; Waivers (GOVERN 1.1) <span class="tooltip-icon" data-tooltip-id="exceptions" tabindex="0" role="button" aria-label="Show tooltip for Exceptions & Waivers">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-risktolerance" onclick="window.switchPolicySubview && window.switchPolicySubview('risktolerance')">
-          <span class="sub-tab-icon">🎚️</span> Risk Tolerance Framework (GOVERN 1.5)
+          <span class="sub-tab-icon">🎚️</span> Risk Tolerance Framework (GOVERN 1.5) <span class="tooltip-icon" data-tooltip-id="risktolerance" tabindex="0" role="button" aria-label="Show tooltip for Risk Tolerance Framework">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-tpmonitoring" onclick="window.switchPolicySubview && window.switchPolicySubview('tpmonitoring')">
-          <span class="sub-tab-icon">🔭</span> Vendor Risk Monitoring (GOVERN 5.2)
+          <span class="sub-tab-icon">🔭</span> Vendor Risk Monitoring (GOVERN 5.2) <span class="tooltip-icon" data-tooltip-id="tpmonitoring" tabindex="0" role="button" aria-label="Show tooltip for Vendor Risk Monitoring">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-govreview" onclick="window.switchPolicySubview && window.switchPolicySubview('govreview')">
-          <span class="sub-tab-icon">🔄</span> Assessment Review (GOVERN 6.1)
+          <span class="sub-tab-icon">🔄</span> Assessment Review (GOVERN 6.1) <span class="tooltip-icon" data-tooltip-id="govreview" tabindex="0" role="button" aria-label="Show tooltip for Assessment Review">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-govimprove" onclick="window.switchPolicySubview && window.switchPolicySubview('govimprove')">
-          <span class="sub-tab-icon">📈</span> Process Improvement (GOVERN 6.2)
+          <span class="sub-tab-icon">📈</span> Process Improvement (GOVERN 6.2) <span class="tooltip-icon" data-tooltip-id="govimprove" tabindex="0" role="button" aria-label="Show tooltip for Process Improvement">?</span>
         </button>
       </div>
 
@@ -1016,34 +1144,34 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-map-harms" onclick="window.switchMapSubview && window.switchMapSubview('harms')">
-          <span class="sub-tab-icon">⚡</span> Harm Scenarios (MAP 3.2)
+          <span class="sub-tab-icon">⚡</span> Harm Scenarios (MAP 3.2) <span class="tooltip-icon" data-tooltip-id="harms" tabindex="0" role="button" aria-label="Show tooltip for Harm Scenarios">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-matrix" onclick="window.switchMapSubview && window.switchMapSubview('matrix')">
-          <span class="sub-tab-icon">⚖️</span> Risk-Benefit Matrix (MAP 3.1)
+          <span class="sub-tab-icon">⚖️</span> Risk-Benefit Matrix (MAP 3.1) <span class="tooltip-icon" data-tooltip-id="matrix" tabindex="0" role="button" aria-label="Show tooltip for Risk-Benefit Matrix">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-stakeholders" onclick="window.switchMapSubview && window.switchMapSubview('stakeholders')">
-          <span class="sub-tab-icon">👥</span> Stakeholders &amp; Vulnerability (MAP 5.1–5.2)
+          <span class="sub-tab-icon">👥</span> Stakeholders &amp; Vulnerability (MAP 5.1–5.2) <span class="tooltip-icon" data-tooltip-id="stakeholders" tabindex="0" role="button" aria-label="Show tooltip for Stakeholders & Vulnerability">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-conops" onclick="window.switchMapSubview && window.switchMapSubview('conops')">
-          <span class="sub-tab-icon">🎯</span> CONOPS &amp; Oversight (MAP 1.1 &amp; 3.5)
+          <span class="sub-tab-icon">🎯</span> CONOPS &amp; Oversight (MAP 1.1 &amp; 3.5) <span class="tooltip-icon" data-tooltip-id="conops" tabindex="0" role="button" aria-label="Show tooltip for CONOPS & Oversight">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-dependencies" onclick="window.switchMapSubview && window.switchMapSubview('dependencies')">
-          <span class="sub-tab-icon">🌐</span> Third-Party Dependencies (MAP 4.1)
+          <span class="sub-tab-icon">🌐</span> Third-Party Dependencies (MAP 4.1) <span class="tooltip-icon" data-tooltip-id="dependencies" tabindex="0" role="button" aria-label="Show tooltip for Third-Party Dependencies">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-taskclass" onclick="window.switchMapSubview && window.switchMapSubview('taskclass')">
-          <span class="sub-tab-icon">🏷️</span> AI Task Classification (MAP 1.3)
+          <span class="sub-tab-icon">🏷️</span> AI Task Classification (MAP 1.3) <span class="tooltip-icon" data-tooltip-id="taskclass" tabindex="0" role="button" aria-label="Show tooltip for AI Task Classification">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-science" onclick="window.switchMapSubview && window.switchMapSubview('science')">
-          <span class="sub-tab-icon">🔬</span> Scientific Risk Principles (MAP 2.1)
+          <span class="sub-tab-icon">🔬</span> Scientific Risk Principles (MAP 2.1) <span class="tooltip-icon" data-tooltip-id="science" tabindex="0" role="button" aria-label="Show tooltip for Scientific Risk Principles">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-lineage" onclick="window.switchMapSubview && window.switchMapSubview('lineage')">
-          <span class="sub-tab-icon">🗄️</span> Data Lineage (MAP 2.3)
+          <span class="sub-tab-icon">🗄️</span> Data Lineage (MAP 2.3) <span class="tooltip-icon" data-tooltip-id="lineage" tabindex="0" role="button" aria-label="Show tooltip for Data Lineage">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-expertreview" onclick="window.switchMapSubview && window.switchMapSubview('expertreview')">
-          <span class="sub-tab-icon">🧑‍💼</span> Expert Review (MAP 4.2)
+          <span class="sub-tab-icon">🧑‍💼</span> Expert Review (MAP 4.2) <span class="tooltip-icon" data-tooltip-id="expertreview" tabindex="0" role="button" aria-label="Show tooltip for Expert Review">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-map-transparency" onclick="window.switchMapSubview && window.switchMapSubview('transparency')">
-          <span class="sub-tab-icon">📢</span> External Transparency (MAP 5.3)
+          <span class="sub-tab-icon">📢</span> External Transparency (MAP 5.3) <span class="tooltip-icon" data-tooltip-id="transparency" tabindex="0" role="button" aria-label="Show tooltip for External Transparency">?</span>
         </button>
       </div>
 
@@ -1384,52 +1512,52 @@
       <!-- Module Sub-Tabs Switcher -->
       <div class="sub-tab-bar" style="flex-wrap: wrap;">
         <button type="button" class="sub-tab-btn active" id="btn-sub-measure-metrics" onclick="window.switchMeasureSubview && window.switchMeasureSubview('metrics')">
-          <span class="sub-tab-icon">📋</span> Metrics Tracker (MEASURE 1.1)
+          <span class="sub-tab-icon">📋</span> Metrics Tracker (MEASURE 1.1) <span class="tooltip-icon" data-tooltip-id="metrics" tabindex="0" role="button" aria-label="Show tooltip for Metrics Tracker">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-suites" onclick="window.switchMeasureSubview && window.switchMeasureSubview('suites')">
-          <span class="sub-tab-icon">🧪</span> TEVV Test Suites (MEASURE 2.1)
+          <span class="sub-tab-icon">🧪</span> TEVV Test Suites (MEASURE 2.1) <span class="tooltip-icon" data-tooltip-id="suites" tabindex="0" role="button" aria-label="Show tooltip for TEVV Test Suites">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-bias" onclick="window.switchMeasureSubview && window.switchMeasureSubview('bias')">
-          <span class="sub-tab-icon">⚖️</span> Bias &amp; Fairness Lab (MEASURE 2.5)
+          <span class="sub-tab-icon">⚖️</span> Bias &amp; Fairness Lab (MEASURE 2.5) <span class="tooltip-icon" data-tooltip-id="bias" tabindex="0" role="button" aria-label="Show tooltip for Bias & Fairness Lab">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-monitoring" onclick="window.switchMeasureSubview && window.switchMeasureSubview('monitoring')">
-          <span class="sub-tab-icon">📡</span> Monitoring &amp; Alerts (MEASURE 3.1)
+          <span class="sub-tab-icon">📡</span> Monitoring &amp; Alerts (MEASURE 3.1) <span class="tooltip-icon" data-tooltip-id="monitoring" tabindex="0" role="button" aria-label="Show tooltip for Monitoring & Alerts">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-calendar" onclick="window.switchMeasureSubview && window.switchMeasureSubview('calendar')">
-          <span class="sub-tab-icon">📅</span> TEVV Lifecycle (MEASURE 4.2)
+          <span class="sub-tab-icon">📅</span> TEVV Lifecycle (MEASURE 4.2) <span class="tooltip-icon" data-tooltip-id="calendar" tabindex="0" role="button" aria-label="Show tooltip for TEVV Lifecycle">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-expertrev" onclick="window.switchMeasureSubview && window.switchMeasureSubview('expertrev')">
-          <span class="sub-tab-icon">👁️</span> Expert Review (MEASURE 1.3)
+          <span class="sub-tab-icon">👁️</span> Expert Review (MEASURE 1.3) <span class="tooltip-icon" data-tooltip-id="expertrev" tabindex="0" role="button" aria-label="Show tooltip for Expert Review">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-arch" onclick="window.switchMeasureSubview && window.switchMeasureSubview('arch')">
-          <span class="sub-tab-icon">🏗️</span> Architecture Docs (MEASURE 2.2)
+          <span class="sub-tab-icon">🏗️</span> Architecture Docs (MEASURE 2.2) <span class="tooltip-icon" data-tooltip-id="arch" tabindex="0" role="button" aria-label="Show tooltip for Architecture Docs">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-trust" onclick="window.switchMeasureSubview && window.switchMeasureSubview('trust')">
-          <span class="sub-tab-icon">🔐</span> Trustworthiness Eval (MEASURE 2.3)
+          <span class="sub-tab-icon">🔐</span> Trustworthiness Eval (MEASURE 2.3) <span class="tooltip-icon" data-tooltip-id="trust" tabindex="0" role="button" aria-label="Show tooltip for Trustworthiness Eval">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-hf" onclick="window.switchMeasureSubview && window.switchMeasureSubview('hf')">
-          <span class="sub-tab-icon">🧑‍💻</span> Human Factors (MEASURE 2.7)
+          <span class="sub-tab-icon">🧑‍💻</span> Human Factors (MEASURE 2.7) <span class="tooltip-icon" data-tooltip-id="hf" tabindex="0" role="button" aria-label="Show tooltip for Human Factors">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-tpeval" onclick="window.switchMeasureSubview && window.switchMeasureSubview('tpeval')">
-          <span class="sub-tab-icon">🔗</span> Third-Party Risk (MEASURE 2.8)
+          <span class="sub-tab-icon">🔗</span> Third-Party Risk (MEASURE 2.8) <span class="tooltip-icon" data-tooltip-id="tpeval" tabindex="0" role="button" aria-label="Show tooltip for Third-Party Risk">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-privacy" onclick="window.switchMeasureSubview && window.switchMeasureSubview('privacy')">
-          <span class="sub-tab-icon">🔒</span> Privacy Risk (MEASURE 2.9–2.10)
+          <span class="sub-tab-icon">🔒</span> Privacy Risk (MEASURE 2.9–2.10) <span class="tooltip-icon" data-tooltip-id="privacy" tabindex="0" role="button" aria-label="Show tooltip for Privacy Risk">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-env" onclick="window.switchMeasureSubview && window.switchMeasureSubview('env')">
-          <span class="sub-tab-icon">🌱</span> Environmental Impact (MEASURE 2.11)
+          <span class="sub-tab-icon">🌱</span> Environmental Impact (MEASURE 2.11) <span class="tooltip-icon" data-tooltip-id="env" tabindex="0" role="button" aria-label="Show tooltip for Environmental Impact">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-comms" onclick="window.switchMeasureSubview && window.switchMeasureSubview('comms')">
-          <span class="sub-tab-icon">📣</span> Metrics Communication (MEASURE 2.12)
+          <span class="sub-tab-icon">📣</span> Metrics Communication (MEASURE 2.12) <span class="tooltip-icon" data-tooltip-id="comms" tabindex="0" role="button" aria-label="Show tooltip for Metrics Communication">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-ctrleff" onclick="window.switchMeasureSubview && window.switchMeasureSubview('ctrleff')">
-          <span class="sub-tab-icon">✅</span> Control Effectiveness (MEASURE 2.13)
+          <span class="sub-tab-icon">✅</span> Control Effectiveness (MEASURE 2.13) <span class="tooltip-icon" data-tooltip-id="ctrleff" tabindex="0" role="button" aria-label="Show tooltip for Control Effectiveness">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-metupdate" onclick="window.switchMeasureSubview && window.switchMeasureSubview('metupdate')">
-          <span class="sub-tab-icon">🔁</span> Metric Updates (MEASURE 3.2)
+          <span class="sub-tab-icon">🔁</span> Metric Updates (MEASURE 3.2) <span class="tooltip-icon" data-tooltip-id="metupdate" tabindex="0" role="button" aria-label="Show tooltip for Metric Updates">?</span>
         </button>
         <button type="button" class="sub-tab-btn" id="btn-sub-measure-improvmeth" onclick="window.switchMeasureSubview && window.switchMeasureSubview('improvmeth')">
-          <span class="sub-tab-icon">🚀</span> Methodology Improvement (MEASURE 4.1)
+          <span class="sub-tab-icon">🚀</span> Methodology Improvement (MEASURE 4.1) <span class="tooltip-icon" data-tooltip-id="improvmeth" tabindex="0" role="button" aria-label="Show tooltip for Methodology Improvement">?</span>
         </button>
       </div>
 
@@ -1888,43 +2016,43 @@
       <!-- MANAGE Sub-Tabs Navigation -->
       <div class="inventory-tabs" style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; flex-wrap: wrap;">
         <button type="button" class="btn btn-secondary active-subtab" id="manage-tab-incidents" data-subview="incidents">
-          🚨 Incident Register (MANAGE 4.1)
+          🚨 Incident Register (MANAGE 4.1) <span class="tooltip-icon" data-tooltip-id="incidents" tabindex="0" role="button" aria-label="Show tooltip for Incident Register">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-playbooks" data-subview="playbooks">
-          📘 Playbooks A–G (MANAGE 4.2)
+          📘 Playbooks A–G (MANAGE 4.2) <span class="tooltip-icon" data-tooltip-id="playbooks" tabindex="0" role="button" aria-label="Show tooltip for Playbooks">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-responses" data-subview="responses">
-          🛡️ Risk Response Plans (MANAGE 1.1)
+          🛡️ Risk Response Plans (MANAGE 1.1) <span class="tooltip-icon" data-tooltip-id="responses" tabindex="0" role="button" aria-label="Show tooltip for Risk Response Plans">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-improvements" data-subview="improvements">
-          📈 Improvement Log (MANAGE 3.1)
+          📈 Improvement Log (MANAGE 3.1) <span class="tooltip-icon" data-tooltip-id="improvements" tabindex="0" role="button" aria-label="Show tooltip for Improvement Log">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-override" data-subview="override">
-          ⚡ Emergency Controls (MANAGE 2.3)
+          ⚡ Emergency Controls (MANAGE 2.3) <span class="tooltip-icon" data-tooltip-id="override" tabindex="0" role="button" aria-label="Show tooltip for Emergency Controls">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-resources" data-subview="resources">
-          💰 Resource Allocation (MANAGE 1.2)
+          💰 Resource Allocation (MANAGE 1.2) <span class="tooltip-icon" data-tooltip-id="resources" tabindex="0" role="button" aria-label="Show tooltip for Resource Allocation">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-docreg" data-subview="docreg">
-          📂 Risk Documentation (MANAGE 1.3)
+          📂 Risk Documentation (MANAGE 1.3) <span class="tooltip-icon" data-tooltip-id="docreg" tabindex="0" role="button" aria-label="Show tooltip for Risk Documentation">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-residual" data-subview="residual">
-          🎯 Risk Acceptance (MANAGE 1.4)
+          🎯 Risk Acceptance (MANAGE 1.4) <span class="tooltip-icon" data-tooltip-id="residual" tabindex="0" role="button" aria-label="Show tooltip for Risk Acceptance">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-trustmaint" data-subview="trustmaint">
-          🔐 Trustworthiness Maintenance (MANAGE 2.1)
+          🔐 Trustworthiness Maintenance (MANAGE 2.1) <span class="tooltip-icon" data-tooltip-id="trustmaint" tabindex="0" role="button" aria-label="Show tooltip for Trustworthiness Maintenance">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-decommission" data-subview="decommission">
-          🔌 Decommission Criteria (MANAGE 2.2)
+          🔌 Decommission Criteria (MANAGE 2.2) <span class="tooltip-icon" data-tooltip-id="decommission" tabindex="0" role="button" aria-label="Show tooltip for Decommission Criteria">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-stakeng" data-subview="stakeng">
-          📡 Stakeholder Engagement (MANAGE 2.4)
+          📡 Stakeholder Engagement (MANAGE 2.4) <span class="tooltip-icon" data-tooltip-id="stakeng" tabindex="0" role="button" aria-label="Show tooltip for Stakeholder Engagement">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-procimprove" data-subview="procimprove">
-          🔁 Process Improvement (MANAGE 3.2)
+          🔁 Process Improvement (MANAGE 3.2) <span class="tooltip-icon" data-tooltip-id="procimprove" tabindex="0" role="button" aria-label="Show tooltip for Process Improvement">?</span>
         </button>
         <button type="button" class="btn btn-secondary" id="manage-tab-pia" data-subview="pia">
-          🔍 Post-Incident Analysis (MANAGE 4.3)
+          🔍 Post-Incident Analysis (MANAGE 4.3) <span class="tooltip-icon" data-tooltip-id="pia" tabindex="0" role="button" aria-label="Show tooltip for Post-Incident Analysis">?</span>
         </button>
       </div>
 
@@ -3041,163 +3169,236 @@
   </div><!-- End of #hub-shell -->
 
   <!-- Modal: Register / Edit AI System -->
-  <div id="modal-register-system" class="modal-backdrop" style="display: none;">
+  <div id="modal-register-system" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-system-title" style="display: none;">
     <div class="modal-content card">
       <div class="modal-header">
         <div>
-          <div class="section-tag">NIST AI RMF GOVERN 1.6</div>
           <h2 id="modal-system-title">Register New AI System</h2>
         </div>
         <button type="button" class="btn-modal-close" id="btn-close-modal" aria-label="Close modal">&times;</button>
       </div>
 
-      <form id="form-system-registry" class="modal-body">
+      <form id="form-system-registry" class="modal-body registry-form">
         <input type="hidden" id="reg-edit-id" value="">
 
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="reg-system-id">System ID *</label>
-            <input type="text" id="reg-system-id" required placeholder="e.g. AI-007">
-            <span class="field-hint">Unique identifier per AI-System-Inventory.csv</span>
+        <p class="registry-form-intro" id="registry-form-intro">Capture the system’s current facts. Required fields are marked <span class="req">*</span>; update risk and assurance statuses when they have been reviewed.</p>
+        <div id="registry-completion-summary" class="registry-completion" role="status" aria-live="polite" aria-describedby="registry-form-intro"></div>
+
+        <section class="registry-form-section" aria-labelledby="registry-section-profile">
+          <div class="registry-section-heading">
+            <h3 id="registry-section-profile">System profile</h3>
+            <p>Identify the system and describe its intended use.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="reg-system-id">System ID <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-system-id" required maxlength="64" placeholder="e.g. AI-007" aria-describedby="reg-system-id-hint">
+              <span class="form-helper" id="reg-system-id-hint">A unique identifier within this company workspace.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-system-name">AI system name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-system-name" required maxlength="200" placeholder="e.g. Document processing assistant">
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="reg-department">Department / business unit <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-department" required maxlength="150" placeholder="e.g. Finance, Customer Service, Operations">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-task-type">AI task type(s) <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-task-type" required maxlength="250" placeholder="e.g. Classification, forecasting, text generation">
+            </div>
           </div>
 
           <div class="form-group">
-            <label for="reg-system-name">AI System Name *</label>
-            <input type="text" id="reg-system-name" required placeholder="e.g. DocuExtract OCR">
+            <label for="reg-purpose">Business purpose and intended use <span class="req">*</span></label>
+            <textarea class="form-textarea" id="reg-purpose" rows="3" maxlength="2000" required placeholder="What need does the system address? Who uses it, and how does its output inform a decision or service?"></textarea>
           </div>
-        </div>
+        </section>
 
-        <div class="grid-2">
+        <section class="registry-form-section" aria-labelledby="registry-section-risk">
+          <div class="registry-section-heading">
+            <h3 id="registry-section-risk">Risk, lifecycle and data</h3>
+            <p>Record the current lifecycle and assessment state; avoid marking work complete before it is verified.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label for="reg-risk-level">Inherent risk level <span class="req">*</span></label>
+              <select class="form-select" id="reg-risk-level" required>
+                <option value="" selected disabled>Select a risk tier</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-deployment-status">Lifecycle status <span class="req">*</span></label>
+              <select class="form-select" id="reg-deployment-status" required>
+                <option value="Planning / Pre-Development" selected>Planning / pre-development</option>
+                <option value="Development">Development</option>
+                <option value="Testing / TEVV">Testing / TEVV</option>
+                <option value="Piloting">Piloting</option>
+                <option value="Production">Production</option>
+                <option value="Decommissioned">Decommissioned</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-tevv-status">TEVV status <span class="req">*</span></label>
+              <select class="form-select" id="reg-tevv-status" required>
+                <option value="Not Started" selected>Not started</option>
+                <option value="In Progress">In progress</option>
+                <option value="Passed">Passed</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="reg-data-types">Data types used <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-data-types" required maxlength="500" placeholder="e.g. Personal data, customer records, public information">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-third-party">Third-party components and models</label>
+              <input class="form-input" type="text" id="reg-third-party" maxlength="500" placeholder="e.g. Model provider, hosting service, key dependencies">
+            </div>
+          </div>
+        </section>
+
+        <section class="registry-form-section" aria-labelledby="registry-section-owners">
+          <div class="registry-section-heading">
+            <h3 id="registry-section-owners">People and oversight</h3>
+            <p>Make accountability clear and keep review dates aligned with your governance process.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="reg-accountable-owner">Accountable owner <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-accountable-owner" required maxlength="200" placeholder="e.g. Chief Information Officer or Head of AI">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-project-lead">Project lead <span class="req">*</span></label>
+              <input class="form-input" type="text" id="reg-project-lead" required maxlength="200" placeholder="e.g. AI product manager or technical lead">
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="reg-dev-team">Developer / engineering team</label>
+              <input class="form-input" type="text" id="reg-dev-team" maxlength="200" placeholder="Team or service provider responsible for development">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-operator-team">Operator team</label>
+              <input class="form-input" type="text" id="reg-operator-team" maxlength="200" placeholder="Team responsible for day-to-day use or oversight">
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label for="reg-last-review">Last review date</label>
+              <input class="form-input" type="date" id="reg-last-review">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-next-review">Next scheduled review</label>
+              <input class="form-input" type="date" id="reg-next-review">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-assessment-status">Impact assessment status</label>
+              <select class="form-select" id="reg-assessment-status">
+                <option value="Not Started" selected>Not started</option>
+                <option value="In Progress">In progress</option>
+                <option value="Signed Off">Signed off</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="registry-form-section" aria-labelledby="registry-section-evidence">
+          <div class="registry-section-heading">
+            <h3 id="registry-section-evidence">Evidence and notes</h3>
+            <p>Add links to the records your team uses; these fields are optional.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="reg-doc-link">Documentation / context report link</label>
+              <input class="form-input" type="text" id="reg-doc-link" maxlength="1000" placeholder="URL or internal document path">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-incident-link">Incident log link</label>
+              <input class="form-input" type="text" id="reg-incident-link" maxlength="1000" placeholder="URL or internal incident record path">
+            </div>
+          </div>
+
           <div class="form-group">
-            <label for="reg-department">Department / Business Unit *</label>
-            <input type="text" id="reg-department" required placeholder="e.g. Retail Banking & Operations">
+            <label for="reg-notes">Operational notes and governance decisions</label>
+            <textarea class="form-textarea" id="reg-notes" rows="3" maxlength="4000" placeholder="Record relevant review decisions, limitations, conditions, or planned changes."></textarea>
           </div>
-
-          <div class="form-group">
-            <label for="reg-task-type">AI Task Type(s) *</label>
-            <input type="text" id="reg-task-type" required placeholder="e.g. NLU + RAG + Intent Classification">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="reg-purpose">Business Purpose &amp; Intended Use *</label>
-          <textarea id="reg-purpose" rows="2" required placeholder="Describe the operational problem solved and intended business function..."></textarea>
-        </div>
-
-        <div class="grid-3">
-          <div class="form-group">
-            <label for="reg-risk-level">Inherent Risk Level *</label>
-            <select id="reg-risk-level" required>
-              <option value="Low">Low (🟢)</option>
-              <option value="Medium">Medium (🟡)</option>
-              <option value="High" selected>High (🟠)</option>
-              <option value="Critical">Critical (🔴)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-deployment-status">Deployment Lifecycle Status *</label>
-            <select id="reg-deployment-status" required>
-              <option value="Planning / Pre-Development">Planning / Pre-Development</option>
-              <option value="Development">Development</option>
-              <option value="Testing / TEVV">Testing / TEVV</option>
-              <option value="Piloting">Piloting</option>
-              <option value="Production" selected>Production</option>
-              <option value="Decommissioned">Decommissioned</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-tevv-status">TEVV Status *</label>
-            <select id="reg-tevv-status" required>
-              <option value="Not Started">Not Started</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Passed" selected>Passed</option>
-              <option value="Failed">Failed</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="reg-data-types">Data Types Used *</label>
-            <input type="text" id="reg-data-types" required placeholder="e.g. Customer queries, session context, non-PII">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-third-party">Third-Party Components &amp; Foundation Models</label>
-            <input type="text" id="reg-third-party" placeholder="e.g. Cloudflare Workers AI, Vectorize">
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="reg-accountable-owner">Accountable Executive Owner *</label>
-            <input type="text" id="reg-accountable-owner" required placeholder="e.g. Dr. Elena Vance (Chief AI Officer)">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-project-lead">AI Project Lead *</label>
-            <input type="text" id="reg-project-lead" required placeholder="e.g. Marcus Sterling (Lead AI Engineer)">
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="reg-dev-team">Developer / Engineering Team</label>
-            <input type="text" id="reg-dev-team" placeholder="e.g. AI/ML Engineering Team">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-operator-team">Operator Team</label>
-            <input type="text" id="reg-operator-team" placeholder="e.g. Customer Service Operations">
-          </div>
-        </div>
-
-        <div class="grid-3">
-          <div class="form-group">
-            <label for="reg-last-review">Last Review Date</label>
-            <input type="date" id="reg-last-review" value="2026-08-15">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-next-review">Next Scheduled Review</label>
-            <input type="date" id="reg-next-review" value="2027-02-15">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-assessment-status">Impact Assessment Status</label>
-            <select id="reg-assessment-status">
-              <option value="Not Started">Not Started</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Signed Off" selected>Signed Off</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="reg-doc-link">Documentation / Context Report Link</label>
-            <input type="text" id="reg-doc-link" value="docs/02-map/MAP-AI-System-Context-Report.md">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-incident-link">Incident Log Link</label>
-            <input type="text" id="reg-incident-link" value="docs/04-manage/AI-Incident-Log.md">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="reg-notes">Operational Notes &amp; Governance Decisions</label>
-          <textarea id="reg-notes" rows="2" placeholder="Audit observations, conditions, or decommission triggers..."></textarea>
-        </div>
+        </section>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
-          <button type="submit" class="btn btn-primary glow-btn" id="btn-save-system">Save AI System</button>
+          <button type="submit" class="btn btn-primary glow-btn" id="btn-save-system">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></svg>
+            Save AI system
+          </button>
         </div>
       </form>
     </div>
+  </div>
+
+  <div id="modal-about-inventory" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="about-inventory-title" style="display: none;">
+    <section class="modal-content card about-inventory-content">
+      <header class="modal-header">
+        <div>
+          <div class="section-tag">AI GOVERNANCE SUITE</div>
+          <h2 id="about-inventory-title">About the AI System Inventory</h2>
+        </div>
+        <button type="button" class="btn-modal-close" id="btn-close-about-inventory" aria-label="Close information">&times;</button>
+      </header>
+      <div class="about-inventory-body">
+        <section>
+          <h3>What this tool is for</h3>
+          <p>This workspace helps your organization maintain an inventory of AI systems it develops, provides, procures, or uses. It supports <strong>NIST AI Risk Management Framework (AI RMF) GOVERN 1.6</strong>, which calls for processes to inventory AI systems and related risks.</p>
+          <p>Use the register to keep a practical overview of each system’s intended purpose, business owner, lifecycle, risk tier, data, third-party components, and review or assessment status.</p>
+        </section>
+        <section>
+          <h3>Common use cases</h3>
+          <ul>
+            <li>Identify and maintain a central list of AI systems across departments.</li>
+            <li>Record who is accountable for a system and who develops or operates it.</li>
+            <li>Track lifecycle stage, risk rating, data types, and external models or providers.</li>
+            <li>Find systems that need review, testing, or an impact assessment.</li>
+            <li>Search, filter, and export the register for internal governance and oversight.</li>
+          </ul>
+        </section>
+        <aside class="about-inventory-note">
+          <strong>Use as a governance aid.</strong> The inventory helps organize information; it does not determine legal compliance, assign a risk rating for you, or replace a context-specific assessment and human review.
+        </aside>
+      </div>
+      <footer class="modal-footer about-inventory-footer">
+        <button type="button" class="btn btn-secondary" id="btn-dismiss-about-inventory">Close</button>
+        <button type="button" class="btn btn-primary" id="btn-about-register-system">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          Register a system
+        </button>
+      </footer>
+    </section>
   </div>
 
   <!-- Modal: Log New AI Incident (MANAGE 4.1) -->
@@ -3321,6 +3522,6 @@
   <script src="manage-data.js?v=20261020-1"></script>
   <script src="finassist-data.js?v=20261020-1"></script>
   <script src="rmf-extensions-data.js?v=20261021-1"></script>
-  <script src="app.js?v=20261021-1"></script>
+  <script src="app.js?v=20261105-4"></script>
 </body>
 </html>

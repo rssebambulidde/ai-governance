@@ -1,7 +1,7 @@
 # AI Governance & Safety Engineering Portfolio
 
 [![Framework: NIST AI RMF 1.0](https://img.shields.io/badge/Framework-NIST%20AI%20RMF%201.0-blue?style=for-the-badge)](https://www.nist.gov/itl/ai-risk-management-framework)
-[![Live Web Suite: Cloudflare Pages](https://img.shields.io/badge/Live%20Web%20Suite-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare)](https://ai-impact-assessment-20y.pages.dev)
+[![Live Web Suite: Cloudflare Pages](https://img.shields.io/badge/Live%20Web%20Suite-Cloudflare%20Pages-F38020?style=for-the-badge&logo=cloudflare)](https://govern.samabrains.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/robert-ssebambulidde/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Practice: SamaBrains](https://img.shields.io/badge/Practice-SamaBrains-purple?style=for-the-badge)](https://samabrains.com/)
@@ -10,7 +10,8 @@ A working AI governance toolkit: policy release gates, a risk register, bias-tes
 
 > **Key Figures:** 20 production metrics with breach thresholds, 13 profiled risks, 28 RACI activities across 18 roles, and a 15-minute incident containment SLA.
 
-* **Live Web Application:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev) (Inventory · Roles · Policy Gates · Context & Harms · TEVV & Metrics · Impact Assessment)
+* **Production Hub:** [govern.samabrains.com](https://govern.samabrains.com) (Company workspace AI System Inventory)
+* **Preview Hub:** [preview.govern.samabrains.com](https://preview.govern.samabrains.com)
 * **Live Regulatory Assistant:** [samabrains.com/ask/](https://samabrains.com/ask/) (Bounded retrieval over official governance standards)
 
 ---
@@ -31,17 +32,27 @@ A working AI governance toolkit: policy release gates, a risk register, bias-tes
 
 ## Pillar 1: Interactive Web Governance Hub
 
-> **Live Deployment:** [https://ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)  
+> **Production:** [govern.samabrains.com](https://govern.samabrains.com)
+> **Preview:** [preview.govern.samabrains.com](https://preview.govern.samabrains.com)
 > **Source Directory:** [`tools/ai-impact-assessment/`](tools/ai-impact-assessment/)  
-> **Architecture:** Pure client-side HTML5/CSS3/JavaScript hosted on Cloudflare Pages (zero backend runtime, local storage persistence, corporate print styling).
+> **Architecture:** Cloudflare Pages Functions verify Cloudflare Access JWTs and scope inventory and governance-module data to a company workspace in separate preview/production D1 databases. Each workspace has private membership roles and invitation links. The hub is branded as the **AI Governance Suite**; AI System Inventory is currently available, while the other six modules are marked **Coming soon** in the interface. The interface uses SamaBrains branding and a light-only theme.
 
-The web hub operationalizes governance workflows into six interactive modules:
+The inventory API is available at `/api/inventory?organizationId=...` (list and create), `/api/inventory/:id?organizationId=...` (update and delete), and `POST /api/inventory/import` (atomic CSV batch upsert, limited to 200 records). The other modules use `/api/modules/:module?organizationId=...`; each module's example copy is initialized once per organization and stored separately. Module updates are revision-checked so simultaneous edits do not silently overwrite one another. All API routes require a valid Cloudflare Access JWT, and database queries additionally require membership in the requested organization. `owner` and `admin` members can invite colleagues as `editor` or `viewer`; they can also use `GET /api/invitations?organizationId=...` to review workspace membership and outstanding invitation states. Editors can change workspace data, while viewers are read-only. Invitation links are single-use, expire after seven days, and can only be accepted by the invited email address. The app does not send invitation email automatically; workspace owners share the generated link.
+
+Users sign in through the Cloudflare Access policy before creating or joining a workspace. The hub's **Sign out** action ends the Cloudflare Access session using the logout endpoint on the protected application hostname.
+
+The AI Governance Suite is being delivered in stages. The following module capabilities are planned; only the AI System Inventory is currently enabled in the user interface.
+
+The inventory page's **About this tool** panel explains its purpose, NIST AI RMF GOVERN 1.6 alignment, common use cases, and limitations.
 
 ### Module 1: AI System Inventory (GOVERN 1.6)
 * Central registry tracking model classes, task types, risk tiers, foundation models, data classifications, and lifecycle states.
 * Real-time KPI indicators for total registered systems, critical-risk assets, and active production deployments.
-* Two-way CSV synchronization with [`docs/01-govern/AI-System-Inventory.csv`](docs/01-govern/AI-System-Inventory.csv).
-* One-click transition of any inventory record directly into the Impact Assessment Studio with pre-bound metadata.
+* Tenant-scoped CSV export and validated import preview; invalid files are blocked before writes, and accepted imports update or create records in one transaction. Exports include workspace/date metadata and guard spreadsheet formula values.
+* Review-date and key-detail reminders, with filters for overdue, upcoming, unscheduled, and incomplete records.
+* Company workspace onboarding, workspace switching, invitation status, and a member access list for owners/admins.
+
+Inventory records are scoped to the selected company workspace. Workspace-specific storage for the planned modules is already provisioned, but those modules cannot currently be opened from the interface.
 
 ### Module 2: Roles and RACI Matrix (GOVERN 2 & 3.2)
 * Interactive lifecycle matrix mapping 28 activities across 6 phases against 18 enterprise roles.
@@ -158,6 +169,20 @@ This repository's deliverables are structured for direct ingestion into modern e
 
 ## For Developers and Technical Reviewers
 
+### EU AI Act References
+
+The reference library includes the original Official Journal text and a plain-language guide that explains the Act as amended through 24 October 2026:
+
+- [Original EU AI Act (Regulation (EU) 2024/1689), Official Journal PDF](docs/00-references/EU-AI-Act-Regulation-2024-1689-Official-Journal.pdf)
+- [EU AI Act Simplified Guide](docs/00-references/EU-AI-Act-Simplified-Guide.md)
+- [AI Regulatory Compliance: A Practical Guide](docs/00-references/AI-Regulatory-Compliance-Practical-Guide.md) — regulatory landscape, existing laws, core obligations, and compliance management.
+
+### Data and AI Foundations
+
+- [Understanding Data and AI](docs/00-references/Understanding-Data-and-AI.md) — beginner's guide to data + AI mapping and tracing AI through a business process.
+- [Securing Generative AI: Data, Attacks, and Controls](docs/00-references/Securing-Generative-AI-Data-and-LLM-Applications.md) — data ingestion, entitlements, OWASP LLM risks, NIST adversarial ML, technical controls, and LLM firewalls.
+- [AI Governance Program and Management](docs/00-references/AI-Governance-Program-and-Management-Guide.md) — program building blocks, implementation, and business outcomes.
+
 ### Repository File Structure
 
 ```
@@ -165,6 +190,12 @@ ai-governance/
 ├── README.md                                  <- Master Portfolio Overview & Technical Index (Single Source of Truth)
 ├── docs/                                      <- Operational NIST AI RMF Governance Deliverables
 │   ├── 00-references/                         <- Primary Standards, Study Notes & Playbook Spreadsheets
+│   │   ├── EU-AI-Act-Regulation-2024-1689-Official-Journal.pdf <- Original EU AI Act text
+│   │   ├── EU-AI-Act-Simplified-Guide.md      <- End-to-end practitioner guide (current through 2026-10-24)
+│   │   ├── AI-Regulatory-Compliance-Practical-Guide.md <- AI compliance landscape and management guide
+│   │   ├── Understanding-Data-and-AI.md       <- Beginner guide to data, AI mapping, and processes
+│   │   ├── Securing-Generative-AI-Data-and-LLM-Applications.md <- LLM data and application security guide
+│   │   ├── AI-Governance-Program-and-Management-Guide.md <- Governance program and business value guide
 │   │   ├── NIST-AI-RMF-Learning-Guide.md      <- 40+ page breakdown of NIST AI 100-1
 │   │   ├── NIST-AI-RMF-Playbook-Study-Notes.md<- Deep dive across all 72 NIST subcategories
 │   │   ├── ai-risk-guide.md                   <- AI risk, vulnerability, and mitigation guide
@@ -192,46 +223,67 @@ ai-governance/
 │       └── AI-Incident-Log.md                 <- Standardized incident reporting register
 ├── solutions/                                 <- Practical AI Governance Architectures
 │   └── ai-governance-kb-assistant/            <- Grounded Regulatory Knowledge Base & Assistant
-└── tools/                                     <- Live Production Web Applications
-    └── ai-impact-assessment/                  <- SamaBrains NIST AI Governance Hub
-        ├── index.html                         <- Main 4-module portal application markup
-        ├── styles.css                         <- Glassmorphism theme & light-theme print engine
-        ├── app.js                             <- Interactive state engine, gatekeeper & router
-        ├── inventory-data.js                  <- Seed dataset for 6 enterprise AI systems
-        ├── roles-data.js                      <- 28 RACI activities, 18 roles & training data
-        ├── policy-data.js                     <- 4 deployment gates, 8 principles & 9 artifacts
-        ├── finassist-data.js                  <- Preloaded FinAssist AI impact assessment dataset
-        └── _headers                           <- Cloudflare security & cache-invalidation headers
+├── tools/                                     <- Live Production Web Applications
+│   └── ai-impact-assessment/                  <- SamaBrains NIST AI Governance Hub
+│       ├── index.html                         <- Main 7-module portal application markup
+│       ├── styles.css                         <- SamaBrains light theme & print styles
+│       ├── app.js                             <- Interactive state engine, gatekeeper & router
+│       ├── inventory-data.js                  <- Legacy synthetic sample dataset (not loaded into company workspaces)
+│       ├── roles-data.js                      <- 28 RACI activities, 18 roles & training data
+│       ├── policy-data.js                     <- 4 deployment gates, 8 principles & 9 artifacts
+│       ├── finassist-data.js                  <- Preloaded FinAssist AI impact assessment dataset
+│       └── _headers                           <- Cloudflare security & cache-invalidation headers
+├── functions/
+│   ├── _lib/                                  <- Access JWT and workspace helpers
+│   ├── _middleware.js                         <- Fail-closed Access verification
+│   └── api/                                   <- Tenant-scoped session, workspace and inventory APIs
+├── migrations/
+│   ├── 0001-create-ai-inventory.sql           <- Initial inventory schema
+│   └── 0002-multi-company-workspaces.sql      <- Tenant, membership, invitation and audit schema
+└── wrangler.toml                              <- Pages configuration and production/preview D1 bindings
 ```
 
 ### Cloudflare Pages Deployment
 
-The web suite requires zero external build steps or server runtime:
+The `governance` Cloudflare Pages project serves production at `govern.samabrains.com` and the `development` branch preview at `preview.govern.samabrains.com`. Its default Pages hostname remains `ai-impact-assessment-20y.pages.dev`. Preview and production use separate D1 databases: `govern-hub-preview` and `govern-hub-production`.
 
 ```powershell
-# Method A: Direct upload using Wrangler CLI
-$env:CLOUDFLARE_ACCOUNT_ID="$CLOUDFLARE_ACCOUNT_ID"
-npx wrangler pages deploy tools/ai-impact-assessment --project-name="ai-impact-assessment" --branch="main"
+# Deploy the current hub build to the preview environment
+npm run deploy:preview
+
+# Deploy the current hub build to production
+npm run deploy:production
+
+# Apply the original inventory schema only if the database has not been initialized
+npm run db:migrate:preview
+npm run db:migrate:production
+
+# After taking a database backup, apply the tenant migration once to each environment
+npm run db:migrate:workspaces:preview
+npm run db:migrate:workspaces:production
+
+# Add organization-scoped storage for the six governance modules
+npm run db:migrate:modules:preview
+npm run db:migrate:modules:production
 ```
 
-```text
-Method B: Cloudflare Git Integration
-1. Cloudflare Dashboard -> Workers & Pages -> Create application -> Pages -> Connect to Git
-2. Repository: rssebambulidde/ai-governance
-3. Build output directory: tools/ai-impact-assessment (build command: empty)
-4. Save and Deploy
-```
+Before enabling an environment, configure a Cloudflare Access self-hosted application for its full hostname and policy. The project is configured through `wrangler.toml`, which is the source of truth for Pages Functions bindings and variables; add the environment values there and deploy the updated configuration:
+
+* `ACCESS_TEAM_DOMAIN`: Access team issuer, for example `https://<team-name>.cloudflareaccess.com`.
+* `ACCESS_AUD`: the Access application's Audience (AUD) tag.
+
+Never deploy before Access is protecting the hostname and the matching values are configured; the API deliberately fails closed when Access is missing or misconfigured. Dashboard-managed text variables are unavailable while Wrangler configuration is authoritative; encrypted secrets can still be managed in the dashboard. Configure preview and production separately, back up each D1 database, then apply migrations `0002-multi-company-workspaces.sql` and `0003-organization-module-data.sql` once per environment. The workspace migration keeps existing inventory examples isolated in a sample organization with no members. The module migration adds per-organization module storage. Do not rerun either migration after it has succeeded. Wrangler must be authenticated to the Cloudflare account that owns the Pages project and databases.
 
 ### Running Locally
 
 ```powershell
-# Using Python built-in static server
+# Static-only preview (the Access-protected API is unavailable)
 python -m http.server 8080 --directory tools/ai-impact-assessment
 
-# Or using npx serve
-npx serve tools/ai-impact-assessment
+# Local Pages Functions preview (requires valid Access assertions to use the API)
+npx wrangler pages dev tools/ai-impact-assessment
 ```
-Open `http://localhost:8080` in any web browser.
+The static server can preview layout only. The multi-company workspace API requires a deployed Cloudflare Access application and cannot be bypassed in local development.
 
 ---
 
@@ -246,5 +298,6 @@ Practice Lead at [SamaBrains](https://samabrains.com/)
 * **Direct Email:** [rssebambulidde@gmail.com](mailto:rssebambulidde@gmail.com)
 * **Repository:** [github.com/rssebambulidde/ai-governance](https://github.com/rssebambulidde/ai-governance)
 * **GitHub Profile:** [@rssebambulidde](https://github.com/rssebambulidde)
-* **Live Interactive Suite:** [ai-impact-assessment-20y.pages.dev](https://ai-impact-assessment-20y.pages.dev)
+* **Production Governance Hub:** [govern.samabrains.com](https://govern.samabrains.com)
+* **Preview Governance Hub:** [preview.govern.samabrains.com](https://preview.govern.samabrains.com)
 * **Live Assistant Demo:** [samabrains.com/ask/](https://samabrains.com/ask/)

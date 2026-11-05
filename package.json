@@ -6,7 +6,17 @@
   "scripts": {
     "serve": "python -m http.server 8080 --directory tools/ai-impact-assessment",
     "serve:node": "npx serve tools/ai-impact-assessment",
-    "deploy": "npx wrangler pages deploy tools/ai-impact-assessment --project-name=ai-impact-assessment --branch=main"
+    "deploy": "npm run deploy:production",
+    "deploy:preview": "npx wrangler pages deploy tools/ai-impact-assessment --project-name=governance --branch=development",
+    "deploy:production": "npx wrangler pages deploy tools/ai-impact-assessment --project-name=governance --branch=main",
+    "db:migrate:preview": "npx wrangler d1 execute govern-hub-preview --remote --file migrations/0001-create-ai-inventory.sql",
+    "db:migrate:production": "npx wrangler d1 execute govern-hub-production --remote --file migrations/0001-create-ai-inventory.sql",
+    "db:migrate:workspaces:preview": "npx wrangler d1 execute govern-hub-preview --remote --file migrations/0002-multi-company-workspaces.sql",
+    "db:migrate:workspaces:production": "npx wrangler d1 execute govern-hub-production --remote --file migrations/0002-multi-company-workspaces.sql",
+    "db:migrate:modules:preview": "npx wrangler d1 execute govern-hub-preview --remote --file migrations/0003-organization-module-data.sql",
+    "db:migrate:modules:production": "npx wrangler d1 execute govern-hub-production --remote --file migrations/0003-organization-module-data.sql",
+    "db:execute:preview": "npx wrangler d1 execute govern-hub-preview --remote",
+    "db:execute:production": "npx wrangler d1 execute govern-hub-production --remote"
   },
   "repository": {
     "type": "git",
@@ -29,7 +39,7 @@
   "bugs": {
     "url": "https://github.com/rssebambulidde/ai-governance/issues"
   },
-  "homepage": "https://ai-impact-assessment-20y.pages.dev",
+  "homepage": "https://govern.samabrains.com",
   "dependencies": {
     "md-to-pdf": "^5.2.5"
   },
